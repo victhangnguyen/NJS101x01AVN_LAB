@@ -1,0 +1,24 @@
+{
+  "name": "njs101x01avn_lab",
+  "version": "1.0.0",
+  "description": "NJS101x_01-A_VN Lập trình Web với NodeJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --config nodemon.json first-app.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victhangnguyen/NJS101x01AVN_LAB.git"
+  },
+  "author": "victhangnguyen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/victhangnguyen/NJS101x01AVN_LAB/issues"
+  },
+  "homepage": "https://github.com/victhangnguyen/NJS101x01AVN_LAB#readme",
+  "dependencies": {
+    "nodemon": "^2.0.19",
+    "ts-node": "^10.9.1"
+  }
+}
