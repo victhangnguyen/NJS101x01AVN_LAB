@@ -1,26 +1,38 @@
 // const http = require('http'); //! NodeRequire
 import http, { IncomingMessage, ServerResponse } from 'http';
+import fs from 'fs';
+
 //! type RequestListener = (req: IncomingMessage, res: ServerResponse) => any
 function reqListener(req: IncomingMessage, res: ServerResponse): any {
   const url = req.url;
-  console.log('req.url: ', url);
-  console.log('req.method: ', req.method);
-  console.log('req.headers: ', req.headers);
+  const method = req.method;
+  const headers = req.headers;
 
   if (url === '/') {
     res.write('<html>');
     res.write('<head><title>My First Page</title></head>');
     res.write(`
-      <body>
-        <form action="/message" method="POST" novalidate>
-          <input type="text" name="message">
-          <button type="submit">Send</button>
-        </form>
-      </body>
-    `);
+        <body>
+          <form action="/message" method="POST" novalidate>
+            <input type="text" name="message">
+            <button type="submit">Send</button>
+          </form>
+        </body>
+      `);
     res.write('</head>');
     return res.end(); //! reqListener renturn : any
     //! return to quit the function execution.
+  }
+
+  if (url === '/message' && method === 'POST') {
+    fs.writeFileSync('message.txt', 'Message Content');
+    //! write some meta information
+    //! 302 stands for redirection
+    // res.writeHead(302, )
+    res.statusCode = 302;
+    //! / will automatically use the host
+    res.setHeader('Location', '/alo');
+    return res.end();
   }
 
   res.setHeader('Content-Type', 'text/html');
