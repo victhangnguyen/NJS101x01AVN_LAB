@@ -1,13 +1,10 @@
-
 import http from 'http';
 import Logging from './library/Logging';
+import express from 'express';
 
-//! imp Routes
-// const routes = require('./routes');
-  import routes from './routes';
-
+//! an instance of the app object
+const app = express();
 //! type RequestListener = (req: IncomingMessage, res: ServerResponse) => any
-const server = http.createServer(routes.handler);
-Logging.info(routes.someText);
+const server = http.createServer();
 
 server.listen(3000);
