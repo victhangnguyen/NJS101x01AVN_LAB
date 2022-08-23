@@ -1,4 +1,4 @@
-// const http = require('http'); //! NodeRequire
+
 import http from 'http';
 import Logging from './library/Logging';
 

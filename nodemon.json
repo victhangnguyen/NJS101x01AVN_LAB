@@ -1,5 +1,8 @@
-  {
-    "execMap": {
-      "ts": "ts-node"
-    }
+{
+  "restartable": "rs",
+  "ignore": [".git", "node_modules/", "dist/"],
+  "watch": "src",
+  "execMap": {
+    "ts": "ts-node"
   }
+}
