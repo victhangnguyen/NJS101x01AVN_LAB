@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --config nodemon.json dist/app.js",
-    "dev:debug": "nodemon --config nodemon.json src/app.ts",
+    "dev": "nodemon --config nodemon.json src/app.ts",
+    "dev:debug": "nodemon --config nodemon.json --inspect-brk src/app.ts",
     "build": "npx tsc"
   },
   "repository": {

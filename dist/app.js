@@ -3,19 +3,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const http_1 = __importDefault(require("http"));
 const express_1 = __importDefault(require("express"));
 //! an instance of the app object
 const app = (0, express_1.default)();
-app.use((req, res, next) => {
-    console.log('In the middleware 1!');
-    next(); //! This allows the Request to continue to the Next Middleware in line (funnel)
+//! Register Middlewares
+app.use(express_1.default.urlencoded({ extended: false }));
+app.use('/product', (req, res, next) => {
+    console.log(req.body);
+    //! Redirect
+    res.redirect('/');
 });
-app.use((req, res, next) => {
-    console.log('In the middleware 2!');
+app.use('/add-product', (req, res, next) => {
+    res.send(`
+    <form action="/product" method="POST">
+      <input type="text" name="title">
+        <button type="submit">Add Product</button>
+      </input>
+    </form>
+  `);
+});
+// next(); //! The Request goes through the File from TOP to BOTTOM,
+//! if we dont call next(); it's not going to the next() middleware.
+//! If middlewares 1 don't call next(), this middleware 2 will never get a chance of handling that Request.
+//!
+app.use('/', (req, res, next) => {
     //! (property) Response<any, Record<string, any>, number>.send: (body?: any) => express.Response<any, Record<string, any>>
     res.send(`<h1>Hello from Express</h1>`);
 });
-const server = http_1.default.createServer(app);
-server.listen(3000);
+app.listen(3000);
 //# sourceMappingURL=app.js.map
