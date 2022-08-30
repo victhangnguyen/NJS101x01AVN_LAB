@@ -13,7 +13,7 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/product', (req: Request, res: Response, next: NextFunction) => {
-  console.log(req.body);
+  Logging.info(req.body);
   //! Redirect
   res.redirect('/');
 });
@@ -29,7 +29,6 @@ app.use('/add-product', (req: Request, res: Response, next: NextFunction) => {
 });
 // next(); //! The Request goes through the File from TOP to BOTTOM,
 //! if we dont call next(); it's not going to the next() middleware.
-
 
 //! If middlewares 1 don't call next(), this middleware 2 will never get a chance of handling that Request.
 //!

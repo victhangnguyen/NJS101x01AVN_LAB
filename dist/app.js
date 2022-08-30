@@ -3,13 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Logging_1 = __importDefault(require("./library/Logging"));
 const express_1 = __importDefault(require("express"));
 //! an instance of the app object
 const app = (0, express_1.default)();
 //! Register Middlewares
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use('/product', (req, res, next) => {
-    console.log(req.body);
+    Logging_1.default.info(req.body);
     //! Redirect
     res.redirect('/');
 });
