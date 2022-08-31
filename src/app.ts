@@ -19,5 +19,12 @@ app.use(express.urlencoded({ extended: false }));
 //! implementing Routes
 app.use(shopRoutes);
 app.use(adminRoutes);
+//! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.status(404).send(`<h1>PAGE NOT FOUND</h1>`)
+});
+
+//! 404 Error
+//! We simply have to add a Catch all Middleware at the Bottom
 
 app.listen(3000);
