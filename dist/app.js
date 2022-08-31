@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const path_1 = __importDefault(require("path"));
 const express_1 = __importDefault(require("express"));
 //! import Routes
 const admin_1 = __importDefault(require("./routes/admin"));
@@ -16,7 +17,8 @@ app.use(shop_1.default);
 app.use('/admin', admin_1.default);
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use((req, res, next) => {
-    res.status(404).send(`<h1>PAGE NOT FOUND</h1>`);
+    const pathFile = path_1.default.join(__dirname, 'views/', '404.html');
+    res.status(404).sendFile(pathFile);
 });
 //! 404 Error
 //! We simply have to add a Catch all Middleware at the Bottom

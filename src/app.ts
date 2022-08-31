@@ -1,4 +1,5 @@
 import Logging from './library/Logging';
+import path from 'path';
 import express, {
   Request,
   Response,
@@ -22,7 +23,8 @@ app.use('/admin', adminRoutes);
 
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use((req: Request, res: Response, next: NextFunction) => {
-  res.status(404).send(`<h1>PAGE NOT FOUND</h1>`);
+  const pathFile = path.join(__dirname, 'views/', '404.html');
+  res.status(404).sendFile(pathFile);
 });
 
 //! 404 Error
