@@ -13,7 +13,7 @@ const app = (0, express_1.default)();
 app.use(express_1.default.urlencoded({ extended: false }));
 //! implementing Routes
 app.use(shop_1.default);
-app.use(admin_1.default);
+app.use('/admin', admin_1.default);
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use((req, res, next) => {
     res.status(404).send(`<h1>PAGE NOT FOUND</h1>`);
