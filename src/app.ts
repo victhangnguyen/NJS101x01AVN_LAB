@@ -17,9 +17,13 @@ const app = express();
 //! Register Middlewares
 app.use(express.urlencoded({ extended: false }));
 
+//! app.ts => root Directory : src
+const publicDir = path.join(__dirname, '..', 'public');
+app.use(express.static(publicDir));
+
 //! implementing Routes
-app.use(shopRoutes);
 app.use('/admin', adminRoutes);
+app.use(shopRoutes);
 
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use((req: Request, res: Response, next: NextFunction) => {
