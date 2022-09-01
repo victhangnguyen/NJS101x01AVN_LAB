@@ -10,7 +10,6 @@
     "dev:debug": "nodemon --config nodemon.json --inspect-brk src/app.ts",
     "build": "npx tsc",
     "debug": "nodemon --exec \"node --inspect-brk=0.0.0.0:9229 --require ts-node/register src/app.ts\""
-
   },
   "repository": {
     "type": "git",
@@ -24,7 +23,10 @@
   "homepage": "https://github.com/victhangnguyen/NJS101x01AVN_LAB#readme",
   "dependencies": {
     "chalk": "^4.1.2",
+    "ejs": "^3.1.8",
     "express": "^4.18.1",
+    "express-handlebars": "^6.0.6",
+    "pug": "^3.0.2",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {

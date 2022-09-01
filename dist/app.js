@@ -10,6 +10,9 @@ var admin_1 = __importDefault(require("./routes/admin"));
 var shop_1 = __importDefault(require("./routes/shop"));
 //! an instance of the app object
 var app = (0, express_1.default)();
+//! Set a global configuration value
+app.set('view engine', 'pug');
+app.set('views', 'src/views'); //! default 
 //! Register Middlewares
 app.use(express_1.default.urlencoded({ extended: false }));
 //! app.ts => root Directory : src

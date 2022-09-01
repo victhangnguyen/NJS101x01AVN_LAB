@@ -13,6 +13,9 @@ import shopRoutes from './routes/shop';
 
 //! an instance of the app object
 const app = express();
+//! Set a global configuration value
+app.set('view engine', 'pug');
+app.set('views', 'src/views') //! default 
 
 //! Register Middlewares
 app.use(express.urlencoded({ extended: false }));
