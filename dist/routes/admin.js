@@ -4,22 +4,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 //! core modules
-const path_1 = __importDefault(require("path"));
-const express_1 = __importDefault(require("express"));
-//! utils - libs
-const Logging_1 = __importDefault(require("../library/Logging"));
-const path_2 = __importDefault(require("../utils/path"));
-const router = express_1.default.Router();
-const pathFile = path_1.default.join(path_2.default, 'views', 'add-product.html');
-//! implicitly, this route is reached /admin/add-product/ => GET
-router.get('/add-product', (req, res, next) => {
+var path_1 = __importDefault(require("path"));
+var express_1 = __importDefault(require("express"));
+var path_2 = __importDefault(require("../utils/path"));
+var router = express_1.default.Router();
+var products = [];
+var pathFile = path_1.default.join(path_2.default, 'views', 'add-product.html');
+//! /admin/add-product/ => GET
+router.get('/add-product', function (req, res, next) {
     res.sendFile(pathFile);
 });
-//! implicitly, this route is reached /admin/add-product/ => POST
-router.post('/add-product', (req, res, next) => {
-    Logging_1.default.info(req.body);
+//! /admin/add-product/ => POST
+router.post('/add-product', function (req, res, next) {
+    //! add new Product object to productsArray
+    //! set req.body type by TypeCasting
+    var newProduct = { title: req.body.title };
+    products.push(newProduct);
     //! Redirect
     res.redirect('/');
 });
-exports.default = router;
+// exports.routes = router;
+// exports.products = products;
+exports.default = { routes: router, products: products };
 //# sourceMappingURL=admin.js.map

@@ -28,7 +28,6 @@
         }
       },
       "problemMatcher": [
-        // "$tsc"
         "tsc"
       ],
       "group": "build",

@@ -8,7 +8,7 @@ import express, {
 } from 'express';
 
 //! import Routes
-import adminRoutes from './routes/admin';
+import adminData from './routes/admin';
 import shopRoutes from './routes/shop';
 
 //! an instance of the app object
@@ -19,10 +19,11 @@ app.use(express.urlencoded({ extended: false }));
 
 //! app.ts => root Directory : src
 const publicDir = path.join(__dirname, '..', 'public');
+
 app.use(express.static(publicDir));
 
 //! implementing Routes
-app.use('/admin', adminRoutes);
+app.use('/admin', adminData.routes);
 app.use(shopRoutes);
 
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...

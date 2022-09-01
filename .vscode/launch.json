@@ -4,15 +4,14 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Typescript debug",
+      "name": "Debugger TypeScript",
       "program": "${workspaceFolder}\\src\\app.ts",
       "preLaunchTask": "tsc: build - tsconfig.json",
+      "sourceMaps": true,
+      "smartStep": true,
       "outFiles": [
         "${workspaceFolder}/dist/**/*.js"
       ],
-      "restart": true,
-      // "runtimeExecutable": "nodemon", //! (--global nodemon) 
-      "runtimeExecutable": "${workspaceFolder}/node_modules/nodemon/bin/nodemon.js", //! (--save-dev nodemon)
       "console": "integratedTerminal",
     }
   ]
