@@ -23,8 +23,9 @@ app.use('/admin', admin_1.default.routes);
 app.use(shop_1.default);
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(function (req, res, next) {
-    var pathFile = path_1.default.join(__dirname, 'views/', '404.html');
-    res.status(404).sendFile(pathFile);
+    // const pathFile = path.join(__dirname, 'views/', '404.html');
+    // res.status(404).sendFile(pathFile);
+    res.render('404');
 });
 //! 404 Error
 //! We simply have to add a Catch all Middleware at the Bottom

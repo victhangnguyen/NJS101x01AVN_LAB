@@ -31,8 +31,9 @@ app.use(shopRoutes);
 
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use((req: Request, res: Response, next: NextFunction) => {
-  const pathFile = path.join(__dirname, 'views/', '404.html');
-  res.status(404).sendFile(pathFile);
+  // const pathFile = path.join(__dirname, 'views/', '404.html');
+  // res.status(404).sendFile(pathFile);
+  res.render('404')
 });
 
 //! 404 Error

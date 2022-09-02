@@ -20,7 +20,8 @@ const pathFile = path.join(rootDir, 'views', 'add-product.html');
 router.get(
   '/add-product',
   (req: Request, res: Response, next: NextFunction) => {
-    res.sendFile(pathFile);
+    // res.sendFile(pathFile);
+    res.render('add-product', {pageTitle: 'Add Product'})
   }
 );
 
