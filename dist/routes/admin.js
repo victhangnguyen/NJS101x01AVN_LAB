@@ -14,6 +14,7 @@ var pathFile = path_1.default.join(path_2.default, 'views', 'add-product.html');
 router.get('/add-product', function (req, res, next) {
     // res.sendFile(pathFile);
     res.render('add-product', {
+        layout: false,
         pageTitle: 'Add Product',
         path: '/admin/add-product',
     });

@@ -22,6 +22,7 @@ router.get(
   (req: Request, res: Response, next: NextFunction) => {
     // res.sendFile(pathFile);
     res.render('add-product', {
+      layout: false,
       pageTitle: 'Add Product',
       path: '/admin/add-product',
     });
