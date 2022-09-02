@@ -16,7 +16,7 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
   const products = adminData.products;
 
   //! This will use the Default Tempalting Engine
-  res.render('shop', { prods: products, docTitle: 'Shop' }); //! shop.pug
+  res.render('shop', { prods: products, pageTitle: 'Shop', path: '/' }); //! shop.pug
 });
 
 export default router;

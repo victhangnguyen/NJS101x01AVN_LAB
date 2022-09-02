@@ -12,7 +12,7 @@ var shop_1 = __importDefault(require("./routes/shop"));
 var app = (0, express_1.default)();
 //! Set a global configuration value
 app.set('view engine', 'pug');
-app.set('views', 'src/views'); //! default 
+app.set('views', 'src/views'); //! default
 //! Register Middlewares
 app.use(express_1.default.urlencoded({ extended: false }));
 //! app.ts => root Directory : src
@@ -25,7 +25,7 @@ app.use(shop_1.default);
 app.use(function (req, res, next) {
     // const pathFile = path.join(__dirname, 'views/', '404.html');
     // res.status(404).sendFile(pathFile);
-    res.render('404');
+    res.render('404', { pageTitle: 'Page Not Found' }); //! pass props {}
 });
 //! 404 Error
 //! We simply have to add a Catch all Middleware at the Bottom

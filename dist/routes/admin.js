@@ -13,7 +13,10 @@ var pathFile = path_1.default.join(path_2.default, 'views', 'add-product.html');
 //! /admin/add-product/ => GET
 router.get('/add-product', function (req, res, next) {
     // res.sendFile(pathFile);
-    res.render('add-product', { pageTitle: 'Add Product' });
+    res.render('add-product', {
+        pageTitle: 'Add Product',
+        path: '/admin/add-product',
+    });
 });
 //! /admin/add-product/ => POST
 router.post('/add-product', function (req, res, next) {
