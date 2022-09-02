@@ -6,6 +6,7 @@ import express, {
   NextFunction,
   RequestHandler,
 } from 'express';
+import expressHbs from 'express-handlebars';
 
 //! import Routes
 import adminData from './routes/admin';
@@ -13,9 +14,14 @@ import shopRoutes from './routes/shop';
 
 //! an instance of the app object
 const app = express();
-//! Set a global configuration value
-app.set('view engine', 'pug');
-app.set('views', 'src/views'); //! default
+//! Set engine with name
+app.engine(
+  'hbs',
+  expressHbs()
+); //! expressHbs return a fn
+
+app.set('view engine', 'hbs');
+app.set('views', 'src/views');
 
 //! Register Middlewares
 app.use(express.urlencoded({ extended: false }));
@@ -31,9 +37,8 @@ app.use(shopRoutes);
 
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use((req: Request, res: Response, next: NextFunction) => {
-  // const pathFile = path.join(__dirname, 'views/', '404.html');
-  // res.status(404).sendFile(pathFile);
-  res.render('404', { pageTitle: 'Page Not Found' }); //! pass props {}
+//! default Handlebars have layout: main, set props with layout is false to ignore the layout
+  res.render('404', { layout: false, pageTitle: 'Page Not Found' }); //! pass props {}
 });
 
 //! 404 Error

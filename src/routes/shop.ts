@@ -14,7 +14,6 @@ const router = express.Router();
 
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
   const products = adminData.products;
-
   //! This will use the Default Tempalting Engine
   res.render('shop', { prods: products, pageTitle: 'Shop', path: '/' }); //! shop.pug
 });
