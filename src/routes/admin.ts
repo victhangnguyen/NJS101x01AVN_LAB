@@ -21,9 +21,6 @@ router.get(
     res.render('add-product', {
       pageTitle: 'Add Product',
       path: '/admin/add-product',
-      activeAddProduct: true,
-      formsCSS: true,
-      productCSS: true,
     });
   }
 );

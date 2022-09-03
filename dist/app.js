@@ -25,7 +25,7 @@ app.use(shop_1.default);
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(function (req, res, next) {
     //! default Handlebars have layout: main, set props with layout is false to ignore the layout
-    res.render('404', { pageTitle: 'Page Not Found' }); //! pass props {}
+    res.render('404', { pageTitle: 'Page Not Found', path: '' }); //! pass props {}
 });
 //! 404 Error
 //! We simply have to add a Catch all Middleware at the Bottom

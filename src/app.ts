@@ -34,7 +34,7 @@ app.use(shopRoutes);
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use((req: Request, res: Response, next: NextFunction) => {
   //! default Handlebars have layout: main, set props with layout is false to ignore the layout
-  res.render('404', {pageTitle: 'Page Not Found' }); //! pass props {}
+  res.render('404', { pageTitle: 'Page Not Found', path: '' }); //! pass props {}
 });
 
 //! 404 Error

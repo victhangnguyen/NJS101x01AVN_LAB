@@ -5,10 +5,10 @@
   "main": "src/app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --config nodemon.json dist/app.js",
+    "start": "node dist/app.js",
     "dev:tsc": "npx tsc -w",
     "dev:nodemon": "nodemon --config nodemon.json src/app.ts",
-    "copy-files": "copyfiles -u 1 src/**/*.html src/**/*.pug src/**/*.hbs src/**/*.ejs dist/"
+    "copy-files": "copyfiles -u 1 src/**/*.html src/**/*.ejs dist/"
   },
   "repository": {
     "type": "git",
