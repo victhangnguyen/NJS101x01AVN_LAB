@@ -12,7 +12,11 @@ var shop_1 = __importDefault(require("./routes/shop"));
 //! an instance of the app object
 var app = (0, express_1.default)();
 //! Set engine with name
-app.engine('hbs', (0, express_handlebars_1.default)()); //! expressHbs return a fn
+app.engine('hbs', (0, express_handlebars_1.default)({
+    extname: 'hbs',
+    defaultLayout: 'main-layout',
+    layoutsDir: 'src/views/layouts',
+})); //! expressHbs return a fn
 app.set('view engine', 'hbs');
 app.set('views', 'src/views');
 //! Register Middlewares
@@ -26,7 +30,7 @@ app.use(shop_1.default);
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(function (req, res, next) {
     //! default Handlebars have layout: main, set props with layout is false to ignore the layout
-    res.render('404', { layout: false, pageTitle: 'Page Not Found' }); //! pass props {}
+    res.render('404', { pageTitle: 'Page Not Found' }); //! pass props {}
 });
 //! 404 Error
 //! We simply have to add a Catch all Middleware at the Bottom

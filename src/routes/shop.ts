@@ -14,14 +14,15 @@ const router = express.Router();
 
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
   const products = adminData.products;
-  //! This will use the Default Tempalting Engine
+
   res.render('shop', {
-    layout: false,
     prods: products,
     pageTitle: 'Shop',
     path: '/',
     hasProducts: products.length > 0,
-  }); //! shop.pug
+    activeShop: true,
+    productCSS: true,
+  });
 });
 
 export default router;

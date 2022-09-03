@@ -9,14 +9,14 @@ var admin_1 = __importDefault(require("./admin"));
 var router = express_1.default.Router();
 router.get('/', function (req, res, next) {
     var products = admin_1.default.products;
-    //! This will use the Default Tempalting Engine
     res.render('shop', {
-        layout: false,
         prods: products,
         pageTitle: 'Shop',
         path: '/',
         hasProducts: products.length > 0,
-    }); //! shop.pug
+        activeShop: true,
+        productCSS: true,
+    });
 });
 exports.default = router;
 //# sourceMappingURL=shop.js.map

@@ -8,7 +8,7 @@
     "start": "nodemon --config nodemon.json dist/app.js",
     "dev:tsc": "npx tsc -w",
     "dev:nodemon": "nodemon --config nodemon.json src/app.ts",
-    "copy-files": "copyfiles -u 1 src/**/*.pug dist/"
+    "copy-files": "copyfiles -u 1 src/**/*.pug src/**/*.hbs src/**/*.html dist/"
   },
   "repository": {
     "type": "git",

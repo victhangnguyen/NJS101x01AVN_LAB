@@ -17,7 +17,11 @@ const app = express();
 //! Set engine with name
 app.engine(
   'hbs',
-  expressHbs()
+  expressHbs({
+    extname: 'hbs',
+    defaultLayout: 'main-layout', //! default: main
+    layoutsDir: 'src/views/layouts',
+  })
 ); //! expressHbs return a fn
 
 app.set('view engine', 'hbs');
@@ -28,7 +32,6 @@ app.use(express.urlencoded({ extended: false }));
 
 //! app.ts => root Directory : src
 const publicDir = path.join(__dirname, '..', 'public');
-
 app.use(express.static(publicDir));
 
 //! implementing Routes
@@ -37,8 +40,8 @@ app.use(shopRoutes);
 
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use((req: Request, res: Response, next: NextFunction) => {
-//! default Handlebars have layout: main, set props with layout is false to ignore the layout
-  res.render('404', { layout: false, pageTitle: 'Page Not Found' }); //! pass props {}
+  //! default Handlebars have layout: main, set props with layout is false to ignore the layout
+  res.render('404', {pageTitle: 'Page Not Found' }); //! pass props {}
 });
 
 //! 404 Error
