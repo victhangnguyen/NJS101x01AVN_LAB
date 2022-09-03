@@ -14,17 +14,10 @@ import shopRoutes from './routes/shop';
 
 //! an instance of the app object
 const app = express();
-//! Set engine with name
-app.engine(
-  'hbs',
-  expressHbs({
-    extname: 'hbs',
-    defaultLayout: 'main-layout', //! default: main
-    layoutsDir: 'src/views/layouts',
-  })
-); //! expressHbs return a fn
 
-app.set('view engine', 'hbs');
+//! set Template Engine
+app.set('view engine', 'ejs');
+//! set View source
 app.set('views', 'src/views');
 
 //! Register Middlewares

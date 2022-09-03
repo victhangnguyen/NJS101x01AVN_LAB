@@ -5,19 +5,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var path_1 = __importDefault(require("path"));
 var express_1 = __importDefault(require("express"));
-var express_handlebars_1 = __importDefault(require("express-handlebars"));
 //! import Routes
 var admin_1 = __importDefault(require("./routes/admin"));
 var shop_1 = __importDefault(require("./routes/shop"));
 //! an instance of the app object
 var app = (0, express_1.default)();
-//! Set engine with name
-app.engine('hbs', (0, express_handlebars_1.default)({
-    extname: 'hbs',
-    defaultLayout: 'main-layout',
-    layoutsDir: 'src/views/layouts',
-})); //! expressHbs return a fn
-app.set('view engine', 'hbs');
+//! set Template Engine
+app.set('view engine', 'ejs');
+//! set View source
 app.set('views', 'src/views');
 //! Register Middlewares
 app.use(express_1.default.urlencoded({ extended: false }));
