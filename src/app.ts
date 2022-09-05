@@ -6,11 +6,13 @@ import express, {
   NextFunction,
   RequestHandler,
 } from 'express';
-import expressHbs from 'express-handlebars';
 
-//! import Routes
+//! imp Routes
 import adminRoutes from './routes/admin';
 import shopRoutes from './routes/shop';
+
+//! imp Controllers
+import * as errorController from './controllers/error';
 
 //! an instance of the app object
 const app = express();
@@ -32,12 +34,6 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
-app.use((req: Request, res: Response, next: NextFunction) => {
-  //! default Handlebars have layout: main, set props with layout is false to ignore the layout
-  res.render('404', { pageTitle: 'Page Not Found', path: '' }); //! pass props {}
-});
-
-//! 404 Error
-//! We simply have to add a Catch all Middleware at the Bottom
+app.use(errorController.get404);
 
 app.listen(3000);
