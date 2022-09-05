@@ -26,6 +26,7 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
 
 export const getProducts: RequestHandler = (req, res, next) => {
   const products = Product.fetchAll();
+  console.log('products: ', products);
 
   res.render('shop', {
     prods: products,

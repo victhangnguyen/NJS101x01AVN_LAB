@@ -1,27 +1,51 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-//! In the real-world, the Models has relationship with the Database.
-var products = [];
-// module.exports = class Product ... => export default
+var fs_1 = __importDefault(require("fs"));
+var path_1 = __importDefault(require("path"));
 var Product = /** @class */ (function () {
-    //! implicitly initialize Public Fields
-    // constructor(t) {
-    //   this.title = t;
-    // }
     function Product(title) {
         this.title = title;
     }
     Product.prototype.save = function () {
-        //! JS | Product.prototype.save = function () {...}
-        //! This method to store product in this product Array
-        products.push(this);
-        //! this keyword will refer to the Object created based on Product Class
+        var _this = this;
+        var _a;
+        // require.main?.filename as string | This point to the src folder
+        var p = path_1.default.join(path_1.default.dirname((_a = require.main) === null || _a === void 0 ? void 0 : _a.filename), //! main src
+        'data', 'products.json');
+        console.log('p: ', p);
+        //! You also create a readStream
+        //! We need to get the Existing Array Product (but with Read File, we can read the entire file here)
+        fs_1.default.readFile(p, function (err, fileContent) {
+            //! There will be a Buffer
+            //! if file no existing, we simply create a new empty Array Product
+            var products = [];
+            //! guard clause
+            if (!err) {
+                //! err => no exist, !err (null) => exist
+                // products = JSON.parse(fileContent);
+                products = JSON.parse(fileContent.toString()); //! parse have text: string
+            }
+            products.push(_this);
+            //! save
+            fs_1.default.writeFile(p, JSON.stringify(products), function (err) {
+                console.log('write File: ', err);
+            });
+        });
     };
     Product.fetchAll = function () {
-        //! JS | Product.prototype.fetchAll = function () {...}
-        //! This is not called on a Single Instance of the Product because it should fetch All Products
-        //! Therefore We will add static-keyword which make sure that We only can call this method  directly on the Class itself and not on Instantiated object.
-        return products;
+        var _a;
+        var p = path_1.default.join(path_1.default.dirname((_a = require.main) === null || _a === void 0 ? void 0 : _a.filename), //! main src
+        'data', 'products.json');
+        fs_1.default.readFile(p, function (err, dataBuffer) {
+            if (err) {
+                return [];
+            }
+            console.log('fetchAll: ', JSON.parse(dataBuffer.toString()));
+            return JSON.parse(dataBuffer.toString());
+        });
     };
     return Product;
 }());

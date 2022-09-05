@@ -1,25 +1,52 @@
-//! In the real-world, the Models has relationship with the Database.
-const products: Product[] = [];
+import fs from 'fs';
+import path from 'path';
 
-// module.exports = class Product ... => export default
 export default class Product {
-  //! implicitly initialize Public Fields
-  // constructor(t) {
-  //   this.title = t;
-  // }
   constructor(public title: string) {}
 
   public save() {
-    //! JS | Product.prototype.save = function () {...}
-    //! This method to store product in this product Array
-    products.push(this);
-    //! this keyword will refer to the Object created based on Product Class
+    // require.main?.filename as string | This point to the src folder
+    const p: string = path.join(
+      path.dirname(require.main?.filename as string), //! main src
+      'data',
+      'products.json'
+    );
+    console.log('p: ', p);
+    //! You also create a readStream
+    //! We need to get the Existing Array Product (but with Read File, we can read the entire file here)
+    fs.readFile(p, (err, fileContent) => {
+      //! There will be a Buffer
+      //! if file no existing, we simply create a new empty Array Product
+      let products: Array<Product> = [];
+
+      //! guard clause
+      if (!err) {
+        //! err => no exist, !err (null) => exist
+
+        // products = JSON.parse(fileContent);
+        products = JSON.parse(fileContent.toString()); //! parse have text: string
+      }
+
+      products.push(this);
+      //! save
+      fs.writeFile(p, JSON.stringify(products), (err) => {
+        console.log('write File: ', err);
+      });
+    });
   }
 
   static fetchAll() {
-    //! JS | Product.prototype.fetchAll = function () {...}
-    //! This is not called on a Single Instance of the Product because it should fetch All Products
-    //! Therefore We will add static-keyword which make sure that We only can call this method  directly on the Class itself and not on Instantiated object.
-    return products;
+    const p: string = path.join(
+      path.dirname(require.main?.filename as string), //! main src
+      'data',
+      'products.json'
+    );
+    fs.readFile(p, (err, dataBuffer) => {
+      if (err) {
+        return [];
+      }
+      console.log('fetchAll: ',JSON.parse(dataBuffer.toString()));
+      return JSON.parse(dataBuffer.toString());
+    });
   }
 }
