@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import { Product } from '../models/product';
+import Product from '../models/product';
 
 //! initialize Product Store
 const products: Product[] = [];
@@ -14,14 +14,19 @@ export const getAddProduct: RequestHandler = (req, res, next) => {
 };
 
 export const postAddProduct: RequestHandler = (req, res, next) => {
-  const newProduct = { title: (req.body as { title: string }).title };
+  const title = (req.body as { title: string }).title;
 
-  products.push(newProduct);
+  const product = new Product(title);
+
+  product.save();
+
   //! Redirect
   res.redirect('/');
 };
 
 export const getProducts: RequestHandler = (req, res, next) => {
+  const products = Product.fetchAll();
+
   res.render('shop', {
     prods: products,
     pageTitle: 'Shop',

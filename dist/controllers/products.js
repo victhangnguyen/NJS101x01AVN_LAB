@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getProducts = exports.postAddProduct = exports.getAddProduct = void 0;
+var product_1 = __importDefault(require("../models/product"));
 //! initialize Product Store
 var products = [];
 //! get AddProduct page
@@ -13,13 +17,15 @@ var getAddProduct = function (req, res, next) {
 };
 exports.getAddProduct = getAddProduct;
 var postAddProduct = function (req, res, next) {
-    var newProduct = { title: req.body.title };
-    products.push(newProduct);
+    var title = req.body.title;
+    var product = new product_1.default(title);
+    product.save();
     //! Redirect
     res.redirect('/');
 };
 exports.postAddProduct = postAddProduct;
 var getProducts = function (req, res, next) {
+    var products = product_1.default.fetchAll();
     res.render('shop', {
         prods: products,
         pageTitle: 'Shop',
