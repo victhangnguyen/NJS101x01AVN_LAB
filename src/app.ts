@@ -9,7 +9,7 @@ import express, {
 import expressHbs from 'express-handlebars';
 
 //! import Routes
-import adminData from './routes/admin';
+import adminRoutes from './routes/admin';
 import shopRoutes from './routes/shop';
 
 //! an instance of the app object
@@ -28,7 +28,7 @@ const publicDir = path.join(__dirname, '..', 'public');
 app.use(express.static(publicDir));
 
 //! implementing Routes
-app.use('/admin', adminData.routes);
+app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...

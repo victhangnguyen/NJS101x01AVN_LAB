@@ -4,16 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
-//! imp Routes
-var admin_1 = __importDefault(require("./admin"));
+//! imp Controllers
+var products_1 = __importDefault(require("../controllers/products"));
 var router = express_1.default.Router();
-router.get('/', function (req, res, next) {
-    var products = admin_1.default.products;
-    res.render('shop', {
-        prods: products,
-        pageTitle: 'Shop',
-        path: '/',
-    });
-});
+router.get('/', products_1.default.getProducts);
 exports.default = router;
 //# sourceMappingURL=shop.js.map

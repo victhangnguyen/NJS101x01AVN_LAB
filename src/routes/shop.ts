@@ -1,25 +1,10 @@
-//! imp core modules
-import path from 'path';
+import express from 'express';
 
-import express, { Request, Response, NextFunction } from 'express';
-
-//! utils - libs
-import rootDir from '../utils/path';
-import Logging from '../library/Logging';
-
-//! imp Routes
-import adminData from './admin';
+//! imp Controllers
+import ProductsController from '../controllers/products';
 
 const router = express.Router();
 
-router.get('/', (req: Request, res: Response, next: NextFunction) => {
-  const products = adminData.products;
-
-  res.render('shop', {
-    prods: products,
-    pageTitle: 'Shop',
-    path: '/',
-  });
-});
+router.get('/', ProductsController.getProducts);
 
 export default router;
