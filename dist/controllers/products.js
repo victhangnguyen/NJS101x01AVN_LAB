@@ -31,13 +31,8 @@ var getProducts = function (req, res, next) {
             pageTitle: 'Shop',
             path: '/',
         });
+        console.log('Controllers -> products: ', products);
     });
-    console.log('Controllers -> products: ', products);
 };
 exports.getProducts = getProducts;
-// export default {
-//   getAddProduct,
-//   postAddProduct,
-//   getProducts,
-// };
 //# sourceMappingURL=products.js.map

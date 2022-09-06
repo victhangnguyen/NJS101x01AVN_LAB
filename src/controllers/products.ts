@@ -31,13 +31,6 @@ export const getProducts: RequestHandler = (req, res, next) => {
       pageTitle: 'Shop',
       path: '/',
     });
+    console.log('Controllers -> products: ', products);
   });
-
-  console.log('Controllers -> products: ', products);
 };
-
-// export default {
-//   getAddProduct,
-//   postAddProduct,
-//   getProducts,
-// };
