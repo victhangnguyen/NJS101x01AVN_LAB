@@ -28,8 +28,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 //! imp Controllers
-var ProductsController = __importStar(require("../controllers/products"));
+var shopController = __importStar(require("../controllers/shop"));
 var router = express_1.default.Router();
-router.get('/', ProductsController.getProducts);
+router.get('/', shopController.getIndex);
+router.get('/products', shopController.getProducts);
+router.get('/cart', shopController.getCart);
+router.get('/orders', shopController.getOrders);
+router.get('/checkout', shopController.getCheckout);
 exports.default = router;
 //# sourceMappingURL=shop.js.map

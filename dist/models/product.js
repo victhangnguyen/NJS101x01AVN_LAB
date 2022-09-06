@@ -21,11 +21,20 @@ var getProductsFromFile = function (callbackFn) {
     });
 };
 var Product = /** @class */ (function () {
-    function Product(title) {
+    function Product(title, imageUrl, description, price) {
         this.title = title;
+        this.imageUrl = imageUrl;
+        this.description = description;
+        this.price = price;
+        // this.title = title;
+        // this.imageUrl = imageUrl;
+        // this.description = description;
+        // this.price = price;
     }
     Product.prototype.save = function () {
         var _this = this;
+        //! init productId
+        this.id = Math.random().toString();
         getProductsFromFile(function (products) {
             //! callbackFn return Array<Product>
             products.push(_this);

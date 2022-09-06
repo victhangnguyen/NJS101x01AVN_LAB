@@ -46,7 +46,7 @@ var publicDir = path_1.default.join(__dirname, '..', 'public');
 app.use(express_1.default.static(publicDir));
 //! implementing Routes
 app.use('/admin', admin_1.default);
-app.use(shop_1.default);
+app.use(shop_1.default); //! default: '/'
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(errorController.get404);
 app.listen(3000);

@@ -31,7 +31,7 @@ app.use(express.static(publicDir));
 
 //! implementing Routes
 app.use('/admin', adminRoutes);
-app.use(shopRoutes);
+app.use(shopRoutes); //! default: '/'
 
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(errorController.get404);

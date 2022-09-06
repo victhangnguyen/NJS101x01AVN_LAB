@@ -28,11 +28,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 //! imp Controllers
-var productsController = __importStar(require("../controllers/products"));
+var adminController = __importStar(require("../controllers/admin"));
 var router = express_1.default.Router();
-//! /admin/add-product/ => GET
-router.get('/add-product', productsController.getAddProduct);
-//! /admin/add-product/ => POST
-router.post('/add-product', productsController.postAddProduct);
+// /admin/add-product => GET
+router.get('/add-product', adminController.getAddProduct);
+// /admin/products => GET
+router.get('/products', adminController.getProducts);
+// /admin/add-product => POST
+router.post('/add-product', adminController.postAddProduct);
 exports.default = router;
 //# sourceMappingURL=admin.js.map

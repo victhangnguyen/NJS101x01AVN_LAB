@@ -20,9 +20,25 @@ const getProductsFromFile = (callbackFn: any) => {
 };
 
 export default class Product {
-  constructor(public title: string) {}
+  // public id: string | undefined;
+  public id?: string;
+
+  constructor(
+    public title: string,
+    public imageUrl: string,
+    public description: string,
+    public price: string
+  ) {
+    // this.title = title;
+    // this.imageUrl = imageUrl;
+    // this.description = description;
+    // this.price = price;
+  }
 
   public save() {
+    //! init productId
+    this.id = Math.random().toString();
+
     getProductsFromFile((products: Array<Product>) => {
       //! callbackFn return Array<Product>
       products.push(this);
