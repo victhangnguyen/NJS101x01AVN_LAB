@@ -25,13 +25,14 @@ var postAddProduct = function (req, res, next) {
 };
 exports.postAddProduct = postAddProduct;
 var getProducts = function (req, res, next) {
-    var products = product_1.default.fetchAll();
-    console.log('products: ', products);
-    res.render('shop', {
-        prods: products,
-        pageTitle: 'Shop',
-        path: '/',
+    product_1.default.fetchAll(function (products) {
+        res.render('shop', {
+            prods: products,
+            pageTitle: 'Shop',
+            path: '/',
+        });
     });
+    console.log('Controllers -> products: ', products);
 };
 exports.getProducts = getProducts;
 // export default {

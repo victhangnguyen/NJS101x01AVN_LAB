@@ -31,20 +31,23 @@ var Product = /** @class */ (function () {
             products.push(_this);
             //! save
             fs_1.default.writeFile(p, JSON.stringify(products), function (err) {
-                console.log('write File: ', err);
+                console.log('Models -> write File: ', err);
             });
         });
     };
-    Product.fetchAll = function () {
+    Product.fetchAll = function (cb) {
         var _a;
         var p = path_1.default.join(path_1.default.dirname((_a = require.main) === null || _a === void 0 ? void 0 : _a.filename), //! main src
         'data', 'products.json');
         fs_1.default.readFile(p, function (err, dataBuffer) {
             if (err) {
-                return [];
+                // return [];
+                cb([]);
+                //! instead of returning Array [], we have a callback with Array Empty
             }
-            console.log('fetchAll: ', JSON.parse(dataBuffer.toString()));
-            return JSON.parse(dataBuffer.toString());
+            console.log('Models -> fetchAll: ', JSON.parse(dataBuffer.toString()));
+            // return JSON.parse(dataBuffer.toString());
+            cb(JSON.parse(dataBuffer.toString()));
         });
     };
     return Product;

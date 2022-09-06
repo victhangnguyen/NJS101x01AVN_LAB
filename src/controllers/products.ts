@@ -25,14 +25,15 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
 };
 
 export const getProducts: RequestHandler = (req, res, next) => {
-  const products = Product.fetchAll();
-  console.log('products: ', products);
-
-  res.render('shop', {
-    prods: products,
-    pageTitle: 'Shop',
-    path: '/',
+  Product.fetchAll((products: Array<Product>) => {
+    res.render('shop', {
+      prods: products,
+      pageTitle: 'Shop',
+      path: '/',
+    });
   });
+
+  console.log('Controllers -> products: ', products);
 };
 
 // export default {

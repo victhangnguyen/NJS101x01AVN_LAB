@@ -30,23 +30,29 @@ export default class Product {
       products.push(this);
       //! save
       fs.writeFile(p, JSON.stringify(products), (err) => {
-        console.log('write File: ', err);
+        console.log('Models -> write File: ', err);
       });
     });
   }
 
-  static fetchAll() {
+  static fetchAll(cb: any) {
     const p: string = path.join(
       path.dirname(require.main?.filename as string), //! main src
       'data',
       'products.json'
     );
+    
     fs.readFile(p, (err, dataBuffer) => {
       if (err) {
-        return [];
+        // return [];
+        cb([]);
+        //! instead of returning Array [], we have a callback with Array Empty
       }
-      console.log('fetchAll: ',JSON.parse(dataBuffer.toString()));
-      return JSON.parse(dataBuffer.toString());
+      console.log('Models -> fetchAll: ', JSON.parse(dataBuffer.toString()));
+      // return JSON.parse(dataBuffer.toString());
+      cb(JSON.parse(dataBuffer.toString()));
     });
   }
 }
+
+
