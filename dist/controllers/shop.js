@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCheckout = exports.getOrders = exports.getCart = exports.getIndex = exports.getProducts = void 0;
+exports.getCheckout = exports.getOrders = exports.getCart = exports.getIndex = exports.getProduct = exports.getProducts = void 0;
 //! Models
 var product_1 = __importDefault(require("../models/product"));
 var getProducts = function (req, res, next) {
@@ -16,6 +16,13 @@ var getProducts = function (req, res, next) {
     });
 };
 exports.getProducts = getProducts;
+var getProduct = function (req, res, next) {
+    //! extract that Dynamic path segment
+    var prodId = req.params.productId;
+    console.log(prodId);
+    res.redirect('/');
+};
+exports.getProduct = getProduct;
 var getIndex = function (req, res, next) {
     product_1.default.fetchAll(function (products) {
         res.render('shop/index', {
