@@ -19,7 +19,9 @@ exports.getProducts = getProducts;
 var getProduct = function (req, res, next) {
     //! extract that Dynamic path segment
     var prodId = req.params.productId;
-    console.log(prodId);
+    product_1.default.findById(prodId, function (product) {
+        console.log(product);
+    });
     res.redirect('/');
 };
 exports.getProduct = getProduct;

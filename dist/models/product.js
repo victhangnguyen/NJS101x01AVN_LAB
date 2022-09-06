@@ -43,8 +43,16 @@ var Product = /** @class */ (function () {
             });
         });
     };
-    Product.fetchAll = function (cb) {
-        getProductsFromFile(cb);
+    Product.fetchAll = function (callbackFn) {
+        getProductsFromFile(callbackFn);
+    };
+    Product.findById = function (id, callbackFn) {
+        getProductsFromFile(function (products) {
+            var product = products.find(function (prod) { return prod.id === id; }); //! just find first element
+            callbackFn(product);
+            //! Find is a synchronous function, doesnt execute any async code.
+            //! simple have 2 lines after each other will do the strick here.
+        });
     };
     return Product;
 }());

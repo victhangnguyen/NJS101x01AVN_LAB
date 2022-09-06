@@ -48,7 +48,16 @@ export default class Product {
     });
   }
 
-  static fetchAll(cb: any) {
-    getProductsFromFile(cb);
+  static fetchAll(callbackFn: any) {
+    getProductsFromFile(callbackFn);
+  }
+
+  static findById(id: string, callbackFn: any) {
+    getProductsFromFile((products: Array<Product>) => {
+      const product = products.find((prod) => prod.id === id); //! just find first element
+      callbackFn(product)
+    //! Find is a synchronous function, doesnt execute any async code.
+    //! simple have 2 lines after each other will do the strick here.
+    });
   }
 }

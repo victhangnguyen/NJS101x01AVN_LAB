@@ -15,7 +15,9 @@ export const getProducts: RequestHandler = (req, res, next) => {
 export const getProduct: RequestHandler = (req, res, next) => {
   //! extract that Dynamic path segment
   const prodId = req.params.productId;
-  console.log(prodId);
+  Product.findById(prodId, (product: Product) => {
+    console.log(product);
+  });
   res.redirect('/');
 };
 
