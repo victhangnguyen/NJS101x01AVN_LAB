@@ -41,6 +41,13 @@ export const getCart: RequestHandler = (req, res, next) => {
   });
 };
 
+export const postCart: RequestHandler = (req, res, next) => {
+  const prodId = req.body.productId;
+  console.log('prodId: ', prodId);
+  res.redirect('/cart');
+  //! get route cart -> render Cart route
+};
+
 export const getOrders: RequestHandler = (req, res, next) => {
   res.render('shop/orders', {
     path: '/orders',

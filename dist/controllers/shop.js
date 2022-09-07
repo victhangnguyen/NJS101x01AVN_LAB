@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCheckout = exports.getOrders = exports.getCart = exports.getIndex = exports.getProduct = exports.getProducts = void 0;
+exports.getCheckout = exports.getOrders = exports.postCart = exports.getCart = exports.getIndex = exports.getProduct = exports.getProducts = void 0;
 //! Models
 var product_1 = __importDefault(require("../models/product"));
 var getProducts = function (req, res, next) {
@@ -45,6 +45,13 @@ var getCart = function (req, res, next) {
     });
 };
 exports.getCart = getCart;
+var postCart = function (req, res, next) {
+    var prodId = req.body.productId;
+    console.log('prodId: ', prodId);
+    res.redirect('/cart');
+    //! get route cart -> render Cart route
+};
+exports.postCart = postCart;
 var getOrders = function (req, res, next) {
     res.render('shop/orders', {
         path: '/orders',
