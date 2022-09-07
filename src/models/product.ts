@@ -21,13 +21,13 @@ const getProductsFromFile = (callbackFn: any) => {
 
 export default class Product {
   // public id: string | undefined;
-  public id?: string;
+  public id!: string;
 
   constructor(
     public title: string,
     public imageUrl: string,
     public description: string,
-    public price: string
+    public price: number
   ) {
     // this.title = title;
     // this.imageUrl = imageUrl;
@@ -55,9 +55,9 @@ export default class Product {
   static findById(id: string, callbackFn: any) {
     getProductsFromFile((products: Array<Product>) => {
       const product = products.find((prod) => prod.id === id); //! just find first element
-      callbackFn(product)
-    //! Find is a synchronous function, doesnt execute any async code.
-    //! simple have 2 lines after each other will do the strick here.
+      callbackFn(product);
+      //! Find is a synchronous function, doesnt execute any async code.
+      //! simple have 2 lines after each other will do the strick here.
     });
   }
 }

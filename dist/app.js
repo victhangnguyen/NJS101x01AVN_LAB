@@ -26,15 +26,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var path_1 = __importDefault(require("path"));
-var express_1 = __importDefault(require("express"));
+const path_1 = __importDefault(require("path"));
+const express_1 = __importDefault(require("express"));
 //! imp Routes
-var admin_1 = __importDefault(require("./routes/admin"));
-var shop_1 = __importDefault(require("./routes/shop"));
+const admin_1 = __importDefault(require("./routes/admin"));
+const shop_1 = __importDefault(require("./routes/shop"));
 //! imp Controllers
-var errorController = __importStar(require("./controllers/error"));
+const errorController = __importStar(require("./controllers/error"));
 //! an instance of the app object
-var app = (0, express_1.default)();
+const app = (0, express_1.default)();
 //! set Template Engine
 app.set('view engine', 'ejs');
 //! set View source
@@ -42,7 +42,7 @@ app.set('views', 'src/views');
 //! Register Middlewares
 app.use(express_1.default.urlencoded({ extended: false }));
 //! app.ts => root Directory : src
-var publicDir = path_1.default.join(__dirname, '..', 'public');
+const publicDir = path_1.default.join(__dirname, '..', 'public');
 app.use(express_1.default.static(publicDir));
 //! implementing Routes
 app.use('/admin', admin_1.default);

@@ -26,10 +26,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importDefault(require("express"));
+const express_1 = __importDefault(require("express"));
 //! imp Controllers
-var adminController = __importStar(require("../controllers/admin"));
-var router = express_1.default.Router();
+const adminController = __importStar(require("../controllers/admin"));
+const router = express_1.default.Router();
 // /admin/add-product => GET
 router.get('/add-product', adminController.getAddProduct);
 // /admin/products => GET
