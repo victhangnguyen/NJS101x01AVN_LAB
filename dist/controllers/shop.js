@@ -20,9 +20,12 @@ var getProduct = function (req, res, next) {
     //! extract that Dynamic path segment
     var prodId = req.params.productId;
     product_1.default.findById(prodId, function (product) {
-        console.log(product);
+        res.render('shop/product-detail', {
+            product: product,
+            pageTitle: product.title,
+            path: '/products',
+        });
     });
-    res.redirect('/');
 };
 exports.getProduct = getProduct;
 var getIndex = function (req, res, next) {
