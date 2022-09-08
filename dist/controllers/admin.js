@@ -18,7 +18,7 @@ const postAddProduct = (req, res, next) => {
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    const product = new product_1.default(title, imageUrl, description, price);
+    const product = new product_1.default(null, title, imageUrl, description, price);
     product.save();
     res.redirect('/');
 };
@@ -35,10 +35,10 @@ const getProducts = (req, res, next) => {
 exports.getProducts = getProducts;
 const getEditProduct = (req, res, next) => {
     const editMode = req.query.edit;
-    console.log(editMode);
     if (!editMode) {
         return res.redirect('/');
         //! Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+        //! Solution: add return
     }
     const prodId = req.params.productId;
     product_1.default.findById(prodId, (product) => {
@@ -55,8 +55,20 @@ const getEditProduct = (req, res, next) => {
 };
 exports.getEditProduct = getEditProduct;
 const postEditProduct = (req, res, next) => {
-    const editedProduct = req.body;
-    console.log(editedProduct);
+    //! fetch information for the product
+    const prodId = req.body.productId;
+    const updatedTitle = req.body.title;
+    const updatedPrice = req.body.price;
+    const updatedImageUrl = req.body.imageUrl;
+    const updatedDesc = req.body.description;
+    //! create a new product instance that already have existing Id
+    //! populate it with that information
+    const updatedProduct = new product_1.default(prodId, updatedTitle, updatedImageUrl, updatedDesc, updatedPrice);
+    //! call save()
+    updatedProduct.save();
+    //! res
+    res.redirect(`/admin/products`);
+    // res.redirect(`/admin/edit-product/${prodId}?edit=true`);
 };
 exports.postEditProduct = postEditProduct;
 //# sourceMappingURL=admin.js.map

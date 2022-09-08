@@ -25,7 +25,7 @@ class Cart {
             if (existingProduct) {
                 updatedProduct = { ...existingProduct };
                 updatedProduct.qty = updatedProduct.qty + 1;
-                //! cart.products = [...cart.products]; __???
+                cart.products = [...cart.products]; //!__???
                 cart.products[existingProductIndex] = updatedProduct;
             }
             else {

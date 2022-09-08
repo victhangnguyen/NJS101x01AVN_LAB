@@ -2,11 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 //! get src directory
-const p = path.join(
-  path.dirname(require.main?.filename as string),
-  'data',
-  'cart.json'
-);
+const p = path.join(path.dirname(require.main?.filename as string), 'data', 'cart.json');
 
 interface IProductCart {
   id: string;
@@ -27,9 +23,7 @@ class Cart {
       }
 
       //!_2. Analyze the Cart => Find the existing product
-      const existingProductIndex = cart.products.findIndex(
-        (prod) => prod.id === id
-      );
+      const existingProductIndex = cart.products.findIndex((prod) => prod.id === id);
 
       const existingProduct = cart.products[existingProductIndex];
 
@@ -40,7 +34,7 @@ class Cart {
       if (existingProduct) {
         updatedProduct = { ...existingProduct };
         updatedProduct.qty = updatedProduct.qty + 1;
-        //! cart.products = [...cart.products]; __???
+        cart.products = [...cart.products]; //!__???
         cart.products[existingProductIndex] = updatedProduct;
       } else {
         updatedProduct = { id: id, qty: 1 };

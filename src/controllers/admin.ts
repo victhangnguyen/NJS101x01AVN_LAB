@@ -10,12 +10,15 @@ export const getAddProduct: RequestHandler = (req, res, next) => {
 };
 
 export const postAddProduct: RequestHandler = (req, res, next) => {
-  const title = req.body.title;
-  const imageUrl = req.body.imageUrl;
-  const price = req.body.price;
-  const description = req.body.description;
-  const product = new Product(title, imageUrl, description, price);
+  const title: Product['title'] = req.body.title;
+  const imageUrl: Product['imageUrl'] = req.body.imageUrl;
+  const price: Product['price'] = req.body.price;
+  const description: Product['description'] = req.body.description;
+
+  const product: Product = new Product(null, title, imageUrl, description, price);
+
   product.save();
+
   res.redirect('/');
 };
 
@@ -31,14 +34,14 @@ export const getProducts: RequestHandler = (req, res, next) => {
 
 export const getEditProduct: RequestHandler = (req, res, next) => {
   const editMode = req.query.edit;
-  console.log(editMode);
 
   if (!editMode) {
     return res.redirect('/');
     //! Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    //! Solution: add return
   }
 
-  const prodId = req.params.productId;
+  const prodId: Product['id'] = req.params.productId;
   Product.findById(prodId, (product: Product) => {
     if (!product) {
       return res.redirect('/'); //! send response and out callback.
@@ -54,6 +57,20 @@ export const getEditProduct: RequestHandler = (req, res, next) => {
 };
 
 export const postEditProduct: RequestHandler = (req, res, next) => {
-  const editedProduct: Product = req.body;
-  console.log(editedProduct)
+  //! fetch information for the product
+  const prodId: Product['id'] = req.body.productId;
+  const updatedTitle: Product['title'] = req.body.title;
+  const updatedPrice: Product['price'] = req.body.price;
+  const updatedImageUrl: Product['imageUrl'] = req.body.imageUrl;
+  const updatedDesc: Product['description'] = req.body.description;
+
+  //! create a new product instance that already have existing Id
+  //! populate it with that information
+  const updatedProduct: Product = new Product(prodId, updatedTitle, updatedImageUrl, updatedDesc, updatedPrice);
+
+  //! call save()
+  updatedProduct.save();
+  //! res
+  res.redirect(`/admin/products`);
+  // res.redirect(`/admin/edit-product/${prodId}?edit=true`);
 };

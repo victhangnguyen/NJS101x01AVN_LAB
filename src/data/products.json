@@ -1,5 +1,1 @@
-[
-  { "id": ".20238", "title": "A Book", "imageUrl": "https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg", "description": "This is an awesome book!", "price": "19" },
-  { "title": "Hello", "imageUrl": "https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg", "description": "1555", "price": "15", "id": "0.550587397029872" },
-  { "title": "", "description": "12", "price": "12", "id": "0.4095315823842036" }
-]
+[{"id":".20238","title":"A Book","imageUrl":"https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg","description":"This is an awesome book!","price":"19"},{"id":"0.550587397029872","title":"Thu nghiem","imageUrl":"https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg","description":"Thu nghiem","price":"2"},{"title":"","description":"12","price":"12","id":"0.4095315823842036"}]

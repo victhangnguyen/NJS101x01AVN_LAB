@@ -47,7 +47,7 @@ export const postCart: RequestHandler = (req, res, next) => {
   res.redirect('/cart');
 
   Product.findById(prodId, (product: Product) => {
-    Cart.addProduct(product.id, product.price); 
+    Cart.addProduct(product.id!, product.price);
   });
   //! get route cart -> render Cart route
 };

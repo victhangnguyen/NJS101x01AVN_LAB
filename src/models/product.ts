@@ -21,14 +21,7 @@ const getProductsFromFile = (callbackFn: any) => {
 
 export default class Product {
   // public id: string | undefined;
-  public id!: string;
-
-  constructor(
-    public title: string,
-    public imageUrl: string,
-    public description: string,
-    public price: number
-  ) {
+  constructor(public id: string | null, public title: string, public imageUrl: string, public description: string, public price: number) {
     // this.title = title;
     // this.imageUrl = imageUrl;
     // this.description = description;
@@ -36,15 +29,27 @@ export default class Product {
   }
 
   public save() {
-    //! init productId
-    this.id = Math.random().toString();
-
     getProductsFromFile((products: Array<Product>) => {
-      //! callbackFn return Array<Product>
-      products.push(this);
-      fs.writeFile(p, JSON.stringify(products), (err) => {
-        console.log(err);
-      });
+      if (this.id) {
+        const existingProductIndex = products.findIndex((product) => {
+          return product.id === this.id; //! __DEBUG existing = -1 => callbackFn do not return
+        });
+        
+        const updatedProducts = [...products]; //! handling shallow copy array (create a nextUpdatedProducts)
+        updatedProducts[existingProductIndex] = this;
+
+        //! store updatedProducts to products.json
+        fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {
+          console.log(err);
+        });
+      } else {
+        //! create a New Product
+        this.id = Math.random().toString();
+        products.push(this);
+        fs.writeFile(p, JSON.stringify(products), (err) => {
+          console.log(err);
+        });
+      }
     });
   }
 
