@@ -9,6 +9,7 @@ const getAddProduct = (req, res, next) => {
     res.render('admin/edit-product', {
         pageTitle: 'Add Product',
         path: '/admin/add-product',
+        editing: false,
     });
 };
 exports.getAddProduct = getAddProduct;
@@ -35,12 +36,21 @@ exports.getProducts = getProducts;
 const getEditProduct = (req, res, next) => {
     const editMode = req.query.edit;
     console.log(editMode);
-    if (editMode === 'false') {
-        res.redirect('/');
+    if (!editMode) {
+        return res.redirect('/');
+        //! Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
     }
-    res.render('admin/edit-product', {
-        pageTitle: 'Edit Product',
-        path: '/admin/edit-product',
+    const prodId = req.params.productId;
+    product_1.default.findById(prodId, (product) => {
+        if (!product) {
+            return res.redirect('/'); //! send response and out callback.
+        }
+        res.render('admin/edit-product', {
+            product: product,
+            pageTitle: 'Edit Product',
+            path: '/admin/edit-product',
+            editing: editMode,
+        });
     });
 };
 exports.getEditProduct = getEditProduct;
