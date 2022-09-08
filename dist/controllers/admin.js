@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEditProduct = exports.getProducts = exports.postAddProduct = exports.getAddProduct = void 0;
+exports.postEditProduct = exports.getEditProduct = exports.getProducts = exports.postAddProduct = exports.getAddProduct = void 0;
 const product_1 = __importDefault(require("../models/product"));
 const getAddProduct = (req, res, next) => {
     res.render('admin/edit-product', {
@@ -54,4 +54,9 @@ const getEditProduct = (req, res, next) => {
     });
 };
 exports.getEditProduct = getEditProduct;
+const postEditProduct = (req, res, next) => {
+    const editedProduct = req.body;
+    console.log(editedProduct);
+};
+exports.postEditProduct = postEditProduct;
 //# sourceMappingURL=admin.js.map

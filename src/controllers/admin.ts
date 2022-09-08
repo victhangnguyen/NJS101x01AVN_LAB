@@ -52,3 +52,8 @@ export const getEditProduct: RequestHandler = (req, res, next) => {
     });
   });
 };
+
+export const postEditProduct: RequestHandler = (req, res, next) => {
+  const editedProduct: Product = req.body;
+  console.log(editedProduct)
+};
