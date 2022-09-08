@@ -74,3 +74,8 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
   res.redirect(`/admin/products`);
   // res.redirect(`/admin/edit-product/${prodId}?edit=true`);
 };
+
+export const postDeleteProduct: RequestHandler = (req, res, next) => {
+  const prodId = req.body.productId;
+  console.log(prodId);
+};

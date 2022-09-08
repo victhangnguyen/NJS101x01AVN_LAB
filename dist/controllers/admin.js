@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postEditProduct = exports.getEditProduct = exports.getProducts = exports.postAddProduct = exports.getAddProduct = void 0;
+exports.postDeleteProduct = exports.postEditProduct = exports.getEditProduct = exports.getProducts = exports.postAddProduct = exports.getAddProduct = void 0;
 const product_1 = __importDefault(require("../models/product"));
 const getAddProduct = (req, res, next) => {
     res.render('admin/edit-product', {
@@ -71,4 +71,9 @@ const postEditProduct = (req, res, next) => {
     // res.redirect(`/admin/edit-product/${prodId}?edit=true`);
 };
 exports.postEditProduct = postEditProduct;
+const postDeleteProduct = (req, res, next) => {
+    const prodId = req.body.productId;
+    console.log(prodId);
+};
+exports.postDeleteProduct = postDeleteProduct;
 //# sourceMappingURL=admin.js.map

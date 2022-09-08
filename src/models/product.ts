@@ -34,7 +34,7 @@ export default class Product {
         const existingProductIndex = products.findIndex((product) => {
           return product.id === this.id; //! __DEBUG existing = -1 => callbackFn do not return
         });
-        
+
         const updatedProducts = [...products]; //! handling shallow copy array (create a nextUpdatedProducts)
         updatedProducts[existingProductIndex] = this;
 
@@ -57,12 +57,24 @@ export default class Product {
     getProductsFromFile(callbackFn);
   }
 
-  static findById(id: string, callbackFn: any) {
+  static findById(id: Product['id'], callbackFn: any) {
     getProductsFromFile((products: Array<Product>) => {
-      const product = products.find((prod) => prod.id === id); //! just find first element
+      const product: Product | undefined = products.find((prod) => prod.id === id); //! just find first element
       callbackFn(product);
       //! Find is a synchronous function, doesnt execute any async code.
       //! simple have 2 lines after each other will do the strick here.
+    });
+  }
+
+  static deleteById(id: Product['id'], callbackFn: () => any) {
+    getProductsFromFile((products: Array<Product>) => {
+      const updatedProducts: Array<Product> = products.filter((product) => product.id !== id);
+      fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {
+        //! if not error => it log to null
+        if (!err) {
+          //! Work on the Cart and make sure we can delete items from there.
+        }
+      });
     });
   }
 }

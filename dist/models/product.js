@@ -67,6 +67,17 @@ class Product {
             //! simple have 2 lines after each other will do the strick here.
         });
     }
+    static deleteById(id, callbackFn) {
+        getProductsFromFile((products) => {
+            const updatedProducts = products.filter((product) => product.id !== id);
+            fs_1.default.writeFile(p, JSON.stringify(updatedProducts), (err) => {
+                //! if not error => it log to null
+                if (!err) {
+                    //! Work on the Cart and make sure we can delete items from there.
+                }
+            });
+        });
+    }
 }
 exports.default = Product;
 //# sourceMappingURL=product.js.map
