@@ -30,11 +30,14 @@ const express_1 = __importDefault(require("express"));
 //! imp Controllers
 const adminController = __importStar(require("../controllers/admin"));
 const router = express_1.default.Router();
-// /admin/add-product => GET
+//@ /admin/add-product => GET
 router.get('/add-product', adminController.getAddProduct);
-// /admin/products => GET
-router.get('/products', adminController.getProducts);
-// /admin/add-product => POST
+//@ /admin/add-product => POST
 router.post('/add-product', adminController.postAddProduct);
+//@ /admin/products => GET
+router.get('/products', adminController.getProducts);
+//@ /admin/edit-product => GET
+router.get('/edit-product/:productId', adminController.getEditProduct);
+//@ /admin/edit-product => POST
 exports.default = router;
 //# sourceMappingURL=admin.js.map

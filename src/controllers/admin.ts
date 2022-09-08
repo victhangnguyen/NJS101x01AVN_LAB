@@ -2,12 +2,9 @@ import { RequestHandler } from 'express';
 import Product from '../models/product';
 
 export const getAddProduct: RequestHandler = (req, res, next) => {
-  res.render('admin/add-product', {
+  res.render('admin/edit-product', {
     pageTitle: 'Add Product',
     path: '/admin/add-product',
-    formsCSS: true,
-    productCSS: true,
-    activeAddProduct: true,
   });
 };
 
@@ -28,5 +25,19 @@ export const getProducts: RequestHandler = (req, res, next) => {
       pageTitle: 'Admin Products',
       path: '/admin/products',
     });
+  });
+};
+
+export const getEditProduct: RequestHandler = (req, res, next) => {
+  const editMode = req.query.edit;
+  console.log(editMode);
+
+  if (editMode === 'false') {
+    res.redirect('/');
+  }
+
+  res.render('admin/edit-product', {
+    pageTitle: 'Edit Product',
+    path: '/admin/edit-product',
   });
 };

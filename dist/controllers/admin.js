@@ -3,15 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProducts = exports.postAddProduct = exports.getAddProduct = void 0;
+exports.getEditProduct = exports.getProducts = exports.postAddProduct = exports.getAddProduct = void 0;
 const product_1 = __importDefault(require("../models/product"));
 const getAddProduct = (req, res, next) => {
-    res.render('admin/add-product', {
+    res.render('admin/edit-product', {
         pageTitle: 'Add Product',
         path: '/admin/add-product',
-        formsCSS: true,
-        productCSS: true,
-        activeAddProduct: true,
     });
 };
 exports.getAddProduct = getAddProduct;
@@ -35,4 +32,16 @@ const getProducts = (req, res, next) => {
     });
 };
 exports.getProducts = getProducts;
+const getEditProduct = (req, res, next) => {
+    const editMode = req.query.edit;
+    console.log(editMode);
+    if (editMode === 'false') {
+        res.redirect('/');
+    }
+    res.render('admin/edit-product', {
+        pageTitle: 'Edit Product',
+        path: '/admin/edit-product',
+    });
+};
+exports.getEditProduct = getEditProduct;
 //# sourceMappingURL=admin.js.map
