@@ -6,6 +6,8 @@ var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+//! __imp Models
+const cart_1 = __importDefault(require("./cart"));
 const p = path_1.default.join(path_1.default.dirname((_a = require.main) === null || _a === void 0 ? void 0 : _a.filename), //! main src
 'data', 'products.json');
 //! Helper Funcction
@@ -67,13 +69,15 @@ class Product {
             //! simple have 2 lines after each other will do the strick here.
         });
     }
-    static deleteById(id, callbackFn) {
+    static deleteById(id) {
         getProductsFromFile((products) => {
-            const updatedProducts = products.filter((product) => product.id !== id);
+            const product = products.find((prod) => prod.id === id);
+            const updatedProducts = products.filter((prod) => prod.id !== id);
             fs_1.default.writeFile(p, JSON.stringify(updatedProducts), (err) => {
                 //! if not error => it log to null
                 if (!err) {
                     //! Work on the Cart and make sure we can delete items from there.
+                    cart_1.default.deleteProduct(id, product === null || product === void 0 ? void 0 : product.price);
                 }
             });
         });

@@ -39,6 +39,26 @@ class Cart {
             });
         });
     }
+    //! delete Product into Cart
+    static deleteProduct(id, productPrice) {
+        //! we need [param] productPrice, because We'll need update the total cart price.
+        fs_1.default.readFile(p, (err, fileContent) => {
+            if (err) {
+                return;
+            }
+            const cart = JSON.parse(fileContent.toString());
+            const updatedCart = { ...cart };
+            //! This wil be fixed later - "cart" don't exist here. We will need to parse that from fileContent.
+            const product = updatedCart.products.find((prod) => prod.id === id);
+            const productQty = product.qty;
+            //! and now, I can update my cart products here.
+            updatedCart.products = updatedCart.products.filter((prod) => prod.id !== id);
+            updatedCart.totalPrice = cart.totalPrice - productPrice * productQty; //! qty: 3, it should be reduced by the product price times three
+            fs_1.default.writeFile(p, JSON.stringify(updatedCart), (err) => {
+                console.log(err);
+            });
+        });
+    }
 }
 exports.default = Cart;
 //# sourceMappingURL=cart.js.map

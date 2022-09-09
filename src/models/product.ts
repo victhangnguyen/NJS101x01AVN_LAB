@@ -1,6 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
+//! __imp Models
+import Cart from './cart';
+
 const p: string = path.join(
   path.dirname(require.main?.filename as string), //! main src
   'data',
@@ -66,13 +69,15 @@ export default class Product {
     });
   }
 
-  static deleteById(id: Product['id'], callbackFn: () => any) {
+  static deleteById(id: Product['id']) {
     getProductsFromFile((products: Array<Product>) => {
-      const updatedProducts: Array<Product> = products.filter((product) => product.id !== id);
+      const product: Product | undefined = products.find((prod) => prod.id === id);
+      const updatedProducts: Array<Product> = products.filter((prod) => prod.id !== id);
       fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {
         //! if not error => it log to null
         if (!err) {
           //! Work on the Cart and make sure we can delete items from there.
+          Cart.deleteProduct(id, product?.price!);
         }
       });
     });

@@ -73,7 +73,8 @@ const postEditProduct = (req, res, next) => {
 exports.postEditProduct = postEditProduct;
 const postDeleteProduct = (req, res, next) => {
     const prodId = req.body.productId;
-    console.log(prodId);
+    product_1.default.deleteById(prodId);
+    res.redirect('/admin/products');
 };
 exports.postDeleteProduct = postDeleteProduct;
 //# sourceMappingURL=admin.js.map
