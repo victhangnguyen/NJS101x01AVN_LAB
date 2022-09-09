@@ -60,10 +60,10 @@ export default class Product {
     getProductsFromFile(callbackFn);
   }
 
-  static findById(id: Product['id'], callbackFn: any) {
+  static findById(id: string, callbackFn: (product: Product) => void) {
     getProductsFromFile((products: Array<Product>) => {
       const product: Product | undefined = products.find((prod) => prod.id === id); //! just find first element
-      callbackFn(product);
+      callbackFn(product!);
       //! Find is a synchronous function, doesnt execute any async code.
       //! simple have 2 lines after each other will do the strick here.
     });

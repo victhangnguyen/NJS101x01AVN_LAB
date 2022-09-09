@@ -48,7 +48,7 @@ export const getCart: RequestHandler = (req, res, next) => {
           //! __important This is use for example, with large data, we should use function database
         }
       }
-      console.log(cartProducts)
+      console.log(cartProducts);
       res.render('shop/cart', {
         products: cartProducts,
         path: '/cart',
@@ -59,13 +59,24 @@ export const getCart: RequestHandler = (req, res, next) => {
 };
 
 export const postCart: RequestHandler = (req, res, next) => {
-  const prodId = req.body.productId;
+  const prodId: string = req.body.productId;
   res.redirect('/cart');
 
   Product.findById(prodId, (product: Product) => {
     Cart.addProduct(product.id!, product.price);
   });
   //! get route cart -> render Cart route
+};
+
+export const postCartDeleteProduct: RequestHandler = (req, res, next) => {
+  const prodId: string = req.body.productId;
+  //! We can alse use a hidden input to pass the [prop: price] to the backend.
+  //! I think this Ok, If we only pass the [prop: id] through the req and then we do all the data retrieval on the backend.
+
+  Product.findById(prodId, (product: Product) => {
+    Cart.deleteProduct(prodId, product.price);
+    res.redirect('/cart');
+  });
 };
 
 export const getOrders: RequestHandler = (req, res, next) => {

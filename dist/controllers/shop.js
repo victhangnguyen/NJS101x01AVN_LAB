@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCheckout = exports.getOrders = exports.postCart = exports.getCart = exports.getIndex = exports.getProduct = exports.getProducts = void 0;
+exports.getCheckout = exports.getOrders = exports.postCartDeleteProduct = exports.postCart = exports.getCart = exports.getIndex = exports.getProduct = exports.getProducts = void 0;
 //! Models
 const product_1 = __importDefault(require("../models/product"));
 const cart_1 = __importDefault(require("../models/cart"));
@@ -70,6 +70,16 @@ const postCart = (req, res, next) => {
     //! get route cart -> render Cart route
 };
 exports.postCart = postCart;
+const postCartDeleteProduct = (req, res, next) => {
+    const prodId = req.body.productId;
+    //! We can alse use a hidden input to pass the [prop: price] to the backend.
+    //! I think this Ok, If we only pass the [prop: id] through the req and then we do all the data retrieval on the backend.
+    product_1.default.findById(prodId, (product) => {
+        cart_1.default.deleteProduct(prodId, product.price);
+        res.redirect('/cart');
+    });
+};
+exports.postCartDeleteProduct = postCartDeleteProduct;
 const getOrders = (req, res, next) => {
     res.render('shop/orders', {
         path: '/orders',
