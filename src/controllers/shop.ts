@@ -36,9 +36,25 @@ export const getIndex: RequestHandler = (req, res, next) => {
 };
 
 export const getCart: RequestHandler = (req, res, next) => {
-  res.render('shop/cart', {
-    path: '/cart',
-    pageTitle: 'Your Cart',
+  Cart.getCart((cart) => {
+    Product.fetchAll((products: Array<Product>) => {
+      const cartProducts = [];
+      //! if we have no products in the Cart, then cart products will be an empty Array.
+      for (const product of products) {
+        const cartProductData = cart?.products.find((prod) => prod.id === product.id);
+
+        if (cartProductData) {
+          cartProducts.push({ productData: product, qty: cartProductData.qty });
+          //! __important This is use for example, with large data, we should use function database
+        }
+      }
+      console.log(cartProducts)
+      res.render('shop/cart', {
+        products: cartProducts,
+        path: '/cart',
+        pageTitle: 'Your Cart',
+      });
+    });
   });
 };
 

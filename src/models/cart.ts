@@ -14,6 +14,18 @@ class Cart {
   public products!: Array<IProductCart>;
   public totalPrice!: number;
 
+  //! GET Products
+  static getCart(callbackFn: (cart: Cart | null) => void): void {
+    fs.readFile(p, (err, fileContent) => {
+      const cart = JSON.parse(fileContent.toString());
+      if (err) {
+        callbackFn(null);
+      } else {
+        callbackFn(cart);
+      }
+    }); //! async
+  }
+
   static addProduct(id: Product['id'], productPrice: Product['price']) {
     //!_1. Fetch the previousCart
     fs.readFile(p, (err, fileContent) => {

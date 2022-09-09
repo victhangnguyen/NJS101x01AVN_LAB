@@ -9,6 +9,18 @@ const path_1 = __importDefault(require("path"));
 //! get src directory
 const p = path_1.default.join(path_1.default.dirname((_a = require.main) === null || _a === void 0 ? void 0 : _a.filename), 'data', 'cart.json');
 class Cart {
+    //! GET Products
+    static getCart(callbackFn) {
+        fs_1.default.readFile(p, (err, fileContent) => {
+            const cart = JSON.parse(fileContent.toString());
+            if (err) {
+                callbackFn(null);
+            }
+            else {
+                callbackFn(cart);
+            }
+        }); //! async
+    }
     static addProduct(id, productPrice) {
         //!_1. Fetch the previousCart
         fs_1.default.readFile(p, (err, fileContent) => {
