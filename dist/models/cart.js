@@ -55,6 +55,7 @@ class Cart {
     static deleteProduct(id, productPrice) {
         //! we need [param] productPrice, because We'll need update the total cart price.
         fs_1.default.readFile(p, (err, fileContent) => {
+            //! guard clause
             if (err) {
                 return;
             }
@@ -62,6 +63,9 @@ class Cart {
             const updatedCart = { ...cart };
             //! This wil be fixed later - "cart" don't exist here. We will need to parse that from fileContent.
             const product = updatedCart.products.find((prod) => prod.id === id);
+            //! guard clause
+            if (!product)
+                return;
             const productQty = product.qty;
             //! and now, I can update my cart products here.
             updatedCart.products = updatedCart.products.filter((prod) => prod.id !== id);

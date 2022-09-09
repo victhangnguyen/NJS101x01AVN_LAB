@@ -66,6 +66,7 @@ class Cart {
   static deleteProduct(id: Product['id'], productPrice: Product['price']) {
     //! we need [param] productPrice, because We'll need update the total cart price.
     fs.readFile(p, (err, fileContent) => {
+      //! guard clause
       if (err) {
         return;
       }
@@ -74,6 +75,9 @@ class Cart {
       const updatedCart = { ...cart };
       //! This wil be fixed later - "cart" don't exist here. We will need to parse that from fileContent.
       const product: IProductCart = updatedCart.products.find((prod: IProductCart) => prod.id === id);
+
+      //! guard clause
+      if (!product) return;
 
       const productQty: IProductCart['qty'] = product.qty;
       //! and now, I can update my cart products here.
