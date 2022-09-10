@@ -24,34 +24,34 @@ const postAddProduct = (req, res, next) => {
 };
 exports.postAddProduct = postAddProduct;
 const getProducts = (req, res, next) => {
-    product_1.default.fetchAll((products) => {
-        res.render('admin/products', {
-            prods: products,
-            pageTitle: 'Admin Products',
-            path: '/admin/products',
-        });
-    });
+    // Product.fetchAll((products: Array<Product>) => {
+    //   res.render('admin/products', {
+    //     prods: products,
+    //     pageTitle: 'Admin Products',
+    //     path: '/admin/products',
+    //   });
+    // });
 };
 exports.getProducts = getProducts;
 const getEditProduct = (req, res, next) => {
-    const editMode = req.query.edit;
-    if (!editMode) {
-        return res.redirect('/');
-        //! Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
-        //! Solution: add return
-    }
-    const prodId = req.params.productId;
-    product_1.default.findById(prodId, (product) => {
-        if (!product) {
-            return res.redirect('/'); //! send response and out callback.
-        }
-        res.render('admin/edit-product', {
-            product: product,
-            pageTitle: 'Edit Product',
-            path: '/admin/edit-product',
-            editing: editMode,
-        });
-    });
+    // const editMode = req.query.edit;
+    // if (!editMode) {
+    //   return res.redirect('/');
+    //   //! Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    //   //! Solution: add return
+    // }
+    // const prodId: Product['id'] = req.params.productId;
+    // Product.findById(prodId, (product: Product) => {
+    //   if (!product) {
+    //     return res.redirect('/'); //! send response and out callback.
+    //   }
+    //   res.render('admin/edit-product', {
+    //     product: product,
+    //     pageTitle: 'Edit Product',
+    //     path: '/admin/edit-product',
+    //     editing: editMode,
+    //   });
+    // });
 };
 exports.getEditProduct = getEditProduct;
 const postEditProduct = (req, res, next) => {
