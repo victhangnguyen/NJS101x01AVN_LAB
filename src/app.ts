@@ -12,7 +12,7 @@ import * as errorController from './controllers/error';
 //! imp Database
 import db from './utils/database';
 
-db.execute('SELECT * FROM products') //! we have no products table yet.
+db.execute('SELECT * FROM products').then().catch();
 
 //! an instance of the app object
 const app = express();
