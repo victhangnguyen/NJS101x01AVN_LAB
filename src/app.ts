@@ -1,11 +1,6 @@
 import Logging from './library/Logging';
 import path from 'path';
-import express, {
-  Request,
-  Response,
-  NextFunction,
-  RequestHandler,
-} from 'express';
+import express from 'express';
 
 //! imp Routes
 import adminRoutes from './routes/admin';
@@ -13,6 +8,11 @@ import shopRoutes from './routes/shop';
 
 //! imp Controllers
 import * as errorController from './controllers/error';
+
+//! imp Database
+import db from './utils/database';
+
+db.execute('SELECT * FROM products') //! we have no products table yet.
 
 //! an instance of the app object
 const app = express();
