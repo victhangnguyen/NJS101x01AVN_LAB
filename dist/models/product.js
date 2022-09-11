@@ -19,12 +19,16 @@ class Product {
         // this.price = price;
     }
     save() {
+        // create new
         return database_1.default.execute('INSERT INTO products (title, price, imageUrl, description) VALUES (?, ?, ?, ?)', [this.title, this.price, this.imageUrl, this.description]);
     }
     static fetchAll() {
         return database_1.default.execute('SELECT * FROM products'); //! Table name: products
     }
-    static findById(id) { }
+    static findById(id) {
+        //! __generic RowDataPacket
+        return database_1.default.execute('SELECT * FROM products WHERE products.id = ?', [id]);
+    }
     static deleteById(id) { }
 }
 exports.default = Product;

@@ -1,5 +1,6 @@
 //! database
 import db from '../utils/database';
+import { RowDataPacket } from 'mysql2';
 
 //! __imp Models
 import Cart from './cart';
@@ -14,6 +15,7 @@ export default class Product {
   }
 
   public save() {
+    // create new
     return db.execute('INSERT INTO products (title, price, imageUrl, description) VALUES (?, ?, ?, ?)', [this.title, this.price, this.imageUrl, this.description]);
   }
 
@@ -21,7 +23,10 @@ export default class Product {
     return db.execute('SELECT * FROM products'); //! Table name: products
   }
 
-  static findById(id: string) {}
+  static findById(id: string) {
+    //! __generic RowDataPacket
+    return db.execute<RowDataPacket[]>('SELECT * FROM products WHERE products.id = ?', [id]);
+  }
 
   static deleteById(id: string) {}
 }

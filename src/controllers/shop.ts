@@ -16,15 +16,16 @@ export const getProducts: RequestHandler = (req, res, next) => {
 };
 
 export const getProduct: RequestHandler = (req, res, next) => {
-  // //! extract that Dynamic path segment
-  // const prodId = req.params.productId;
-  // Product.findById(prodId, (product: Product) => {
-  //   res.render('shop/product-detail', {
-  //     product: product,
-  //     pageTitle: product.title,
-  //     path: '/products',
-  //   });
-  // });
+  const prodId = req.params.productId;
+  Product.findById(prodId)
+    .then(([product, fieldPacket]) => {
+      res.render('shop/product-detail', {
+        product: product[0], //! Get first Element of Array
+        pageTitle: product[0].title,
+        path: '/products',
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 export const getIndex: RequestHandler = (req, res, next) => {

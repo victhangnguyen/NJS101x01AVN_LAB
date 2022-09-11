@@ -19,15 +19,16 @@ const getProducts = (req, res, next) => {
 };
 exports.getProducts = getProducts;
 const getProduct = (req, res, next) => {
-    // //! extract that Dynamic path segment
-    // const prodId = req.params.productId;
-    // Product.findById(prodId, (product: Product) => {
-    //   res.render('shop/product-detail', {
-    //     product: product,
-    //     pageTitle: product.title,
-    //     path: '/products',
-    //   });
-    // });
+    const prodId = req.params.productId;
+    product_1.default.findById(prodId)
+        .then(([product, fieldPacket]) => {
+        res.render('shop/product-detail', {
+            product: product[0],
+            pageTitle: product[0].title,
+            path: '/products',
+        });
+    })
+        .catch((err) => console.log(err));
 };
 exports.getProduct = getProduct;
 const getIndex = (req, res, next) => {
