@@ -7,13 +7,15 @@ exports.getCheckout = exports.getOrders = exports.postCartDeleteProduct = export
 //! Models
 const product_1 = __importDefault(require("../models/product"));
 const getProducts = (req, res, next) => {
-    // Product.fetchAll((products: Array<Product>) => {
-    //   res.render('shop/product-list', {
-    //     prods: products,
-    //     pageTitle: 'All Products',
-    //     path: '/products',
-    //   });
-    // });
+    product_1.default.fetchAll()
+        .then(([rows, fieldPacket]) => {
+        res.render('shop/product-list', {
+            prods: rows,
+            pageTitle: 'All Products',
+            path: '/products',
+        });
+    })
+        .catch((err) => console.log(err));
 };
 exports.getProducts = getProducts;
 const getProduct = (req, res, next) => {
@@ -37,30 +39,25 @@ const getIndex = (req, res, next) => {
             pageTitle: 'Shop',
             path: '/',
         });
-        console.log(rows);
     })
         .catch((err) => console.log(err));
 };
 exports.getIndex = getIndex;
 const getCart = (req, res, next) => {
     // Cart.getCart((cart) => {
-    //   Product.fetchAll((products: Array<Product>) => {
-    //     const cartProducts = [];
-    //     //! if we have no products in the Cart, then cart products will be an empty Array.
-    //     for (const product of products) {
-    //       const cartProductData = cart?.products.find((prod) => prod.id === product.id);
-    //       if (cartProductData) {
-    //         cartProducts.push({ productData: product, qty: cartProductData.qty });
-    //         //! __important This is use for example, with large data, we should use function database
+    //   Product.fetchAll()
+    //     .then(([rows, fieldPacket]) => {
+    //       const cartProducts = [];
+    //       //! if we have no products in the Cart, then cart products will be an empty Array.
+    //       for (const product of rows) {
+    //         const cartProductData = cart?.products.find((prod) => prod.id === product.id);
+    //         if (cartProductData) {
+    //           cartProducts.push({ productData: product, qty: cartProductData.qty });
+    //           //! __important This is use for example, with large data, we should use function database
+    //         }
     //       }
-    //     }
-    //     console.log(cartProducts);
-    //     res.render('shop/cart', {
-    //       products: cartProducts,
-    //       path: '/cart',
-    //       pageTitle: 'Your Cart',
-    //     });
-    //   });
+    //     })
+    //     .catch((err) => console.log(err));
     // });
 };
 exports.getCart = getCart;

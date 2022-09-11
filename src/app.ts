@@ -9,14 +9,6 @@ import shopRoutes from './routes/shop';
 //! imp Controllers
 import * as errorController from './controllers/error';
 
-//! imp Database
-import db from './utils/database';
-
-db.execute('SELECT * FROM products')
-  .then((result) => console.log(result[0], result[1])) //! fulfilled
-  .catch((err) => console.log(err)); //! rejected
-
-
 //! an instance of the app object
 const app = express();
 

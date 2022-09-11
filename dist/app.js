@@ -33,11 +33,6 @@ const admin_1 = __importDefault(require("./routes/admin"));
 const shop_1 = __importDefault(require("./routes/shop"));
 //! imp Controllers
 const errorController = __importStar(require("./controllers/error"));
-//! imp Database
-const database_1 = __importDefault(require("./utils/database"));
-database_1.default.execute('SELECT * FROM products')
-    .then((result) => console.log(result[0], result[1])) //! fulfilled
-    .catch((err) => console.log(err)); //! rejected
 //! an instance of the app object
 const app = (0, express_1.default)();
 //! set Template Engine

@@ -4,13 +4,15 @@ import Product from '../models/product';
 import Cart from '../models/cart';
 
 export const getProducts: RequestHandler = (req, res, next) => {
-  // Product.fetchAll((products: Array<Product>) => {
-  //   res.render('shop/product-list', {
-  //     prods: products,
-  //     pageTitle: 'All Products',
-  //     path: '/products',
-  //   });
-  // });
+  Product.fetchAll()
+    .then(([rows, fieldPacket]) => {
+      res.render('shop/product-list', {
+        prods: rows,
+        pageTitle: 'All Products',
+        path: '/products',
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 export const getProduct: RequestHandler = (req, res, next) => {
@@ -34,30 +36,25 @@ export const getIndex: RequestHandler = (req, res, next) => {
         pageTitle: 'Shop',
         path: '/',
       });
-      console.log(rows)
     })
     .catch((err) => console.log(err));
 };
 
 export const getCart: RequestHandler = (req, res, next) => {
   // Cart.getCart((cart) => {
-  //   Product.fetchAll((products: Array<Product>) => {
-  //     const cartProducts = [];
-  //     //! if we have no products in the Cart, then cart products will be an empty Array.
-  //     for (const product of products) {
-  //       const cartProductData = cart?.products.find((prod) => prod.id === product.id);
-  //       if (cartProductData) {
-  //         cartProducts.push({ productData: product, qty: cartProductData.qty });
-  //         //! __important This is use for example, with large data, we should use function database
+  //   Product.fetchAll()
+  //     .then(([rows, fieldPacket]) => {
+  //       const cartProducts = [];
+  //       //! if we have no products in the Cart, then cart products will be an empty Array.
+  //       for (const product of rows) {
+  //         const cartProductData = cart?.products.find((prod) => prod.id === product.id);
+  //         if (cartProductData) {
+  //           cartProducts.push({ productData: product, qty: cartProductData.qty });
+  //           //! __important This is use for example, with large data, we should use function database
+  //         }
   //       }
-  //     }
-  //     console.log(cartProducts);
-  //     res.render('shop/cart', {
-  //       products: cartProducts,
-  //       path: '/cart',
-  //       pageTitle: 'Your Cart',
-  //     });
-  //   });
+  //     })
+  //     .catch((err) => console.log(err));
   // });
 };
 
