@@ -6,14 +6,16 @@ import Cart from './cart';
 
 export default class Product {
   // public id: string | undefined;
-  constructor(public id: string | null, public title: string, public imageUrl: string, public description: string, public price: number) {
+  constructor(public id: string | null, public title: string, public price: number, public imageUrl: string, public description: string) {
     // this.title = title;
     // this.imageUrl = imageUrl;
     // this.description = description;
     // this.price = price;
   }
 
-  public save() {}
+  public save() {
+    return db.execute('INSERT INTO products (title, price, imageUrl, description) VALUES (?, ?, ?, ?)', [this.title, this.price, this.imageUrl, this.description]);
+  }
 
   static fetchAll() {
     return db.execute('SELECT * FROM products'); //! Table name: products

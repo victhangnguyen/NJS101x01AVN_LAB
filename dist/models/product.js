@@ -7,18 +7,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../utils/database"));
 class Product {
     // public id: string | undefined;
-    constructor(id, title, imageUrl, description, price) {
+    constructor(id, title, price, imageUrl, description) {
         this.id = id;
         this.title = title;
+        this.price = price;
         this.imageUrl = imageUrl;
         this.description = description;
-        this.price = price;
         // this.title = title;
         // this.imageUrl = imageUrl;
         // this.description = description;
         // this.price = price;
     }
-    save() { }
+    save() {
+        return database_1.default.execute('INSERT INTO products (title, price, imageUrl, description) VALUES (?, ?, ?, ?)', [this.title, this.price, this.imageUrl, this.description]);
+    }
     static fetchAll() {
         return database_1.default.execute('SELECT * FROM products'); //! Table name: products
     }

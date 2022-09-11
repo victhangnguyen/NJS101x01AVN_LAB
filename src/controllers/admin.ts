@@ -15,9 +15,12 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
   const price: Product['price'] = req.body.price;
   const description: Product['description'] = req.body.description;
 
-  const product: Product = new Product(null, title, imageUrl, description, price);
+  const product: Product = new Product(null, title, price, imageUrl, description);
 
-  product.save();
+  product
+    .save()
+    .then((data) => console.log(data))
+    .catch((err) => console.log(err));
 
   res.redirect('/');
 };
@@ -34,19 +37,16 @@ export const getProducts: RequestHandler = (req, res, next) => {
 
 export const getEditProduct: RequestHandler = (req, res, next) => {
   // const editMode = req.query.edit;
-
   // if (!editMode) {
   //   return res.redirect('/');
   //   //! Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
   //   //! Solution: add return
   // }
-
   // const prodId: Product['id'] = req.params.productId;
   // Product.findById(prodId, (product: Product) => {
   //   if (!product) {
   //     return res.redirect('/'); //! send response and out callback.
   //   }
-
   //   res.render('admin/edit-product', {
   //     product: product,
   //     pageTitle: 'Edit Product',
@@ -66,10 +66,11 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
 
   //! create a new product instance that already have existing Id
   //! populate it with that information
-  const updatedProduct: Product = new Product(prodId, updatedTitle, updatedImageUrl, updatedDesc, updatedPrice);
+  const updatedProduct: Product = new Product(prodId, updatedTitle, updatedPrice, updatedImageUrl, updatedDesc);
 
   //! call save()
   updatedProduct.save();
+
   //! res
   res.redirect(`/admin/products`);
   // res.redirect(`/admin/edit-product/${prodId}?edit=true`);
@@ -78,5 +79,5 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
 export const postDeleteProduct: RequestHandler = (req, res, next) => {
   const prodId = req.body.productId;
   Product.deleteById(prodId);
-  res.redirect('/admin/products')
+  res.redirect('/admin/products');
 };

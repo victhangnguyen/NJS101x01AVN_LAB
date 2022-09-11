@@ -18,8 +18,11 @@ const postAddProduct = (req, res, next) => {
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    const product = new product_1.default(null, title, imageUrl, description, price);
-    product.save();
+    const product = new product_1.default(null, title, price, imageUrl, description);
+    product
+        .save()
+        .then((data) => console.log(data))
+        .catch((err) => console.log(err));
     res.redirect('/');
 };
 exports.postAddProduct = postAddProduct;
@@ -63,7 +66,7 @@ const postEditProduct = (req, res, next) => {
     const updatedDesc = req.body.description;
     //! create a new product instance that already have existing Id
     //! populate it with that information
-    const updatedProduct = new product_1.default(prodId, updatedTitle, updatedImageUrl, updatedDesc, updatedPrice);
+    const updatedProduct = new product_1.default(prodId, updatedTitle, updatedPrice, updatedImageUrl, updatedDesc);
     //! call save()
     updatedProduct.save();
     //! res
