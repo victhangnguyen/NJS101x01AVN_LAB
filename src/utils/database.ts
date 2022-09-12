@@ -1,20 +1,18 @@
 //! npm i --save mysql2
 import mysql from 'mysql2';
 
-//! configuration
-const connectionOption: mysql.PoolOptions = {
-  //! Database Engine (Host)
-  //! [prop: host : ConnectionOptions]
-  host: 'localhost', //! because it's running on our local machine
-  //! [prop: user : ConnectionOption]
-  user: 'root',
-  //! [prop: database: ConnectionOption]
-  password: 'js123456',
-  //! [prop: database: ConnectionOption]
-  database: 'node-complete', //! name of the Schema
-};
+import { Sequelize } from 'sequelize'; //! Sequelize class
 
-const pool: mysql.Pool = mysql.createPool(connectionOption); //! ConnectionOption
+// constructor(database: string, username: string, password?: string, options?: Options);
+const sequelize = new Sequelize('node-complete', 'root', 'js123456', {
+  // The dialect of the database you are connecting to. One of mysql, postgres, sqlite, mariadb and mssql.
+  //! to make clear that we connect to a MySQL database because different SQL engines or databases use slightly different SQL syntax
+  dialect: 'mysql',
+  //! The host of the relational database.
+  //! by default, it would use localhost, so we don't need to set it, but i will explicit set this to 'localhost'.
+  host: 'localhost',
+});
 
-export default pool.promise(); //! because this allow us to use Promises when working with these Connections which of course handle Asynchronous.
-//! Asynchronous data instead of Callback Function because Promise allow us to write Code that dont have many Nested Callback
+export default sequelize;
+//! We export sequelize object here which is essentially that database connection pool.
+//! However this is managed by sequelize giving us a lot of useful features.
