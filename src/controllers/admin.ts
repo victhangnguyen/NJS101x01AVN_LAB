@@ -19,8 +19,8 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
 
   product
     .save()
-    .then((data) => console.log(data))
-    .catch((err) => console.log(err));
+    .then((data: any) => console.log(data))
+    .catch((err: any) => console.log(err));
 
   res.redirect('/');
 };

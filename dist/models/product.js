@@ -3,33 +3,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-//! database
-const database_1 = __importDefault(require("../utils/database"));
-class Product {
-    // public id: string | undefined;
-    constructor(id, title, price, imageUrl, description) {
-        this.id = id;
-        this.title = title;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.description = description;
-        // this.title = title;
-        // this.imageUrl = imageUrl;
-        // this.description = description;
-        // this.price = price;
-    }
-    save() {
-        // create new
-        return database_1.default.execute('INSERT INTO products (title, price, imageUrl, description) VALUES (?, ?, ?, ?)', [this.title, this.price, this.imageUrl, this.description]);
-    }
-    static fetchAll() {
-        return database_1.default.execute('SELECT * FROM products'); //! Table name: products
-    }
-    static findById(id) {
-        //! __generic RowDataPacket
-        return database_1.default.execute('SELECT * FROM products WHERE products.id = ?', [id]);
-    }
-    static deleteById(id) { }
-}
-exports.default = Product;
+const sequelize_1 = require("sequelize");
+const database_1 = __importDefault(require("../utils/database")); //! imp Database Connection Pool sequelize
+//! We can defined a Model with be managed by sequelize
+//   modelName: string,
+//   attributes: ModelAttributes<M, TAttributes>, (Structure of the model, the automatically created database table)
+//   options?: ModelOptions<M>
+const Product = database_1.default.define('Product', {
+    // Model attributes are defined here
+    id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true,
+    },
+    title: sequelize_1.DataTypes.STRING,
+    price: {
+        type: sequelize_1.DataTypes.NUMBER,
+        allowNull: false,
+    },
+    imageUrl: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
+    description: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
+});
 //# sourceMappingURL=product.js.map

@@ -1,32 +1,30 @@
-//! database
-import db from '../utils/database';
-import { RowDataPacket } from 'mysql2';
+import { Sequelize, DataTypes } from 'sequelize';
 
-//! __imp Models
-import Cart from './cart';
+import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
 
-export default class Product {
-  // public id: string | undefined;
-  constructor(public id: string | null, public title: string, public price: number, public imageUrl: string, public description: string) {
-    // this.title = title;
-    // this.imageUrl = imageUrl;
-    // this.description = description;
-    // this.price = price;
-  }
-
-  public save() {
-    // create new
-    return db.execute('INSERT INTO products (title, price, imageUrl, description) VALUES (?, ?, ?, ?)', [this.title, this.price, this.imageUrl, this.description]);
-  }
-
-  static fetchAll() {
-    return db.execute('SELECT * FROM products'); //! Table name: products
-  }
-
-  static findById(id: string) {
-    //! __generic RowDataPacket
-    return db.execute<RowDataPacket[]>('SELECT * FROM products WHERE products.id = ?', [id]);
-  }
-
-  static deleteById(id: string) {}
-}
+//! We can defined a Model with be managed by sequelize
+//   modelName: string,
+//   attributes: ModelAttributes<M, TAttributes>, (Structure of the model, the automatically created database table)
+//   options?: ModelOptions<M>
+const Product = sequelize.define('Product', {
+  // Model attributes are defined here
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+  title: DataTypes.STRING,
+  price: {
+    type: DataTypes.NUMBER,
+    allowNull: false,
+  },
+  imageUrl: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+});

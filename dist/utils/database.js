@@ -1,23 +1,16 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-//! npm i --save mysql2
-const mysql2_1 = __importDefault(require("mysql2"));
-//! configuration
-const connectionOption = {
-    //! Database Engine (Host)
-    //! [prop: host : ConnectionOptions]
+const sequelize_1 = require("sequelize"); //! Sequelize class
+// constructor(database: string, username: string, password?: string, options?: Options);
+const sequelize = new sequelize_1.Sequelize('node-complete', 'root', 'js123456', {
+    // The dialect of the database you are connecting to. One of mysql, postgres, sqlite, mariadb and mssql.
+    //! to make clear that we connect to a MySQL database because different SQL engines or databases use slightly different SQL syntax
+    dialect: 'mysql',
+    //! The host of the relational database.
+    //! by default, it would use localhost, so we don't need to set it, but i will explicit set this to 'localhost'.
     host: 'localhost',
-    //! [prop: user : ConnectionOption]
-    user: 'root',
-    //! [prop: database: ConnectionOption]
-    password: 'js123456',
-    //! [prop: database: ConnectionOption]
-    database: 'node-complete', //! name of the Schema
-};
-const pool = mysql2_1.default.createPool(connectionOption); //! ConnectionOption
-exports.default = pool.promise(); //! because this allow us to use Promises when working with these Connections which of course handle Asynchronous.
-//! Asynchronous data instead of Callback Function because Promise allow us to write Code that dont have many Nested Callback
+});
+exports.default = sequelize;
+//! We export sequelize object here which is essentially that database connection pool.
+//! However this is managed by sequelize giving us a lot of useful features.
 //# sourceMappingURL=database.js.map
