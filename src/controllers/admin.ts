@@ -1,5 +1,8 @@
 import { RequestHandler } from 'express';
+//! imp Models
 import Product from '../models/product';
+//! imp Types
+import { ProductAttributes } from '../models/product';
 
 //! GET admin/add-product -> Render page
 export const getAddProduct: RequestHandler = (req, res, next) => {
@@ -12,10 +15,10 @@ export const getAddProduct: RequestHandler = (req, res, next) => {
 
 //! POST admin/add-product
 export const postAddProduct: RequestHandler = (req, res, next) => {
-  const title: string = req.body.title;
-  const imageUrl: string = req.body.imageUrl;
-  const price: number = req.body.price;
-  const description: string = req.body.description;
+  const title: ProductAttributes['title'] = req.body.title;
+  const imageUrl: ProductAttributes['imageUrl'] = req.body.imageUrl;
+  const price: ProductAttributes['price'] = req.body.price;
+  const description: ProductAttributes['description'] = req.body.description;
 
   //! Builds a new model instance and calls save on it.
   //! create method that creates a new Element based on that Model an immediately saves it to the Database
@@ -45,13 +48,24 @@ export const getProducts: RequestHandler = (req, res, next) => {
 };
 
 export const getEditProduct: RequestHandler = (req, res, next) => {
-  // const editMode = req.query.edit;
-  // if (!editMode) {
-  //   return res.redirect('/');
-  //   //! Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
-  //   //! Solution: add return
-  // }
-  // const prodId: Product['id'] = req.params.productId;
+  const editMode = req.query.edit;
+  if (!editMode) {
+    return res.redirect('/');
+  }
+  const prodId: ProductAttributes['id'] = Number(req.params.productId);
+  Product.findByPk(prodId)
+    .then((product) => {
+      if (!product) {
+        return res.redirect('/');
+      }
+      res.render('admin/edit-product', {
+        product: product,
+        pageTitle: 'Edit Product',
+        path: '/admin/edit-product',
+        editing: editMode,
+      });
+    })
+    .catch((err) => console.log(err));
   // Product.findById(prodId, (product: Product) => {
   //   if (!product) {
   //     return res.redirect('/'); //! send response and out callback.
@@ -66,23 +80,31 @@ export const getEditProduct: RequestHandler = (req, res, next) => {
 };
 
 export const postEditProduct: RequestHandler = (req, res, next) => {
-  //! fetch information for the product
-  const prodId: number = req.body.productId;
-  const updatedTitle: string = req.body.title;
-  const updatedPrice: number = req.body.price;
-  const updatedImageUrl: number = req.body.imageUrl;
-  const updatedDesc: number = req.body.description;
+  const prodId: ProductAttributes['id'] = req.body.productId;
+  const updatedTitle: ProductAttributes['title'] = req.body.title;
+  const updatedPrice: ProductAttributes['price'] = req.body.price;
+  const updatedImageUrl: ProductAttributes['imageUrl'] = req.body.imageUrl;
+  const updatedDesc: ProductAttributes['description'] = req.body.description;
 
-  //! create a new product instance that already have existing Id
-  //! populate it with that information
-  // const updatedProduct: Product = new Product(prodId, updatedTitle, updatedPrice, updatedImageUrl, updatedDesc);
+  //! Updating Product
+  Product.findByPk(prodId)
+    .then((product) => {
+      product!.title = updatedTitle;
+      product!.price = updatedPrice;
+      product!.imageUrl = updatedImageUrl;
+      product!.description = updatedDesc;
 
-  //! call save()
-  // updatedProduct.save();
-
-  //! res
-  res.redirect(`/admin/products`);
-  // res.redirect(`/admin/edit-product/${prodId}?edit=true`);
+      //! save(): choose product with id and save() with exist id
+      //! and if the product does not exist, it will create a new one, but it happen, it will override or update the old one with our new values.
+      return product!.save(); //! return Product to continue then
+      //! Returns a Promise that resolves to the saved instance (or rejects with a Sequelize.ValidationError,
+      //! which will have a property for each of the fields for which the validation failed, with the error message for that field).
+    })
+    .then((result) => {
+      console.log('UPDATED PRODUCT!');
+      res.redirect(`/admin/products`);
+    })
+    .catch((err) => console.log(err));
 };
 
 export const postDeleteProduct: RequestHandler = (req, res, next) => {

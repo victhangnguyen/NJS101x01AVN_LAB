@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postDeleteProduct = exports.postEditProduct = exports.getEditProduct = exports.getProducts = exports.postAddProduct = exports.getAddProduct = void 0;
+//! imp Models
 const product_1 = __importDefault(require("../models/product"));
 //! GET admin/add-product -> Render page
 const getAddProduct = (req, res, next) => {
@@ -47,13 +48,24 @@ const getProducts = (req, res, next) => {
 };
 exports.getProducts = getProducts;
 const getEditProduct = (req, res, next) => {
-    // const editMode = req.query.edit;
-    // if (!editMode) {
-    //   return res.redirect('/');
-    //   //! Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
-    //   //! Solution: add return
-    // }
-    // const prodId: Product['id'] = req.params.productId;
+    const editMode = req.query.edit;
+    if (!editMode) {
+        return res.redirect('/');
+    }
+    const prodId = Number(req.params.productId);
+    product_1.default.findByPk(prodId)
+        .then((product) => {
+        if (!product) {
+            return res.redirect('/');
+        }
+        res.render('admin/edit-product', {
+            product: product,
+            pageTitle: 'Edit Product',
+            path: '/admin/edit-product',
+            editing: editMode,
+        });
+    })
+        .catch((err) => console.log(err));
     // Product.findById(prodId, (product: Product) => {
     //   if (!product) {
     //     return res.redirect('/'); //! send response and out callback.
@@ -68,20 +80,29 @@ const getEditProduct = (req, res, next) => {
 };
 exports.getEditProduct = getEditProduct;
 const postEditProduct = (req, res, next) => {
-    //! fetch information for the product
     const prodId = req.body.productId;
     const updatedTitle = req.body.title;
     const updatedPrice = req.body.price;
     const updatedImageUrl = req.body.imageUrl;
     const updatedDesc = req.body.description;
-    //! create a new product instance that already have existing Id
-    //! populate it with that information
-    // const updatedProduct: Product = new Product(prodId, updatedTitle, updatedPrice, updatedImageUrl, updatedDesc);
-    //! call save()
-    // updatedProduct.save();
-    //! res
-    res.redirect(`/admin/products`);
-    // res.redirect(`/admin/edit-product/${prodId}?edit=true`);
+    //! Updating Product
+    product_1.default.findByPk(prodId)
+        .then((product) => {
+        product.title = updatedTitle;
+        product.price = updatedPrice;
+        product.imageUrl = updatedImageUrl;
+        product.description = updatedDesc;
+        //! save(): choose product with id and save() with exist id
+        //! and if the product does not exist, it will create a new one, but it happen, it will override or update the old one with our new values.
+        return product.save(); //! return Product to continue then
+        //! Returns a Promise that resolves to the saved instance (or rejects with a Sequelize.ValidationError,
+        //! which will have a property for each of the fields for which the validation failed, with the error message for that field).
+    })
+        .then((result) => {
+        console.log('UPDATED PRODUCT!');
+        res.redirect(`/admin/products`);
+    })
+        .catch((err) => console.log(err));
 };
 exports.postEditProduct = postEditProduct;
 const postDeleteProduct = (req, res, next) => {

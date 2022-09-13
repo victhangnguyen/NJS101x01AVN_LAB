@@ -2,7 +2,7 @@ import { Model, DataTypes, Optional } from 'sequelize';
 
 import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
 
-type ProductAttributes = {
+export type ProductAttributes = {
   id: number;
   title: string;
   price: number;
