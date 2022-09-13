@@ -4,6 +4,16 @@ import Product from '../models/product';
 import Cart from '../models/cart';
 
 export const getProducts: RequestHandler = (req, res, next) => {
+  Product.findAll()
+  .then((products) => {
+      res.render('shop/product-list', {
+        prods: products,
+        pageTitle: 'All Products',
+        path: '/products',
+      });
+  })
+  .catch((err) => console.log(err));
+
   // Product.fetchAll()
   //   .then(([rows, fieldPacket]: [any, any]) => {
   //     res.render('shop/product-list', {
@@ -29,16 +39,15 @@ export const getProduct: RequestHandler = (req, res, next) => {
 };
 
 export const getIndex: RequestHandler = (req, res, next) => {
-  // Product.fetchAll()
-  //   .then(([rows, fieldPacket]: [any, any]) => {
-  //     //! [RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]
-  //     res.render('shop/index', {
-  //       prods: rows,
-  //       pageTitle: 'Shop',
-  //       path: '/',
-  //     });
-  //   })
-  //   .catch((err: any) => console.log(err));
+  Product.findAll()
+    .then((products) => {
+      res.render('shop/index', {
+        prods: products,
+        pageTitle: 'Shop',
+        path: '/',
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 export const getCart: RequestHandler = (req, res, next) => {

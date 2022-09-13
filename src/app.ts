@@ -37,7 +37,7 @@ app.use(errorController.get404);
 sequelize
   .sync() //! If force is true, each DAO will do DROP TABLE IF EXISTS ..., before it tries to create its own table
   .then((result: Sequelize) => {
-    console.log('Result: ', result);
+    // console.log('Result: ', result);
     //! Sync with Express Application
     app.listen(3000);
   })

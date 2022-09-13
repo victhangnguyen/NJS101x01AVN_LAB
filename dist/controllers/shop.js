@@ -1,7 +1,21 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCheckout = exports.getOrders = exports.postCartDeleteProduct = exports.postCart = exports.getCart = exports.getIndex = exports.getProduct = exports.getProducts = void 0;
+//! Models
+const product_1 = __importDefault(require("../models/product"));
 const getProducts = (req, res, next) => {
+    product_1.default.findAll()
+        .then((products) => {
+        res.render('shop/product-list', {
+            prods: products,
+            pageTitle: 'All Products',
+            path: '/products',
+        });
+    })
+        .catch((err) => console.log(err));
     // Product.fetchAll()
     //   .then(([rows, fieldPacket]: [any, any]) => {
     //     res.render('shop/product-list', {
@@ -27,16 +41,15 @@ const getProduct = (req, res, next) => {
 };
 exports.getProduct = getProduct;
 const getIndex = (req, res, next) => {
-    // Product.fetchAll()
-    //   .then(([rows, fieldPacket]: [any, any]) => {
-    //     //! [RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]
-    //     res.render('shop/index', {
-    //       prods: rows,
-    //       pageTitle: 'Shop',
-    //       path: '/',
-    //     });
-    //   })
-    //   .catch((err: any) => console.log(err));
+    product_1.default.findAll()
+        .then((products) => {
+        res.render('shop/index', {
+            prods: products,
+            pageTitle: 'Shop',
+            path: '/',
+        });
+    })
+        .catch((err) => console.log(err));
 };
 exports.getIndex = getIndex;
 const getCart = (req, res, next) => {
