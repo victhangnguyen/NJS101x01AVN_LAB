@@ -29,10 +29,11 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
     price,
     description,
   })
-    .then((result) => console.log('Created Product!'))
+    .then((result) => {
+      console.log('CREATED PRODUCT!');
+      res.redirect('/admin/products');
+    })
     .catch((err) => console.log(err));
-
-  res.redirect('/');
 };
 
 export const getProducts: RequestHandler = (req, res, next) => {
@@ -109,6 +110,17 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
 
 export const postDeleteProduct: RequestHandler = (req, res, next) => {
   const prodId = req.body.productId;
-  // Product.deleteById(prodId);
-  res.redirect('/admin/products');
+  // Product.destroy({where}); //! Way 2: DELETE options
+  //! options?: DestroyOptions<ProductAttributes> | undefined
+  //! Delete multiple instances, or set their deletedAt timestamp to the current time if paranoid is enabled.
+  Product.findByPk(prodId)
+    .then((product) => {
+      //! product is an instance of this Model
+      return product?.destroy(); //! Promise
+    })
+    .then((result) => {
+      console.log('DELETED PRODUCT!', result);
+      res.redirect('/admin/products');
+    })
+    .catch((err) => console.log(err));
 };
