@@ -35,13 +35,15 @@ const postAddProduct = (req, res, next) => {
 };
 exports.postAddProduct = postAddProduct;
 const getProducts = (req, res, next) => {
-    // Product.fetchAll((products: Array<Product>) => {
-    //   res.render('admin/products', {
-    //     prods: products,
-    //     pageTitle: 'Admin Products',
-    //     path: '/admin/products',
-    //   });
-    // });
+    product_1.default.findAll()
+        .then((products) => {
+        res.render('admin/products', {
+            prods: products,
+            pageTitle: 'Admin Products',
+            path: '/admin/products',
+        });
+    })
+        .then((err) => console.log(err));
 };
 exports.getProducts = getProducts;
 const getEditProduct = (req, res, next) => {

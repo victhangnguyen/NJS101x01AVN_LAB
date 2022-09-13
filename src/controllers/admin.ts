@@ -33,13 +33,15 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
 };
 
 export const getProducts: RequestHandler = (req, res, next) => {
-  // Product.fetchAll((products: Array<Product>) => {
-  //   res.render('admin/products', {
-  //     prods: products,
-  //     pageTitle: 'Admin Products',
-  //     path: '/admin/products',
-  //   });
-  // });
+  Product.findAll()
+    .then((products) => {
+      res.render('admin/products', {
+        prods: products,
+        pageTitle: 'Admin Products',
+        path: '/admin/products',
+      });
+    })
+    .then((err) => console.log(err));
 };
 
 export const getEditProduct: RequestHandler = (req, res, next) => {
