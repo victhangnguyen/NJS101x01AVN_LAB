@@ -1,4 +1,4 @@
-import { Sequelize, Model, DataTypes } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 
 import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
 

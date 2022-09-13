@@ -1,47 +1,42 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCheckout = exports.getOrders = exports.postCartDeleteProduct = exports.postCart = exports.getCart = exports.getIndex = exports.getProduct = exports.getProducts = void 0;
-//! Models
-const product_1 = __importDefault(require("../models/product"));
 const getProducts = (req, res, next) => {
-    product_1.default.fetchAll()
-        .then(([rows, fieldPacket]) => {
-        res.render('shop/product-list', {
-            prods: rows,
-            pageTitle: 'All Products',
-            path: '/products',
-        });
-    })
-        .catch((err) => console.log(err));
+    // Product.fetchAll()
+    //   .then(([rows, fieldPacket]: [any, any]) => {
+    //     res.render('shop/product-list', {
+    //       prods: rows,
+    //       pageTitle: 'All Products',
+    //       path: '/products',
+    //     });
+    //   })
+    //   .catch((err: any) => console.log(err));
 };
 exports.getProducts = getProducts;
 const getProduct = (req, res, next) => {
-    const prodId = req.params.productId;
-    product_1.default.findById(prodId)
-        .then(([product, fieldPacket]) => {
-        res.render('shop/product-detail', {
-            product: product[0],
-            pageTitle: product[0].title,
-            path: '/products',
-        });
-    })
-        .catch((err) => console.log(err));
+    // const prodId = req.params.productId;
+    // Product.findById(prodId)
+    //   .then(([product, fieldPacket]: [any, any]) => {
+    //     res.render('shop/product-detail', {
+    //       product: product[0], //! Get first Element of Array
+    //       pageTitle: product[0].title,
+    //       path: '/products',
+    //     });
+    //   })
+    //   .catch((err: any) => console.log(err));
 };
 exports.getProduct = getProduct;
 const getIndex = (req, res, next) => {
-    product_1.default.fetchAll()
-        .then(([rows, fieldPacket]) => {
-        //! [RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]
-        res.render('shop/index', {
-            prods: rows,
-            pageTitle: 'Shop',
-            path: '/',
-        });
-    })
-        .catch((err) => console.log(err));
+    // Product.fetchAll()
+    //   .then(([rows, fieldPacket]: [any, any]) => {
+    //     //! [RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]
+    //     res.render('shop/index', {
+    //       prods: rows,
+    //       pageTitle: 'Shop',
+    //       path: '/',
+    //     });
+    //   })
+    //   .catch((err: any) => console.log(err));
 };
 exports.getIndex = getIndex;
 const getCart = (req, res, next) => {

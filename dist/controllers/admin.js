@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postDeleteProduct = exports.postEditProduct = exports.getEditProduct = exports.getProducts = exports.postAddProduct = exports.getAddProduct = void 0;
 const product_1 = __importDefault(require("../models/product"));
+//! GET admin/add-product -> Render page
 const getAddProduct = (req, res, next) => {
     res.render('admin/edit-product', {
         pageTitle: 'Add Product',
@@ -13,15 +14,22 @@ const getAddProduct = (req, res, next) => {
     });
 };
 exports.getAddProduct = getAddProduct;
+//! POST admin/add-product
 const postAddProduct = (req, res, next) => {
     const title = req.body.title;
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    const product = new product_1.default(null, title, price, imageUrl, description);
-    product
-        .save()
-        .then((data) => console.log(data))
+    //! Builds a new model instance and calls save on it.
+    //! create method that creates a new Element based on that Model an immediately saves it to the Database
+    product_1.default.create({
+        //! We don't need to assign an ID, that will be managed automatically
+        title,
+        imageUrl,
+        price,
+        description,
+    })
+        .then((result) => console.log('Created Product!'))
         .catch((err) => console.log(err));
     res.redirect('/');
 };
@@ -66,9 +74,9 @@ const postEditProduct = (req, res, next) => {
     const updatedDesc = req.body.description;
     //! create a new product instance that already have existing Id
     //! populate it with that information
-    const updatedProduct = new product_1.default(prodId, updatedTitle, updatedPrice, updatedImageUrl, updatedDesc);
+    // const updatedProduct: Product = new Product(prodId, updatedTitle, updatedPrice, updatedImageUrl, updatedDesc);
     //! call save()
-    updatedProduct.save();
+    // updatedProduct.save();
     //! res
     res.redirect(`/admin/products`);
     // res.redirect(`/admin/edit-product/${prodId}?edit=true`);
@@ -76,7 +84,7 @@ const postEditProduct = (req, res, next) => {
 exports.postEditProduct = postEditProduct;
 const postDeleteProduct = (req, res, next) => {
     const prodId = req.body.productId;
-    product_1.default.deleteById(prodId);
+    // Product.deleteById(prodId);
     res.redirect('/admin/products');
 };
 exports.postDeleteProduct = postDeleteProduct;

@@ -51,7 +51,7 @@ app.use(shop_1.default); //! default: '/'
 app.use(errorController.get404);
 //! Sync all defined models to the DB.
 database_1.default
-    .sync({ force: true }) //! If force is true, each DAO will do DROP TABLE IF EXISTS ..., before it tries to create its own table
+    .sync() //! If force is true, each DAO will do DROP TABLE IF EXISTS ..., before it tries to create its own table
     .then((result) => {
     console.log('Result: ', result);
     //! Sync with Express Application

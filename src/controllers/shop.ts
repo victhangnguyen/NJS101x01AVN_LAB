@@ -4,41 +4,41 @@ import Product from '../models/product';
 import Cart from '../models/cart';
 
 export const getProducts: RequestHandler = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows, fieldPacket]: [any, any]) => {
-      res.render('shop/product-list', {
-        prods: rows,
-        pageTitle: 'All Products',
-        path: '/products',
-      });
-    })
-    .catch((err: any) => console.log(err));
+  // Product.fetchAll()
+  //   .then(([rows, fieldPacket]: [any, any]) => {
+  //     res.render('shop/product-list', {
+  //       prods: rows,
+  //       pageTitle: 'All Products',
+  //       path: '/products',
+  //     });
+  //   })
+  //   .catch((err: any) => console.log(err));
 };
 
 export const getProduct: RequestHandler = (req, res, next) => {
-  const prodId = req.params.productId;
-  Product.findById(prodId)
-    .then(([product, fieldPacket]: [any, any]) => {
-      res.render('shop/product-detail', {
-        product: product[0], //! Get first Element of Array
-        pageTitle: product[0].title,
-        path: '/products',
-      });
-    })
-    .catch((err: any) => console.log(err));
+  // const prodId = req.params.productId;
+  // Product.findById(prodId)
+  //   .then(([product, fieldPacket]: [any, any]) => {
+  //     res.render('shop/product-detail', {
+  //       product: product[0], //! Get first Element of Array
+  //       pageTitle: product[0].title,
+  //       path: '/products',
+  //     });
+  //   })
+  //   .catch((err: any) => console.log(err));
 };
 
 export const getIndex: RequestHandler = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows, fieldPacket]: [any, any]) => {
-      //! [RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]
-      res.render('shop/index', {
-        prods: rows,
-        pageTitle: 'Shop',
-        path: '/',
-      });
-    })
-    .catch((err: any) => console.log(err));
+  // Product.fetchAll()
+  //   .then(([rows, fieldPacket]: [any, any]) => {
+  //     //! [RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]
+  //     res.render('shop/index', {
+  //       prods: rows,
+  //       pageTitle: 'Shop',
+  //       path: '/',
+  //     });
+  //   })
+  //   .catch((err: any) => console.log(err));
 };
 
 export const getCart: RequestHandler = (req, res, next) => {

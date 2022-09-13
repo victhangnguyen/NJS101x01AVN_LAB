@@ -35,7 +35,7 @@ app.use(errorController.get404);
 
 //! Sync all defined models to the DB.
 sequelize
-  .sync({ force: true }) //! If force is true, each DAO will do DROP TABLE IF EXISTS ..., before it tries to create its own table
+  .sync() //! If force is true, each DAO will do DROP TABLE IF EXISTS ..., before it tries to create its own table
   .then((result: Sequelize) => {
     console.log('Result: ', result);
     //! Sync with Express Application

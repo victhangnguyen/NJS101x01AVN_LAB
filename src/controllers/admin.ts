@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import Product from '../models/product';
 
+//! GET admin/add-product -> Render page
 export const getAddProduct: RequestHandler = (req, res, next) => {
   res.render('admin/edit-product', {
     pageTitle: 'Add Product',
@@ -9,18 +10,24 @@ export const getAddProduct: RequestHandler = (req, res, next) => {
   });
 };
 
+//! POST admin/add-product
 export const postAddProduct: RequestHandler = (req, res, next) => {
-  const title: Product['title'] = req.body.title;
-  const imageUrl: Product['imageUrl'] = req.body.imageUrl;
-  const price: Product['price'] = req.body.price;
-  const description: Product['description'] = req.body.description;
+  const title: string = req.body.title;
+  const imageUrl: string = req.body.imageUrl;
+  const price: number = req.body.price;
+  const description: string = req.body.description;
 
-  const product: Product = new Product(null, title, price, imageUrl, description);
-
-  product
-    .save()
-    .then((data: any) => console.log(data))
-    .catch((err: any) => console.log(err));
+  //! Builds a new model instance and calls save on it.
+  //! create method that creates a new Element based on that Model an immediately saves it to the Database
+  Product.create({
+    //! We don't need to assign an ID, that will be managed automatically
+    title,
+    imageUrl,
+    price,
+    description,
+  })
+    .then((result) => console.log('Created Product!'))
+    .catch((err) => console.log(err));
 
   res.redirect('/');
 };
@@ -58,18 +65,18 @@ export const getEditProduct: RequestHandler = (req, res, next) => {
 
 export const postEditProduct: RequestHandler = (req, res, next) => {
   //! fetch information for the product
-  const prodId: Product['id'] = req.body.productId;
-  const updatedTitle: Product['title'] = req.body.title;
-  const updatedPrice: Product['price'] = req.body.price;
-  const updatedImageUrl: Product['imageUrl'] = req.body.imageUrl;
-  const updatedDesc: Product['description'] = req.body.description;
+  const prodId: number = req.body.productId;
+  const updatedTitle: string = req.body.title;
+  const updatedPrice: number = req.body.price;
+  const updatedImageUrl: number = req.body.imageUrl;
+  const updatedDesc: number = req.body.description;
 
   //! create a new product instance that already have existing Id
   //! populate it with that information
-  const updatedProduct: Product = new Product(prodId, updatedTitle, updatedPrice, updatedImageUrl, updatedDesc);
+  // const updatedProduct: Product = new Product(prodId, updatedTitle, updatedPrice, updatedImageUrl, updatedDesc);
 
   //! call save()
-  updatedProduct.save();
+  // updatedProduct.save();
 
   //! res
   res.redirect(`/admin/products`);
@@ -78,6 +85,6 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
 
 export const postDeleteProduct: RequestHandler = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.deleteById(prodId);
+  // Product.deleteById(prodId);
   res.redirect('/admin/products');
 };
