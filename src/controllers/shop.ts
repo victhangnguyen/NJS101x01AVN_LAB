@@ -5,37 +5,42 @@ import Cart from '../models/cart';
 
 export const getProducts: RequestHandler = (req, res, next) => {
   Product.findAll()
-  .then((products) => {
+    .then((products) => {
       res.render('shop/product-list', {
         prods: products,
         pageTitle: 'All Products',
         path: '/products',
       });
-  })
-  .catch((err) => console.log(err));
-
-  // Product.fetchAll()
-  //   .then(([rows, fieldPacket]: [any, any]) => {
-  //     res.render('shop/product-list', {
-  //       prods: rows,
-  //       pageTitle: 'All Products',
-  //       path: '/products',
-  //     });
-  //   })
-  //   .catch((err: any) => console.log(err));
+    })
+    .catch((err) => console.log(err));
 };
 
 export const getProduct: RequestHandler = (req, res, next) => {
-  // const prodId = req.params.productId;
-  // Product.findById(prodId)
-  //   .then(([product, fieldPacket]: [any, any]) => {
+  const prodId = req.params.productId;
+  // Product.findAll({
+  //   //! options?: FindOptions<ProductAttributes> | undefined)
+  //   where: { id: prodId }, //! Attribute has to be matched for rows to be selected for the given action.
+  // })
+  //   .then((products) => {
+  //     console.log('product: ', products)
   //     res.render('shop/product-detail', {
-  //       product: product[0], //! Get first Element of Array
-  //       pageTitle: product[0].title,
+  //       product: products[0],
+  //       // pageTitle: product?.getDataValue('title'),
+  //       pageTitle: products[0]?.title,
   //       path: '/products',
   //     });
   //   })
-  //   .catch((err: any) => console.log(err));
+  //   .catch((err) => console.log(err));
+  Product.findByPk(prodId) //! Find By Primary Key
+    .then((product) => {
+      res.render('shop/product-detail', {
+        product: product,
+        // pageTitle: product?.getDataValue('title'),
+        pageTitle: product?.title,
+        path: '/products',
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 export const getIndex: RequestHandler = (req, res, next) => {

@@ -21,7 +21,7 @@ Product.init({
         allowNull: false,
     },
     price: {
-        type: sequelize_1.DataTypes.STRING,
+        type: sequelize_1.DataTypes.NUMBER,
         allowNull: false,
         // allowNull defaults to true
     },

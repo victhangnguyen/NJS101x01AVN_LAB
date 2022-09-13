@@ -1,8 +1,24 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, Optional } from 'sequelize';
 
 import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
 
-class Product extends Model {}
+type ProductAttributes = {
+  id: number;
+  title: string;
+  price: number;
+  imageUrl: string;
+  description: string;
+};
+
+type ProductCreationAttributes = Optional<ProductAttributes, 'id'>;
+
+class Product extends Model<ProductAttributes, ProductCreationAttributes> {
+  declare id: number;
+  declare title: string;
+  declare price: number;
+  declare imageUrl: string;
+  declare description: string;
+}
 
 Product.init(
   {
@@ -19,7 +35,7 @@ Product.init(
       allowNull: false,
     },
     price: {
-      type: DataTypes.STRING,
+      type: DataTypes.NUMBER,
       allowNull: false,
       // allowNull defaults to true
     },
