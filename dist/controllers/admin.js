@@ -17,24 +17,21 @@ const getAddProduct = (req, res, next) => {
 exports.getAddProduct = getAddProduct;
 //! POST admin/add-product
 const postAddProduct = (req, res, next) => {
+    var _a;
     const title = req.body.title;
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    //! Builds a new model instance and calls save on it.
-    //! create method that creates a new Element based on that Model an immediately saves it to the Database
-    product_1.default.create({
-        //! We don't need to assign an ID, that will be managed automatically
-        title,
-        imageUrl,
-        price,
-        description,
-    })
-        .then((result) => {
+    // const userId: ProductAttributes['userId'] = req.user!.id;
+    (_a = req.user) === null || _a === void 0 ? void 0 : _a.createProduct({
+        title: title,
+        imageUrl: imageUrl,
+        price: price,
+        description: description,
+    }).then((result) => {
         console.log('CREATED PRODUCT!');
         res.redirect('/admin/products');
-    })
-        .catch((err) => console.log(err));
+    }).catch((err) => console.log(err));
 };
 exports.postAddProduct = postAddProduct;
 const getProducts = (req, res, next) => {
@@ -118,7 +115,7 @@ const postDeleteProduct = (req, res, next) => {
         return product === null || product === void 0 ? void 0 : product.destroy(); //! Promise
     })
         .then((result) => {
-        console.log('DELETED PRODUCT!', result);
+        console.log('DELETED PRODUCT!');
         res.redirect('/admin/products');
     })
         .catch((err) => console.log(err));

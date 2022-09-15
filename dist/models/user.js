@@ -26,9 +26,9 @@ User.init({
 }, {
     // Other model options go here
     sequelize: database_1.default,
-    modelName: 'User', // We need to choose the model name
+    modelName: 'user', // We need to choose the model name
 });
 // the defined model is the class itself
-console.log(User === database_1.default.models.User); // true
+console.log(User === database_1.default.models.user); // true
 exports.default = User;
 //# sourceMappingURL=user.js.map

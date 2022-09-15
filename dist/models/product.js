@@ -31,12 +31,19 @@ Product.init({
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
+    // userId: {
+    //   type: DataTypes.INTEGER,
+    //   // references: {
+    //   //   model: User,
+    //   //   key: 'id',
+    //   // },
+    // },
 }, {
     // Other model options go here
     sequelize: database_1.default,
-    modelName: 'Product', // We need to choose the model name
+    modelName: 'product', // We need to choose the model name
 });
 // the defined model is the class itself
-console.log(Product === database_1.default.models.Product); // true
+console.log(Product === database_1.default.models.product); // true
 exports.default = Product;
 //# sourceMappingURL=product.js.map

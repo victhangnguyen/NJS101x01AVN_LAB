@@ -1,6 +1,7 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 
 import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
+import User from './user';
 
 export type ProductAttributes = {
   id: number;
@@ -8,6 +9,7 @@ export type ProductAttributes = {
   price: number;
   imageUrl: string;
   description: string;
+  // userId: number;
 };
 
 type ProductCreationAttributes = Optional<ProductAttributes, 'id'>;
@@ -18,6 +20,7 @@ class Product extends Model<ProductAttributes, ProductCreationAttributes> {
   declare price: number;
   declare imageUrl: string;
   declare description: string;
+  // declare userId: number;
 }
 
 Product.init(
@@ -45,15 +48,22 @@ Product.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    // userId: {
+    //   type: DataTypes.INTEGER,
+    //   // references: {
+    //   //   model: User,
+    //   //   key: 'id',
+    //   // },
+    // },
   },
   {
     // Other model options go here
     sequelize: sequelize, // We need to pass the connection instance
-    modelName: 'Product', // We need to choose the model name
+    modelName: 'product', // We need to choose the model name
   }
 );
 
 // the defined model is the class itself
-console.log(Product === sequelize.models.Product); // true
+console.log(Product === sequelize.models.product); // true
 
 export default Product;

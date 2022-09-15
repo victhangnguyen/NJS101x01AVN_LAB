@@ -44,10 +44,9 @@ app.use((req, res, next) => {
     .then((user) => {
       //! Store it in a Request, we will set request.user
       req.user = user!;
+      next();
     })
     .catch((err) => err);
-
-  next();
 });
 
 //! implementing Routes
@@ -78,7 +77,6 @@ sequelize
     return user;
   })
   .then((user) => {
-    console.log(user);
     app.listen(3000);
   })
   .catch((err) => console.log(err));

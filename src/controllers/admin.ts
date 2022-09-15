@@ -19,16 +19,15 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
   const imageUrl: ProductAttributes['imageUrl'] = req.body.imageUrl;
   const price: ProductAttributes['price'] = req.body.price;
   const description: ProductAttributes['description'] = req.body.description;
+  // const userId: ProductAttributes['userId'] = req.user!.id;
 
-  //! Builds a new model instance and calls save on it.
-  //! create method that creates a new Element based on that Model an immediately saves it to the Database
-  Product.create({
-    //! We don't need to assign an ID, that will be managed automatically
-    title,
-    imageUrl,
-    price,
-    description,
-  })
+  req.user
+    ?.createProduct({
+      title: title,
+      imageUrl: imageUrl,
+      price: price,
+      description: description,
+    })
     .then((result) => {
       console.log('CREATED PRODUCT!');
       res.redirect('/admin/products');
@@ -119,7 +118,7 @@ export const postDeleteProduct: RequestHandler = (req, res, next) => {
       return product?.destroy(); //! Promise
     })
     .then((result) => {
-      console.log('DELETED PRODUCT!', result);
+      console.log('DELETED PRODUCT!');
       res.redirect('/admin/products');
     })
     .catch((err) => console.log(err));

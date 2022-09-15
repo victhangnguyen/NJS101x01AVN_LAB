@@ -52,9 +52,9 @@ app.use((req, res, next) => {
         .then((user) => {
         //! Store it in a Request, we will set request.user
         req.user = user;
+        next();
     })
         .catch((err) => err);
-    next();
 });
 //! implementing Routes
 app.use('/admin', admin_1.default);
@@ -81,7 +81,6 @@ database_1.default
     return user;
 })
     .then((user) => {
-    console.log(user);
     app.listen(3000);
 })
     .catch((err) => console.log(err));
