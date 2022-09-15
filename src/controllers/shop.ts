@@ -3,7 +3,7 @@ import { RequestHandler } from 'express';
 import Product from '../models/product';
 import Cart from '../models/cart';
 
-
+//@ /products => GET
 export const getProducts: RequestHandler = (req, res, next) => {
   Product.findAll()
     .then((products) => {

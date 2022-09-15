@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCheckout = exports.getOrders = exports.postCartDeleteProduct = exports.postCart = exports.getCart = exports.getIndex = exports.getProduct = exports.getProducts = void 0;
 //! Models
 const product_1 = __importDefault(require("../models/product"));
+//@ /products => GET
 const getProducts = (req, res, next) => {
     product_1.default.findAll()
         .then((products) => {

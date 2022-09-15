@@ -31,6 +31,7 @@ const express_1 = __importDefault(require("express"));
 const shopController = __importStar(require("../controllers/shop"));
 const router = express_1.default.Router();
 router.get('/', shopController.getIndex);
+//@ /products => GET
 router.get('/products', shopController.getProducts);
 router.get('/products/:productId', shopController.getProduct);
 router.get('/cart', shopController.getCart);

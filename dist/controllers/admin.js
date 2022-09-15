@@ -34,26 +34,30 @@ const postAddProduct = (req, res, next) => {
     }).catch((err) => console.log(err));
 };
 exports.postAddProduct = postAddProduct;
+//@ /admin/products => GET
 const getProducts = (req, res, next) => {
-    product_1.default.findAll()
-        .then((products) => {
+    var _a;
+    // Product.findAll();
+    (_a = req.user) === null || _a === void 0 ? void 0 : _a.getProducts().then((products) => {
         res.render('admin/products', {
             prods: products,
             pageTitle: 'Admin Products',
             path: '/admin/products',
         });
-    })
-        .then((err) => console.log(err));
+    }).then((err) => console.log(err));
 };
 exports.getProducts = getProducts;
+//@ /admin/edit-product/:productId => GET
 const getEditProduct = (req, res, next) => {
+    var _a;
     const editMode = req.query.edit;
     if (!editMode) {
         return res.redirect('/');
     }
     const prodId = Number(req.params.productId);
-    product_1.default.findByPk(prodId)
-        .then((product) => {
+    // Product.findByPk(prodId);
+    (_a = req.user) === null || _a === void 0 ? void 0 : _a.getProducts({ where: { id: prodId } }).then((products) => {
+        const product = products[0];
         if (!product) {
             return res.redirect('/');
         }
@@ -63,19 +67,7 @@ const getEditProduct = (req, res, next) => {
             path: '/admin/edit-product',
             editing: editMode,
         });
-    })
-        .catch((err) => console.log(err));
-    // Product.findById(prodId, (product: Product) => {
-    //   if (!product) {
-    //     return res.redirect('/'); //! send response and out callback.
-    //   }
-    //   res.render('admin/edit-product', {
-    //     product: product,
-    //     pageTitle: 'Edit Product',
-    //     path: '/admin/edit-product',
-    //     editing: editMode,
-    //   });
-    // });
+    }).catch((err) => console.log(err));
 };
 exports.getEditProduct = getEditProduct;
 const postEditProduct = (req, res, next) => {

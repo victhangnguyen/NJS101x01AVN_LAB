@@ -1,4 +1,4 @@
-import { Model, DataTypes, Optional, HasManyCreateAssociationMixin } from 'sequelize';
+import { Model, DataTypes, Optional, HasManyCreateAssociationMixin, HasManyGetAssociationsMixin } from 'sequelize';
 
 import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
 import Product from './product';
@@ -15,6 +15,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   declare id: number;
   declare name: string;
   declare email: string;
+  declare getProducts: HasManyGetAssociationsMixin<Product>; // Note the null assertions!
   declare createProduct: HasManyCreateAssociationMixin<Product, 'id'>;
 }
 

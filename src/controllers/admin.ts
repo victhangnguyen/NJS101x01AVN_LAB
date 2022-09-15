@@ -35,8 +35,11 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
+//@ /admin/products => GET
 export const getProducts: RequestHandler = (req, res, next) => {
-  Product.findAll()
+  // Product.findAll();
+  req.user
+    ?.getProducts()
     .then((products) => {
       res.render('admin/products', {
         prods: products,
@@ -47,14 +50,18 @@ export const getProducts: RequestHandler = (req, res, next) => {
     .then((err) => console.log(err));
 };
 
+//@ /admin/edit-product/:productId => GET
 export const getEditProduct: RequestHandler = (req, res, next) => {
   const editMode = req.query.edit;
   if (!editMode) {
     return res.redirect('/');
   }
   const prodId: ProductAttributes['id'] = Number(req.params.productId);
-  Product.findByPk(prodId)
-    .then((product) => {
+  // Product.findByPk(prodId);
+  req.user
+    ?.getProducts({ where: { id: prodId } })
+    .then((products) => {
+      const product = products[0];
       if (!product) {
         return res.redirect('/');
       }
@@ -66,17 +73,6 @@ export const getEditProduct: RequestHandler = (req, res, next) => {
       });
     })
     .catch((err) => console.log(err));
-  // Product.findById(prodId, (product: Product) => {
-  //   if (!product) {
-  //     return res.redirect('/'); //! send response and out callback.
-  //   }
-  //   res.render('admin/edit-product', {
-  //     product: product,
-  //     pageTitle: 'Edit Product',
-  //     path: '/admin/edit-product',
-  //     editing: editMode,
-  //   });
-  // });
 };
 
 export const postEditProduct: RequestHandler = (req, res, next) => {
