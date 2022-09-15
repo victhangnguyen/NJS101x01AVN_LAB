@@ -35,6 +35,9 @@ const shop_1 = __importDefault(require("./routes/shop"));
 const errorController = __importStar(require("./controllers/error"));
 //! imp Sequelize - Database Connection Pool
 const database_1 = __importDefault(require("./utils/database"));
+//! imp Models
+const product_1 = __importDefault(require("./models/product"));
+const user_1 = __importDefault(require("./models//user"));
 //! createExpress -> instance Express()
 const app = (0, express_1.default)();
 app.set('view engine', 'ejs');
@@ -44,17 +47,41 @@ app.use(express_1.default.urlencoded({ extended: false }));
 //! app.ts => root Directory : src
 const publicDir = path_1.default.join(__dirname, '..', 'public');
 app.use(express_1.default.static(publicDir));
+app.use((req, res, next) => {
+    user_1.default.findByPk(1)
+        .then((user) => {
+        //! Store it in a Request, we will set request.user
+        req.user = user;
+    })
+        .catch((err) => err);
+    next();
+});
 //! implementing Routes
 app.use('/admin', admin_1.default);
 app.use(shop_1.default); //! default: '/'
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(errorController.get404);
+//! Association
+product_1.default.belongsTo(user_1.default, { constraints: true, onDelete: 'CASCADE' }); //! Talk about: User created this Product
+user_1.default.hasMany(product_1.default);
 //! Sync all defined models to the DB.
 database_1.default
-    .sync() //! If force is true, each DAO will do DROP TABLE IF EXISTS ..., before it tries to create its own table
+    // .sync({ force: true })
+    .sync()
     .then((result) => {
-    // console.log('Result: ', result);
-    //! Sync with Express Application
+    //! the Relations are set-up
+    return user_1.default.findByPk(1);
+})
+    .then((user) => {
+    if (!user) {
+        //! If user is null, means: we dont have a User, we need to create a new One
+        return user_1.default.create({ name: 'Max', email: 'test@test.com' });
+        //! Builds a new model instance and calls save on it.
+    }
+    return user;
+})
+    .then((user) => {
+    console.log(user);
     app.listen(3000);
 })
     .catch((err) => console.log(err));

@@ -13,7 +13,6 @@ Product.init({
         type: sequelize_1.DataTypes.INTEGER,
         autoIncrement: true,
         allowNull: false,
-        // allowNull defaults to true
         primaryKey: true,
     },
     title: {
@@ -21,9 +20,8 @@ Product.init({
         allowNull: false,
     },
     price: {
-        type: sequelize_1.DataTypes.NUMBER,
+        type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
-        // allowNull defaults to true
     },
     imageUrl: {
         type: sequelize_1.DataTypes.STRING,

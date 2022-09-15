@@ -13,6 +13,19 @@ import * as errorController from './controllers/error';
 import sequelize from './utils/database';
 import { Sequelize } from 'sequelize';
 
+//! imp Models
+import Product from './models/product';
+import User from './models//user';
+
+// ! Extending the Request type
+declare global {
+  namespace Express {
+    export interface Request {
+      user?: User;
+    }
+  }
+}
+
 //! createExpress -> instance Express()
 const app = express();
 
@@ -26,6 +39,17 @@ app.use(express.urlencoded({ extended: false }));
 const publicDir = path.join(__dirname, '..', 'public');
 app.use(express.static(publicDir));
 
+app.use((req, res, next) => {
+  User.findByPk(1)
+    .then((user) => {
+      //! Store it in a Request, we will set request.user
+      req.user = user!;
+    })
+    .catch((err) => err);
+
+  next();
+});
+
 //! implementing Routes
 app.use('/admin', adminRoutes);
 app.use(shopRoutes); //! default: '/'
@@ -33,12 +57,28 @@ app.use(shopRoutes); //! default: '/'
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(errorController.get404);
 
+//! Association
+Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' }); //! Talk about: User created this Product
+User.hasMany(Product);
+
 //! Sync all defined models to the DB.
 sequelize
-  .sync() //! If force is true, each DAO will do DROP TABLE IF EXISTS ..., before it tries to create its own table
+  // .sync({ force: true })
+  .sync()
   .then((result: Sequelize) => {
-    // console.log('Result: ', result);
-    //! Sync with Express Application
+    //! the Relations are set-up
+    return User.findByPk(1);
+  })
+  .then((user) => {
+    if (!user) {
+      //! If user is null, means: we dont have a User, we need to create a new One
+      return User.create({ name: 'Max', email: 'test@test.com' });
+      //! Builds a new model instance and calls save on it.
+    }
+    return user;
+  })
+  .then((user) => {
+    console.log(user);
     app.listen(3000);
   })
   .catch((err) => console.log(err));

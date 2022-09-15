@@ -27,7 +27,6 @@ Product.init(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       allowNull: false,
-      // allowNull defaults to true
       primaryKey: true,
     },
     title: {
@@ -35,9 +34,8 @@ Product.init(
       allowNull: false,
     },
     price: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       allowNull: false,
-      // allowNull defaults to true
     },
     imageUrl: {
       type: DataTypes.STRING,
