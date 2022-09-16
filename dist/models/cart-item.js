@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const database_1 = __importDefault(require("../utils/database")); //! imp Database Connection Pool sequelize
-class Cart extends sequelize_1.Model {
+class CartItem extends sequelize_1.Model {
 }
-Cart.init({
+CartItem.init({
     // Model attributes are defined here
     id: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -15,12 +15,16 @@ Cart.init({
         allowNull: false,
         primaryKey: true,
     },
+    quantity: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false,
+    },
 }, {
     // Other model options go here
     sequelize: database_1.default,
-    modelName: 'cart', // We need to choose the model name
+    modelName: 'cartItem', // We need to choose the model name
 });
 // the defined model is the class itself
-console.log(Cart === database_1.default.models.cart); // true
-exports.default = Cart;
-//# sourceMappingURL=cart.js.map
+console.log(CartItem === database_1.default.models.cartItem); // true
+exports.default = CartItem;
+//# sourceMappingURL=cart-item.js.map

@@ -38,6 +38,8 @@ const database_1 = __importDefault(require("./utils/database"));
 //! imp Models
 const product_1 = __importDefault(require("./models/product"));
 const user_1 = __importDefault(require("./models//user"));
+const cart_1 = __importDefault(require("./models/cart"));
+const cart_item_1 = __importDefault(require("./models/cart-item"));
 //! createExpress -> instance Express()
 const app = (0, express_1.default)();
 app.set('view engine', 'ejs');
@@ -62,12 +64,25 @@ app.use(shop_1.default); //! default: '/'
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(errorController.get404);
 //! Association
+//! User <-> Product
 product_1.default.belongsTo(user_1.default, { constraints: true, onDelete: 'CASCADE' }); //! Talk about: User created this Product
 user_1.default.hasMany(product_1.default);
+//! User <-> Cart
+cart_1.default.belongsTo(user_1.default); //!  Cart hold a foreign key (userId)
+user_1.default.hasOne(cart_1.default);
+//! Cart <-> Product
+//! a Cart contain multiple Product and a Product typpe that is contained in multiple Cart
+cart_1.default.belongsToMany(product_1.default, { through: cart_item_1.default }); //! through tell Sequelize where these connection should be stored an that is cart-item model.
+product_1.default.belongsToMany(cart_1.default, { through: cart_item_1.default });
+//! Many-To-Many Relationship
+//! This only works with an intermediate Table that connects them which basically stores a combination of product IDs and cart IDs.
+//! Cart should belong to a User
+//! Cart holds products
+//! Many products with a Quantity associated to them.
 //! Sync all defined models to the DB.
 database_1.default
-    // .sync({ force: true })
-    .sync()
+    .sync({ force: true })
+    // .sync()
     .then((result) => {
     //! the Relations are set-up
     return user_1.default.findByPk(1);

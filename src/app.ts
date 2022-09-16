@@ -16,6 +16,8 @@ import { Sequelize } from 'sequelize';
 //! imp Models
 import Product from './models/product';
 import User from './models//user';
+import Cart from './models/cart';
+import CartItem from './models/cart-item';
 
 // ! Extending the Request type
 declare global {
@@ -57,13 +59,29 @@ app.use(shopRoutes); //! default: '/'
 app.use(errorController.get404);
 
 //! Association
+//! User <-> Product
 Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' }); //! Talk about: User created this Product
 User.hasMany(Product);
 
+//! User <-> Cart
+Cart.belongsTo(User); //!  Cart hold a foreign key (userId)
+User.hasOne(Cart);
+
+//! Cart <-> Product
+//! a Cart contain multiple Product and a Product typpe that is contained in multiple Cart
+Cart.belongsToMany(Product, { through: CartItem }); //! through tell Sequelize where these connection should be stored an that is cart-item model.
+Product.belongsToMany(Cart, { through: CartItem });
+//! Many-To-Many Relationship
+//! This only works with an intermediate Table that connects them which basically stores a combination of product IDs and cart IDs.
+
+//! Cart should belong to a User
+//! Cart holds products
+//! Many products with a Quantity associated to them.
+
 //! Sync all defined models to the DB.
 sequelize
-  // .sync({ force: true })
-  .sync()
+  .sync({ force: true })
+  // .sync()
   .then((result: Sequelize) => {
     //! the Relations are set-up
     return User.findByPk(1);

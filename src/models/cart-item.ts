@@ -3,17 +3,19 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
 import User from './user';
 
-export type CartAttributes = {
+export type CartItemAttributes = {
   id: number;
+  quantity: number;
 };
 
-type CartCreationAttributes = Optional<CartAttributes, 'id'>;
+type CartItemCreationAttributes = Optional<CartItemAttributes, 'id'>;
 
-class Cart extends Model<CartAttributes, CartCreationAttributes> {
+class CartItem extends Model<CartItemAttributes, CartItemCreationAttributes> {
   declare id: number;
+  declare quantity: number;
 }
 
-Cart.init(
+CartItem.init(
   {
     // Model attributes are defined here
     id: {
@@ -22,15 +24,19 @@ Cart.init(
       allowNull: false,
       primaryKey: true,
     },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
   {
     // Other model options go here
     sequelize: sequelize, // We need to pass the connection instance
-    modelName: 'cart', // We need to choose the model name
+    modelName: 'cartItem', // We need to choose the model name
   }
 );
 
 // the defined model is the class itself
-console.log(Cart === sequelize.models.cart); // true
+console.log(CartItem === sequelize.models.cartItem); // true
 
-export default Cart;
+export default CartItem;
