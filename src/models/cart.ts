@@ -1,6 +1,7 @@
-import { Model, DataTypes, Optional } from 'sequelize';
+import { Model, DataTypes, Optional, HasManyGetAssociationsMixin } from 'sequelize';
 
 import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
+import Product from './product';
 import User from './user';
 
 export type CartAttributes = {
@@ -11,6 +12,7 @@ type CartCreationAttributes = Optional<CartAttributes, 'id'>;
 
 class Cart extends Model<CartAttributes, CartCreationAttributes> {
   declare id: number;
+  declare getProducts: HasManyGetAssociationsMixin<Product>;
 }
 
 Cart.init(

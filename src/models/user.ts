@@ -1,6 +1,7 @@
-import { Model, DataTypes, Optional, HasManyCreateAssociationMixin, HasManyGetAssociationsMixin } from 'sequelize';
+import { Model, DataTypes, Optional, HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, HasOneGetAssociationMixin, HasOneCreateAssociationMixin } from 'sequelize';
 
 import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
+import Cart from './cart';
 import Product from './product';
 
 export type UserAttributes = {
@@ -17,6 +18,8 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   declare email: string;
   declare getProducts: HasManyGetAssociationsMixin<Product>; // Note the null assertions!
   declare createProduct: HasManyCreateAssociationMixin<Product, 'id'>;
+  declare getCart: HasOneGetAssociationMixin<Cart>;
+  declare createCart: HasOneCreateAssociationMixin<Cart>;
 }
 
 User.init(

@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/app.js",
     "dev:tsc": "npx tsc -w",
-    "rmdir": "node -e \"var fs = require('fs'); try{process.argv.slice(1).map((fpath) => fs.rmdirSync(fpath, { recursive: true }))}catch(err){console.log(`Dist not found`)}; process.exit(0);\"",
     "dev:nodemon": "nodemon --config nodemon.json src/app.ts",
+    "rmdir": "node -e \"var fs = require('fs'); try{process.argv.slice(1).map((fpath) => fs.rmdirSync(fpath, { recursive: true }))}catch(err){console.log(`Dist not found`)}; process.exit(0);\"",
     "copy-files": "npm run rmdir dist/data && npm run rmdir dist/views && copyfiles -u 1 src/**/*.ejs dist/ && copyfiles -u 1 src/data/*.json dist/"
   },
   "repository": {

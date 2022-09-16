@@ -57,21 +57,23 @@ export const getIndex: RequestHandler = (req, res, next) => {
 };
 
 export const getCart: RequestHandler = (req, res, next) => {
-  // Cart.getCart((cart) => {
-  //   Product.fetchAll()
-  //     .then(([rows, fieldPacket]) => {
-  //       const cartProducts = [];
-  //       //! if we have no products in the Cart, then cart products will be an empty Array.
-  //       for (const product of rows) {
-  //         const cartProductData = cart?.products.find((prod) => prod.id === product.id);
-  //         if (cartProductData) {
-  //           cartProducts.push({ productData: product, qty: cartProductData.qty });
-  //           //! __important This is use for example, with large data, we should use function database
-  //         }
-  //       }
-  //     })
-  //     .catch((err) => console.log(err));
-  // });
+  //! User.hasOne(Cart)
+  //! User create mixins method createCart and getCart
+  // console.log(req.user.cart)
+  //! we can't access property cart, but we can call getCart
+  req.user
+    ?.getCart()
+    .then((cart) => cart.getProducts())
+    //! we can use cart to fetch the Products that inside of it
+    .then((cartProducts) => {
+      // console.log('hello')
+      res.render('shop/cart', {
+        path: '/cart',
+        pageTitle: 'Your Cart',
+        products: cartProducts,
+      });
+    })
+    .catch((err) => err);
 };
 
 export const postCart: RequestHandler = (req, res, next) => {

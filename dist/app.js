@@ -64,13 +64,13 @@ app.use(shop_1.default); //! default: '/'
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(errorController.get404);
 //! Association
-//! User <-> Product
+//! User <=> Product
 product_1.default.belongsTo(user_1.default, { constraints: true, onDelete: 'CASCADE' }); //! Talk about: User created this Product
 user_1.default.hasMany(product_1.default);
-//! User <-> Cart
+//! User <=> Cart
 cart_1.default.belongsTo(user_1.default); //!  Cart hold a foreign key (userId)
 user_1.default.hasOne(cart_1.default);
-//! Cart <-> Product
+//! Cart <=> Product
 //! a Cart contain multiple Product and a Product typpe that is contained in multiple Cart
 cart_1.default.belongsToMany(product_1.default, { through: cart_item_1.default }); //! through tell Sequelize where these connection should be stored an that is cart-item model.
 product_1.default.belongsToMany(cart_1.default, { through: cart_item_1.default });
@@ -81,8 +81,8 @@ product_1.default.belongsToMany(cart_1.default, { through: cart_item_1.default }
 //! Many products with a Quantity associated to them.
 //! Sync all defined models to the DB.
 database_1.default
-    .sync({ force: true })
-    // .sync()
+    // .sync({ force: true })
+    .sync()
     .then((result) => {
     //! the Relations are set-up
     return user_1.default.findByPk(1);
@@ -96,6 +96,8 @@ database_1.default
     return user;
 })
     .then((user) => {
+    user.createCart(); //! create cart with user id = 1
+}).then(cart => {
     app.listen(3000);
 })
     .catch((err) => console.log(err));

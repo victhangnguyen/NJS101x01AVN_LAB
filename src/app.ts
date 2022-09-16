@@ -59,15 +59,15 @@ app.use(shopRoutes); //! default: '/'
 app.use(errorController.get404);
 
 //! Association
-//! User <-> Product
+//! User <=> Product
 Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' }); //! Talk about: User created this Product
 User.hasMany(Product);
 
-//! User <-> Cart
+//! User <=> Cart
 Cart.belongsTo(User); //!  Cart hold a foreign key (userId)
 User.hasOne(Cart);
 
-//! Cart <-> Product
+//! Cart <=> Product
 //! a Cart contain multiple Product and a Product typpe that is contained in multiple Cart
 Cart.belongsToMany(Product, { through: CartItem }); //! through tell Sequelize where these connection should be stored an that is cart-item model.
 Product.belongsToMany(Cart, { through: CartItem });
@@ -80,8 +80,8 @@ Product.belongsToMany(Cart, { through: CartItem });
 
 //! Sync all defined models to the DB.
 sequelize
-  .sync({ force: true })
-  // .sync()
+  // .sync({ force: true })
+  .sync()
   .then((result: Sequelize) => {
     //! the Relations are set-up
     return User.findByPk(1);
@@ -95,6 +95,8 @@ sequelize
     return user;
   })
   .then((user) => {
+    user.createCart(); //! create cart with user id = 1
+  }).then(cart => {
     app.listen(3000);
   })
   .catch((err) => console.log(err));
