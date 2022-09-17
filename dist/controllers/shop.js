@@ -65,17 +65,48 @@ const getCart = (req, res, next) => {
     //! User create mixins method createCart and getCart
     // console.log(req.user.cart)
     //! we can't access property cart, but we can call getCart
-    (_a = req.user) === null || _a === void 0 ? void 0 : _a.getCart().then((cart) => cart.getProducts()).then((cartProducts) => {
+    (_a = req.user) === null || _a === void 0 ? void 0 : _a.getCart().then((cart) => cart.getProducts().then((cartProducts) => {
         // console.log('hello')
         res.render('shop/cart', {
             path: '/cart',
             pageTitle: 'Your Cart',
             products: cartProducts,
         });
-    }).catch((err) => err);
+    })
+    //! we can use cart to fetch the Products that inside of it
+    ).catch((err) => err);
 };
 exports.getCart = getCart;
+//@ /cart => POST
 const postCart = (req, res, next) => {
+    var _a;
+    const prodId = req.body.productId;
+    let fetchedCart;
+    (_a = req.user) === null || _a === void 0 ? void 0 : _a.getCart().then((cart) => {
+        //! find out if product
+        fetchedCart = cart;
+        return cart.getProducts({ where: { id: prodId } });
+    }).then((products) => {
+        let product;
+        let newQuantity = 1;
+        if (products.length > 0) {
+            //! already exist product id in Cart
+            product = products[0];
+        }
+        //! if exist product
+        if (product) {
+            //! get old Quantity fo this product, and then increase it.
+            //! return (product + qty)
+        }
+        //! no product
+        //! we will return a Product (general product data)
+        return product_1.default.findByPk(prodId)
+            .then((product) => {
+            //! we add a new product with
+            return fetchedCart.addProduct(product, { through: { quantity: newQuantity } });
+        })
+            .catch((err) => err);
+    }).then((param) => console.log('params: ', param)).catch((err) => console.log(err));
     // const prodId: string = req.body.productId;
     // res.redirect('/cart');
     // Product.findById(prodId, (product: Product) => {

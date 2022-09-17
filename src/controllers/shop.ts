@@ -2,6 +2,7 @@ import { RequestHandler } from 'express';
 //! Models
 import Product from '../models/product';
 import Cart from '../models/cart';
+import { BelongsToMany } from 'sequelize';
 
 //@ /products => GET
 export const getProducts: RequestHandler = (req, res, next) => {
@@ -63,20 +64,56 @@ export const getCart: RequestHandler = (req, res, next) => {
   //! we can't access property cart, but we can call getCart
   req.user
     ?.getCart()
-    .then((cart) => cart.getProducts())
-    //! we can use cart to fetch the Products that inside of it
-    .then((cartProducts) => {
-      // console.log('hello')
-      res.render('shop/cart', {
-        path: '/cart',
-        pageTitle: 'Your Cart',
-        products: cartProducts,
-      });
-    })
+    .then(
+      (cart) =>
+        cart.getProducts().then((cartProducts) => {
+          // console.log('hello')
+          res.render('shop/cart', {
+            path: '/cart',
+            pageTitle: 'Your Cart',
+            products: cartProducts,
+          });
+        })
+      //! we can use cart to fetch the Products that inside of it
+    )
     .catch((err) => err);
 };
 
+//@ /cart => POST
 export const postCart: RequestHandler = (req, res, next) => {
+  const prodId = req.body.productId;
+  let fetchedCart: Cart;
+
+  req.user
+    ?.getCart()
+    .then((cart) => {
+      //! find out if product
+      fetchedCart = cart;
+      return cart.getProducts({ where: { id: prodId } });
+    })
+    .then((products) => {
+      let product;
+      let newQuantity = 1;
+      if (products.length > 0) {
+        //! already exist product id in Cart
+        product = products[0];
+      }
+      //! if exist product
+      if (product) {
+        //! get old Quantity fo this product, and then increase it.
+        //! return (product + qty)
+      }
+      //! no product
+      //! we will return a Product (general product data)
+      return Product.findByPk(prodId)
+        .then((product) => {
+          //! we add a new product with
+          return fetchedCart.addProduct(product!, { through: { quantity: newQuantity } });
+        })
+        .catch((err) => err);
+    })
+    .then((param) => console.log('params: ', param))
+    .catch((err) => console.log(err));
   // const prodId: string = req.body.productId;
   // res.redirect('/cart');
   // Product.findById(prodId, (product: Product) => {

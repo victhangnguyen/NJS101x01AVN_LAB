@@ -69,8 +69,15 @@ User.hasOne(Cart);
 
 //! Cart <=> Product
 //! a Cart contain multiple Product and a Product typpe that is contained in multiple Cart
+
 Cart.belongsToMany(Product, { through: CartItem }); //! through tell Sequelize where these connection should be stored an that is cart-item model.
 Product.belongsToMany(Cart, { through: CartItem });
+
+// Cart.hasMany(CartItem);
+// CartItem.belongsTo(Cart);
+// Product.hasMany(CartItem);
+// CartItem.belongsTo(Product);
+
 //! Many-To-Many Relationship
 //! This only works with an intermediate Table that connects them which basically stores a combination of product IDs and cart IDs.
 
@@ -79,6 +86,7 @@ Product.belongsToMany(Cart, { through: CartItem });
 //! Many products with a Quantity associated to them.
 
 //! Sync all defined models to the DB.
+
 sequelize
   // .sync({ force: true })
   .sync()
@@ -95,8 +103,9 @@ sequelize
     return user;
   })
   .then((user) => {
-    user.createCart(); //! create cart with user id = 1
-  }).then(cart => {
+    return user.createCart(); //! create cart with user id = 1
+  })
+  .then((cart) => {
     app.listen(3000);
   })
   .catch((err) => console.log(err));
