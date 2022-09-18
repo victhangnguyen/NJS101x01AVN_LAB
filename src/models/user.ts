@@ -1,3 +1,6 @@
+//! imp library
+import Logging from '../library/Logging';
+
 import { Model, DataTypes, Optional, HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, HasOneGetAssociationMixin, HasOneCreateAssociationMixin } from 'sequelize';
 
 import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
@@ -48,6 +51,6 @@ User.init(
 );
 
 // the defined model is the class itself
-console.log(User === sequelize.models.user); // true
+Logging.info('sequelize.models.user: ' + (User === sequelize.models.user)); // true
 
 export default User;

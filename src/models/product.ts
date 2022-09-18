@@ -1,6 +1,11 @@
+//! imp library
+import Logging from '../library/Logging';
+
 import { Model, DataTypes, Optional } from 'sequelize';
 
 import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
+import CartItem from './cart-item';
+
 import User from './user';
 
 export type ProductAttributes = {
@@ -9,7 +14,6 @@ export type ProductAttributes = {
   price: number;
   imageUrl: string;
   description: string;
-  // userId: number;
 };
 
 type ProductCreationAttributes = Optional<ProductAttributes, 'id'>;
@@ -20,7 +24,7 @@ class Product extends Model<ProductAttributes, ProductCreationAttributes> {
   declare price: number;
   declare imageUrl: string;
   declare description: string;
-  // declare userId: number;
+  declare cartItem: CartItem;
 }
 
 Product.init(
@@ -48,13 +52,6 @@ Product.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    // userId: {
-    //   type: DataTypes.INTEGER,
-    //   // references: {
-    //   //   model: User,
-    //   //   key: 'id',
-    //   // },
-    // },
   },
   {
     // Other model options go here
@@ -64,6 +61,6 @@ Product.init(
 );
 
 // the defined model is the class itself
-console.log(Product === sequelize.models.product); // true
+Logging.info('sequelize.models.product: ' + (Product === sequelize.models.product)); // true
 
 export default Product;

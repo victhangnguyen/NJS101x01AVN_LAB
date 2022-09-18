@@ -1,4 +1,7 @@
-import { Model, DataTypes, Optional } from 'sequelize';
+//! imp library
+import Logging from '../library/Logging';
+
+import { Model, DataTypes, CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize';
 
 import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
 import User from './user';
@@ -8,10 +11,10 @@ export type CartItemAttributes = {
   quantity: number;
 };
 
-type CartItemCreationAttributes = Optional<CartItemAttributes, 'id'>;
+// type CartItemCreationAttributes = Optional<CartItemAttributes, 'id'>;
 
-class CartItem extends Model<CartItemAttributes, CartItemCreationAttributes> {
-  declare id: number;
+class CartItem extends Model<InferAttributes<CartItem>, InferCreationAttributes<CartItem>> {
+  declare id: CreationOptional<number>;
   declare quantity: number;
 }
 
@@ -37,6 +40,6 @@ CartItem.init(
 );
 
 // the defined model is the class itself
-console.log(CartItem === sequelize.models.cartItem); // true
+Logging.info('sequelize.models.cartItem: ' + (CartItem === sequelize.models.cartItem)); // true
 
 export default CartItem;

@@ -1,20 +1,25 @@
+//! imp library
+import Logging from '../library/Logging';
+
 // import { Model, DataTypes, Optional, HasManyGetAssociationsMixin, HasManyAddAssociationMixin, BelongsToManyOptions, ThroughOptions, HasManyAddAssociationsMixin, BelongsToManyAddAssociationMixin, HasManyAddAssociationMixinOptions, AssociationOptions, CreationOptional } from 'sequelize';
-import { Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional, HasManyGetAssociationsMixin, HasManyAddAssociationMixin, BelongsToManyAddAssociationMixin, BelongsToManyAddAssociationsMixin, BelongsToMany, BelongsToCreateAssociationMixin } from 'sequelize';
+import { Model, DataTypes, Optional, HasManyGetAssociationsMixin, BelongsToManyAddAssociationMixin } from 'sequelize';
 
 import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
 import Product from './product';
 import User from './user';
 
-// export type CartAttributes = {
-//   id: number;
-// };
+export type CartAttributes = {
+  id: number;
+};
 
-class Cart extends Model<InferAttributes<Cart>, InferCreationAttributes<Cart>> {
+type ProductCreationAttributes = Optional<CartAttributes, 'id'>;
+
+class Cart extends Model<CartAttributes, ProductCreationAttributes> {
   // 'CreationOptional' is a special type that marks the field as optional
   // when creating an instance of the model (such as using Model.create()).
-  declare id: CreationOptional<number>;
+  declare id: number;
   declare getProducts: HasManyGetAssociationsMixin<Product>;
-  declare addProduct: BelongsToManyAddAssociationMixin <Product, number>;
+  declare addProduct: BelongsToManyAddAssociationMixin<Product, number>;
   // other attributes...
 }
 
@@ -38,12 +43,12 @@ Cart.init(
   },
   {
     // Other model options go here
-    tableName: 'cart', // We need to choose the model name
+    modelName: 'cart', // We need to choose the model name
     sequelize, // We need to pass the connection instance
   }
 );
 
 // the defined model is the class itself
-console.log(Cart === sequelize.models.cart); // true
+Logging.info('sequelize.models.cart: ' + (Cart === sequelize.models.cart)); // true
 
 export default Cart;

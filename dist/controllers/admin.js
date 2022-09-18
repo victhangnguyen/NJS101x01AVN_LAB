@@ -4,10 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postDeleteProduct = exports.postEditProduct = exports.getEditProduct = exports.getProducts = exports.postAddProduct = exports.getAddProduct = void 0;
+//! imp library
+const Logging_1 = __importDefault(require("../library/Logging"));
 //! imp Models
 const product_1 = __importDefault(require("../models/product"));
 //! GET admin/add-product -> Render page
 const getAddProduct = (req, res, next) => {
+    Logging_1.default.admin('GET getAddProduct');
     res.render('admin/edit-product', {
         pageTitle: 'Add Product',
         path: '/admin/add-product',
@@ -18,6 +21,7 @@ exports.getAddProduct = getAddProduct;
 //! POST admin/add-product
 const postAddProduct = (req, res, next) => {
     var _a;
+    Logging_1.default.admin('POST postAddProduct');
     const title = req.body.title;
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
@@ -37,6 +41,7 @@ exports.postAddProduct = postAddProduct;
 //@ /admin/products => GET
 const getProducts = (req, res, next) => {
     var _a;
+    Logging_1.default.admin('GET getProducts');
     // Product.findAll();
     (_a = req.user) === null || _a === void 0 ? void 0 : _a.getProducts().then((products) => {
         res.render('admin/products', {
@@ -50,6 +55,7 @@ exports.getProducts = getProducts;
 //@ /admin/edit-product/:productId => GET
 const getEditProduct = (req, res, next) => {
     var _a;
+    Logging_1.default.admin('GET getEditProduct');
     const editMode = req.query.edit;
     if (!editMode) {
         return res.redirect('/');
@@ -71,6 +77,7 @@ const getEditProduct = (req, res, next) => {
 };
 exports.getEditProduct = getEditProduct;
 const postEditProduct = (req, res, next) => {
+    Logging_1.default.admin('POST postEditProduct');
     const prodId = req.body.productId;
     const updatedTitle = req.body.title;
     const updatedPrice = req.body.price;
@@ -97,6 +104,7 @@ const postEditProduct = (req, res, next) => {
 };
 exports.postEditProduct = postEditProduct;
 const postDeleteProduct = (req, res, next) => {
+    Logging_1.default.admin('POST postDeleteProduct');
     const prodId = req.body.productId;
     // Product.destroy({where}); //! Way 2: DELETE options
     //! options?: DestroyOptions<ProductAttributes> | undefined

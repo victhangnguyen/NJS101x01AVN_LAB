@@ -1,3 +1,6 @@
+//! imp library
+import Logging from '../library/Logging';
+
 import { RequestHandler } from 'express';
 //! imp Models
 import Product from '../models/product';
@@ -6,6 +9,7 @@ import { ProductAttributes } from '../models/product';
 
 //! GET admin/add-product -> Render page
 export const getAddProduct: RequestHandler = (req, res, next) => {
+  Logging.admin('GET getAddProduct');
   res.render('admin/edit-product', {
     pageTitle: 'Add Product',
     path: '/admin/add-product',
@@ -15,6 +19,8 @@ export const getAddProduct: RequestHandler = (req, res, next) => {
 
 //! POST admin/add-product
 export const postAddProduct: RequestHandler = (req, res, next) => {
+  Logging.admin('POST postAddProduct');
+
   const title: ProductAttributes['title'] = req.body.title;
   const imageUrl: ProductAttributes['imageUrl'] = req.body.imageUrl;
   const price: ProductAttributes['price'] = req.body.price;
@@ -37,6 +43,8 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
 
 //@ /admin/products => GET
 export const getProducts: RequestHandler = (req, res, next) => {
+  Logging.admin('GET getProducts');
+
   // Product.findAll();
   req.user
     ?.getProducts()
@@ -52,6 +60,8 @@ export const getProducts: RequestHandler = (req, res, next) => {
 
 //@ /admin/edit-product/:productId => GET
 export const getEditProduct: RequestHandler = (req, res, next) => {
+  Logging.admin('GET getEditProduct');
+
   const editMode = req.query.edit;
   if (!editMode) {
     return res.redirect('/');
@@ -76,6 +86,8 @@ export const getEditProduct: RequestHandler = (req, res, next) => {
 };
 
 export const postEditProduct: RequestHandler = (req, res, next) => {
+  Logging.admin('POST postEditProduct');
+
   const prodId: ProductAttributes['id'] = req.body.productId;
   const updatedTitle: ProductAttributes['title'] = req.body.title;
   const updatedPrice: ProductAttributes['price'] = req.body.price;
@@ -104,6 +116,8 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
 };
 
 export const postDeleteProduct: RequestHandler = (req, res, next) => {
+  Logging.admin('POST postDeleteProduct');
+
   const prodId = req.body.productId;
   // Product.destroy({where}); //! Way 2: DELETE options
   //! options?: DestroyOptions<ProductAttributes> | undefined

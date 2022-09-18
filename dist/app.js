@@ -94,7 +94,7 @@ database_1.default
     .then((user) => {
     if (!user) {
         //! If user is null, means: we dont have a User, we need to create a new One
-        return user_1.default.create({ name: 'Max', email: 'test@test.com' });
+        return user_1.default.create({ name: 'Max', email: 'test@test.  com' });
         //! Builds a new model instance and calls save on it.
     }
     return user;

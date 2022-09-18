@@ -2,10 +2,11 @@ import { RequestHandler } from 'express';
 //! Models
 import Product from '../models/product';
 import Cart from '../models/cart';
-import { BelongsToMany } from 'sequelize';
+import Logging from '../library/Logging';
 
 //@ /products => GET
 export const getProducts: RequestHandler = (req, res, next) => {
+  Logging.shop('GET getProducts');
   Product.findAll()
     .then((products) => {
       res.render('shop/product-list', {
@@ -18,21 +19,8 @@ export const getProducts: RequestHandler = (req, res, next) => {
 };
 
 export const getProduct: RequestHandler = (req, res, next) => {
+  Logging.shop('GET getProduct');
   const prodId = req.params.productId;
-  // Product.findAll({
-  //   //! options?: FindOptions<ProductAttributes> | undefined)
-  //   where: { id: prodId }, //! Attribute has to be matched for rows to be selected for the given action.
-  // })
-  //   .then((products) => {
-  //     console.log('product: ', products)
-  //     res.render('shop/product-detail', {
-  //       product: products[0],
-  //       // pageTitle: product?.getDataValue('title'),
-  //       pageTitle: products[0]?.title,
-  //       path: '/products',
-  //     });
-  //   })
-  //   .catch((err) => console.log(err));
   Product.findByPk(prodId) //! Find By Primary Key
     .then((product) => {
       res.render('shop/product-detail', {
@@ -46,6 +34,7 @@ export const getProduct: RequestHandler = (req, res, next) => {
 };
 
 export const getIndex: RequestHandler = (req, res, next) => {
+  Logging.shop('GET getIndex');
   Product.findAll()
     .then((products) => {
       res.render('shop/index', {
@@ -58,6 +47,7 @@ export const getIndex: RequestHandler = (req, res, next) => {
 };
 
 export const getCart: RequestHandler = (req, res, next) => {
+  Logging.shop('GET getCart');
   //! User.hasOne(Cart)
   //! User create mixins method createCart and getCart
   // console.log(req.user.cart)
@@ -65,7 +55,7 @@ export const getCart: RequestHandler = (req, res, next) => {
   req.user
     ?.getCart()
     .then(
-      (cart) =>
+      (cart) => {
         cart.getProducts().then((cartProducts) => {
           // console.log('hello')
           res.render('shop/cart', {
@@ -73,7 +63,8 @@ export const getCart: RequestHandler = (req, res, next) => {
             pageTitle: 'Your Cart',
             products: cartProducts,
           });
-        })
+        });
+      }
       //! we can use cart to fetch the Products that inside of it
     )
     .catch((err) => err);
@@ -81,8 +72,10 @@ export const getCart: RequestHandler = (req, res, next) => {
 
 //@ /cart => POST
 export const postCart: RequestHandler = (req, res, next) => {
+  Logging.shop('POST postCart');
   const prodId = req.body.productId;
   let fetchedCart: Cart;
+  let newQuantity = 1;
 
   req.user
     ?.getCart()
@@ -93,7 +86,6 @@ export const postCart: RequestHandler = (req, res, next) => {
     })
     .then((products) => {
       let product;
-      let newQuantity = 1;
       if (products.length > 0) {
         //! already exist product id in Cart
         product = products[0];
@@ -102,24 +94,25 @@ export const postCart: RequestHandler = (req, res, next) => {
       if (product) {
         //! get old Quantity fo this product, and then increase it.
         //! return (product + qty)
+        const oldQuantity = product.cartItem.quantity;
+        newQuantity = oldQuantity + 1;
+        //! cartItem is extra field that added by Sequelize to give us access to this in-between table.
+        //! but to this exact product in the in-between table.
+        return product;
       }
       //! no product
       //! we will return a Product (general product data)
-      return Product.findByPk(prodId)
-        .then((product) => {
-          //! we add a new product with
-          return fetchedCart.addProduct(product!, { through: { quantity: newQuantity } });
-        })
-        .catch((err) => err);
+      return Product.findByPk(prodId);
     })
-    .then((param) => console.log('params: ', param))
+    .then((product) => {
+      return fetchedCart.addProduct(product!, { through: { quantity: newQuantity } });
+      //! return fetchedCart to get access to the Cart, and then addProduct to add Product into in-between table base on id cart
+    })
+    .then(() => {
+      Logging.shop('redirect to /cart');
+      res.redirect('/cart');
+    })
     .catch((err) => console.log(err));
-  // const prodId: string = req.body.productId;
-  // res.redirect('/cart');
-  // Product.findById(prodId, (product: Product) => {
-  //   Cart.addProduct(product.id!, product.price);
-  // });
-  // //! get route cart -> render Cart route
 };
 
 export const postCartDeleteProduct: RequestHandler = (req, res, next) => {
@@ -134,6 +127,7 @@ export const postCartDeleteProduct: RequestHandler = (req, res, next) => {
 };
 
 export const getOrders: RequestHandler = (req, res, next) => {
+  Logging.shop('GET getOrders');
   res.render('shop/orders', {
     path: '/orders',
     pageTitle: 'Your Orders',
@@ -141,6 +135,7 @@ export const getOrders: RequestHandler = (req, res, next) => {
 };
 
 export const getCheckout: RequestHandler = (req, res, next) => {
+  Logging.shop('GET getCheckout');
   res.render('shop/checkout', {
     path: '/checkout',
     pageTitle: 'Checkout',
