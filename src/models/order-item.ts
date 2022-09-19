@@ -1,0 +1,47 @@
+//! imp library
+import Logging from '../library/Logging';
+
+import {
+  Model,
+  DataTypes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
+
+import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
+
+export type OrderItemItemAttributes = {
+  id: number;
+};
+
+class OrderItem extends Model<
+  InferAttributes<OrderItem>,
+  InferCreationAttributes<OrderItem>
+> {
+  declare id: CreationOptional<number>;
+}
+
+OrderItem.init(
+  {
+    // Model attributes are defined here
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true,
+    },
+  },
+  {
+    // Other model options go here
+    sequelize: sequelize, // We need to pass the connection instance
+    modelName: 'orderItem', // We need to choose the model name
+  }
+);
+
+// the defined model is the class itself
+Logging.info(
+  'sequelize.models.orderItem: ' + (OrderItem === sequelize.models.orderItem)
+); // true
+
+export default OrderItem;

@@ -18,6 +18,8 @@ import Product from './models/product';
 import User from './models//user';
 import Cart from './models/cart';
 import CartItem from './models/cart-item';
+import Order from './models/order';
+import OrderItem from './models/order-item';
 
 // ! Extending the Request type
 declare global {
@@ -69,9 +71,17 @@ User.hasOne(Cart);
 
 //! Cart <=> Product
 //! a Cart contain multiple Product and a Product typpe that is contained in multiple Cart
-
 Cart.belongsToMany(Product, { through: CartItem }); //! through tell Sequelize where these connection should be stored an that is cart-item model.
 Product.belongsToMany(Cart, { through: CartItem });
+
+//! Order <=> User (One-Many)
+//! a single Order is always belonging to one User who placed the order.
+Order.belongsTo(User);
+User.hasMany(Order);
+
+//! Order <=> Product
+Order.belongsToMany(Product, { through: OrderItem });
+Product.belongsToMany(Order, { through: OrderItem });
 
 // Cart.hasMany(CartItem);
 // CartItem.belongsTo(Cart);

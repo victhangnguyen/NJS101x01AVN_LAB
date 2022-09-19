@@ -40,6 +40,8 @@ const product_1 = __importDefault(require("./models/product"));
 const user_1 = __importDefault(require("./models//user"));
 const cart_1 = __importDefault(require("./models/cart"));
 const cart_item_1 = __importDefault(require("./models/cart-item"));
+const order_1 = __importDefault(require("./models/order"));
+const order_item_1 = __importDefault(require("./models/order-item"));
 //! createExpress -> instance Express()
 const app = (0, express_1.default)();
 app.set('view engine', 'ejs');
@@ -74,6 +76,13 @@ user_1.default.hasOne(cart_1.default);
 //! a Cart contain multiple Product and a Product typpe that is contained in multiple Cart
 cart_1.default.belongsToMany(product_1.default, { through: cart_item_1.default }); //! through tell Sequelize where these connection should be stored an that is cart-item model.
 product_1.default.belongsToMany(cart_1.default, { through: cart_item_1.default });
+//! Order <=> User (One-Many)
+//! a single Order is always belonging to one User who placed the order.
+order_1.default.belongsTo(user_1.default);
+user_1.default.hasMany(order_1.default);
+//! Order <=> Product
+order_1.default.belongsToMany(product_1.default, { through: order_item_1.default });
+product_1.default.belongsToMany(order_1.default, { through: order_item_1.default });
 // Cart.hasMany(CartItem);
 // CartItem.belongsTo(Cart);
 // Product.hasMany(CartItem);
