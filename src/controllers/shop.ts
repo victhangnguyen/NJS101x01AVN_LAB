@@ -105,7 +105,9 @@ export const postCart: RequestHandler = (req, res, next) => {
       return Product.findByPk(prodId);
     })
     .then((product) => {
-      return fetchedCart.addProduct(product!, { through: { quantity: newQuantity } });
+      return fetchedCart.addProduct(product!, {
+        through: { quantity: newQuantity },
+      });
       //! return fetchedCart to get access to the Cart, and then addProduct to add Product into in-between table base on id cart
     })
     .then(() => {
@@ -116,7 +118,24 @@ export const postCart: RequestHandler = (req, res, next) => {
 };
 
 export const postCartDeleteProduct: RequestHandler = (req, res, next) => {
+  Logging.shop('POST postCartDeleteProduct');
   const prodId: string = req.body.productId;
+
+  req.user
+    ?.getCart()
+    .then((cart) => {
+      return cart.getProducts({ where: { id: prodId } });
+    })
+    .then((products) => {
+      const product = products[0];
+      product.cartItem.destroy();
+    })
+    .then((result) => {
+      Logging.admin('redirect /cart');
+      res.redirect('/cart');
+    })
+    .catch((err) => err);
+
   // //! We can alse use a hidden input to pass the [prop: price] to the backend.
   // //! I think this Ok, If we only pass the [prop: id] through the req and then we do all the data retrieval on the backend.
 
