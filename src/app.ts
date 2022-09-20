@@ -83,11 +83,6 @@ User.hasMany(Order);
 Order.belongsToMany(Product, { through: OrderItem });
 Product.belongsToMany(Order, { through: OrderItem });
 
-// Cart.hasMany(CartItem);
-// CartItem.belongsTo(Cart);
-// Product.hasMany(CartItem);
-// CartItem.belongsTo(Product);
-
 //! Many-To-Many Relationship
 //! This only works with an intermediate Table that connects them which basically stores a combination of product IDs and cart IDs.
 

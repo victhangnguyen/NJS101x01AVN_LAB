@@ -30,16 +30,23 @@ const express_1 = __importDefault(require("express"));
 //! imp Controllers
 const shopController = __importStar(require("../controllers/shop"));
 const router = express_1.default.Router();
+//@ / => GET
 router.get('/', shopController.getIndex);
 //@ /products => GET
 router.get('/products', shopController.getProducts);
+//@ /products/:productId => GET
 router.get('/products/:productId', shopController.getProduct);
 //@ /cart => GET
 router.get('/cart', shopController.getCart);
-//@ /admin => POST
+//@ /cart => POST
 router.post('/cart', shopController.postCart);
+//@ /cart-delete-item => POST
 router.post('/cart-delete-item', shopController.postCartDeleteProduct);
+//@ /orders => GET
 router.get('/orders', shopController.getOrders);
+//@ /create-order => POST
+router.post('/create-order', shopController.postOrder);
+//@ /checkout => GET
 router.get('/checkout', shopController.getCheckout);
 exports.default = router;
 //# sourceMappingURL=shop.js.map

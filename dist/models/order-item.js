@@ -17,6 +17,10 @@ OrderItem.init({
         allowNull: false,
         primaryKey: true,
     },
+    quantity: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false,
+    },
 }, {
     // Other model options go here
     sequelize: database_1.default,

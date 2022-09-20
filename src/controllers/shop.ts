@@ -1,8 +1,13 @@
+//! imp library
+import Logging from '../library/Logging';
+
 import { RequestHandler } from 'express';
+
 //! Models
 import Product from '../models/product';
 import Cart from '../models/cart';
-import Logging from '../library/Logging';
+import Order from '../models/order';
+import OrderItem from '../models/order-item';
 
 //@ /products => GET
 export const getProducts: RequestHandler = (req, res, next) => {
@@ -106,6 +111,7 @@ export const postCart: RequestHandler = (req, res, next) => {
     })
     .then((product) => {
       return fetchedCart.addProduct(product!, {
+        //! product : {cartItem}
         through: { quantity: newQuantity },
       });
       //! return fetchedCart to get access to the Cart, and then addProduct to add Product into in-between table base on id cart
@@ -151,6 +157,37 @@ export const getOrders: RequestHandler = (req, res, next) => {
     path: '/orders',
     pageTitle: 'Your Orders',
   });
+};
+
+//@ /create-order => POST
+export const postOrder: RequestHandler = (req, res, next) => {
+  Logging.shop('POST postOrder');
+
+  req.user
+    ?.getCart()
+    .then((cart) => {
+      return cart.getProducts();
+    })
+    .then((products) => {
+      return req.user
+        ?.createOrder()
+        .then((order) => {
+          //! this Promise return order
+          return order.addProducts(
+            products.map((product) => {
+              product.orderItem = { quantity: product.cartItem.quantity };
+              return product;
+            })
+          );
+        })
+        .catch((err) => err);
+    })
+    .then((result) => {
+      console.log(result);
+      Logging.shop('redirect to /orders');
+      res.redirect('/orders');
+    })
+    .catch((err) => err);
 };
 
 export const getCheckout: RequestHandler = (req, res, next) => {

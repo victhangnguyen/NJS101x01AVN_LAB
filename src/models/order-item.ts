@@ -13,6 +13,7 @@ import sequelize from '../utils/database'; //! imp Database Connection Pool sequ
 
 export type OrderItemItemAttributes = {
   id: number;
+  quantity: number;
 };
 
 class OrderItem extends Model<
@@ -20,6 +21,7 @@ class OrderItem extends Model<
   InferCreationAttributes<OrderItem>
 > {
   declare id: CreationOptional<number>;
+  declare quantity: number;
 }
 
 OrderItem.init(
@@ -30,6 +32,10 @@ OrderItem.init(
       autoIncrement: true,
       allowNull: false,
       primaryKey: true,
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
   },
   {

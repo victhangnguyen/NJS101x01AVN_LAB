@@ -1,11 +1,21 @@
 //! imp library
 import Logging from '../library/Logging';
 
-import { Model, DataTypes, Optional, HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, HasOneGetAssociationMixin, HasOneCreateAssociationMixin } from 'sequelize';
-
+import {
+  Model,
+  DataTypes,
+  Optional,
+  HasManyCreateAssociationMixin,
+  HasManyGetAssociationsMixin,
+  HasOneGetAssociationMixin,
+  HasOneCreateAssociationMixin,
+} from 'sequelize';
 import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
+
+//! imp models
 import Cart from './cart';
 import Product from './product';
+import Order from './order';
 
 export type UserAttributes = {
   id: number;
@@ -23,6 +33,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   declare createProduct: HasManyCreateAssociationMixin<Product, 'id'>;
   declare getCart: HasOneGetAssociationMixin<Cart>;
   declare createCart: HasOneCreateAssociationMixin<Cart>;
+  declare createOrder: HasManyCreateAssociationMixin<Order, 'id'>;
 }
 
 User.init(

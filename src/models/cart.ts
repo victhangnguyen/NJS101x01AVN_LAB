@@ -1,11 +1,18 @@
 //! imp library
 import Logging from '../library/Logging';
 
-import { Model, DataTypes, Optional, HasManyGetAssociationsMixin, BelongsToManyAddAssociationMixin } from 'sequelize';
+import {
+  Model,
+  DataTypes,
+  Optional,
+  HasManyGetAssociationsMixin,
+  BelongsToManyAddAssociationMixin,
+} from 'sequelize';
 
 import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
 import Product from './product';
 import User from './user';
+import CartItem from './cart-item';
 
 export type CartAttributes = {
   id: number;

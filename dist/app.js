@@ -83,10 +83,6 @@ user_1.default.hasMany(order_1.default);
 //! Order <=> Product
 order_1.default.belongsToMany(product_1.default, { through: order_item_1.default });
 product_1.default.belongsToMany(order_1.default, { through: order_item_1.default });
-// Cart.hasMany(CartItem);
-// CartItem.belongsTo(Cart);
-// Product.hasMany(CartItem);
-// CartItem.belongsTo(Product);
 //! Many-To-Many Relationship
 //! This only works with an intermediate Table that connects them which basically stores a combination of product IDs and cart IDs.
 //! Cart should belong to a User

@@ -7,6 +7,8 @@ import sequelize from '../utils/database'; //! imp Database Connection Pool sequ
 import CartItem from './cart-item';
 
 import User from './user';
+import OrderItem from './order-item';
+import Order from './order';
 
 export type ProductAttributes = {
   id: number;
@@ -25,6 +27,8 @@ class Product extends Model<ProductAttributes, ProductCreationAttributes> {
   declare imageUrl: string;
   declare description: string;
   declare cartItem: CartItem;
+  declare orderItem: { quantity: number };
+  // declare orderItem: Order;
 }
 
 Product.init(
@@ -61,6 +65,8 @@ Product.init(
 );
 
 // the defined model is the class itself
-Logging.info('sequelize.models.product: ' + (Product === sequelize.models.product)); // true
+Logging.info(
+  'sequelize.models.product: ' + (Product === sequelize.models.product)
+); // true
 
 export default Product;

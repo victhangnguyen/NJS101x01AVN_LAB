@@ -1,16 +1,28 @@
 //! imp library
 import Logging from '../library/Logging';
 
-import { Model, DataTypes, CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize';
+import {
+  Model,
+  DataTypes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  BelongsToManyAddAssociationsMixin,
+} from 'sequelize';
 
 import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
+import Product from './product';
 
 export type OrderAttributes = {
   id: number;
 };
 
-class Order extends Model<InferAttributes<Order>, InferCreationAttributes<Order>> {
+class Order extends Model<
+  InferAttributes<Order>,
+  InferCreationAttributes<Order>
+> {
   declare id: CreationOptional<number>;
+  declare addProducts: BelongsToManyAddAssociationsMixin<Product, number>;
 }
 
 Order.init(

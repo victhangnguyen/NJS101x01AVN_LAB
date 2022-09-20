@@ -3,10 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCheckout = exports.getOrders = exports.postCartDeleteProduct = exports.postCart = exports.getCart = exports.getIndex = exports.getProduct = exports.getProducts = void 0;
+exports.getCheckout = exports.postOrder = exports.getOrders = exports.postCartDeleteProduct = exports.postCart = exports.getCart = exports.getIndex = exports.getProduct = exports.getProducts = void 0;
+//! imp library
+const Logging_1 = __importDefault(require("../library/Logging"));
 //! Models
 const product_1 = __importDefault(require("../models/product"));
-const Logging_1 = __importDefault(require("../library/Logging"));
 //@ /products => GET
 const getProducts = (req, res, next) => {
     Logging_1.default.shop('GET getProducts');
@@ -102,6 +103,7 @@ const postCart = (req, res, next) => {
         return product_1.default.findByPk(prodId);
     }).then((product) => {
         return fetchedCart.addProduct(product, {
+            //! product : {cartItem}
             through: { quantity: newQuantity },
         });
         //! return fetchedCart to get access to the Cart, and then addProduct to add Product into in-between table base on id cart
@@ -140,6 +142,28 @@ const getOrders = (req, res, next) => {
     });
 };
 exports.getOrders = getOrders;
+//@ /create-order => POST
+const postOrder = (req, res, next) => {
+    var _a;
+    Logging_1.default.shop('POST postOrder');
+    (_a = req.user) === null || _a === void 0 ? void 0 : _a.getCart().then((cart) => {
+        return cart.getProducts();
+    }).then((products) => {
+        var _a;
+        return (_a = req.user) === null || _a === void 0 ? void 0 : _a.createOrder().then((order) => {
+            //! this Promise return order
+            return order.addProducts(products.map((product) => {
+                product.orderItem = { quantity: product.cartItem.quantity };
+                return product;
+            }));
+        }).catch((err) => err);
+    }).then((result) => {
+        console.log(result);
+        Logging_1.default.shop('redirect to /orders');
+        res.redirect('/orders');
+    }).catch((err) => err);
+};
+exports.postOrder = postOrder;
 const getCheckout = (req, res, next) => {
     Logging_1.default.shop('GET getCheckout');
     res.render('shop/checkout', {
