@@ -5,39 +5,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 //! imp library
 const Logging_1 = __importDefault(require("../library/Logging"));
-const sequelize_1 = require("sequelize");
-class Product extends sequelize_1.Model {
+class Product {
+    constructor(title, price, description, imageUrl) {
+        this.title = title;
+        this.price = price;
+        this.description = description;
+        this.imageUrl = imageUrl;
+    }
+    save() {
+    }
 }
-Product.init({
-    // Model attributes are defined here
-    id: {
-        type: sequelize_1.DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
-    },
-    title: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
-    price: {
-        type: sequelize_1.DataTypes.INTEGER,
-        allowNull: false,
-    },
-    imageUrl: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
-    description: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
-}, {
-    // Other model options go here
-    sequelize: sequelize,
-    modelName: 'product', // We need to choose the model name
-});
+//! We execute the callback and return connection Client, so that we can interact with it.
+//! However, if we would do this, we would have to connect to mongoDB for every Operation.
+//! We would not event disconnect. This is not really a good way of Connecting to MongoDB.
+// declare id: number;
+// declare title: string;
+// declare price: number;
+// declare imageUrl: string;
+// declare description: string;
+// declare cartItem: CartItem;
+// declare orderItem: { quantity: number };
 // the defined model is the class itself
-Logging_1.default.info('sequelize.models.product: ' + (Product === sequelize.models.product)); // true
+Logging_1.default.info('models.product: '); // true : (Product === sequelize.models.product)
 exports.default = Product;
 //# sourceMappingURL=product.js.map
