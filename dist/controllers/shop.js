@@ -13,7 +13,6 @@ const getProducts = (req, res, next) => {
     Logging_1.default.shop('GET getProducts');
     product_1.default.fetchAll()
         .then((products) => {
-        console.log(products);
         res.render('shop/product-list', {
             prods: products,
             pageTitle: 'All Products',
@@ -23,30 +22,24 @@ const getProducts = (req, res, next) => {
         .catch((err) => {
         console.log(err);
     });
-    // Product.findAll()
-    //   .then((products) => {
-    //     res.render('shop/product-list', {
-    //       prods: products,
-    //       pageTitle: 'All Products',
-    //       path: '/products',
-    //     });
-    //   })
-    //   .catch((err) => console.log(err));
 };
 exports.getProducts = getProducts;
+//! Render Details Product
 const getProduct = (req, res, next) => {
     Logging_1.default.shop('GET getProduct');
-    // const prodId = req.params.productId;
-    // Product.findByPk(prodId) //! Find By Primary Key
-    //   .then((product) => {
-    //     res.render('shop/product-detail', {
-    //       product: product,
-    //       // pageTitle: product?.getDataValue('title'),
-    //       pageTitle: product?.title,
-    //       path: '/products',
-    //     });
-    //   })
-    //   .catch((err) => console.log(err));
+    const prodId = req.params.productId;
+    product_1.default.findById(prodId)
+        .then((product) => {
+        res.render('shop/product-detail', {
+            product: product,
+            // pageTitle: product?.getDataValue('title'),
+            pageTitle: product === null || product === void 0 ? void 0 : product.title,
+            path: '/products',
+        });
+    })
+        .catch((err) => {
+        console.log(err);
+    });
 };
 exports.getProduct = getProduct;
 const getIndex = (req, res, next) => {

@@ -8,6 +8,7 @@ import OrderItem from './order-item';
 import Order from './order';
 
 //! imp ultils - database
+import * as mongoDB from 'mongodb';
 import { getDB } from '../utils/database';
 
 // declare id: number;
@@ -29,7 +30,7 @@ class Product {
     //! We execute the callback and return connection Client, so that we can interact with it.
     //! However, if we would do this, we would have to connect to mongoDB for every Operation.
     //! We would not event disconnect. This is not really a good way of Connecting to MongoDB.
-    const db = getDB(); //! point to Database Connection instance
+    const db = getDB(); //! point to Database Connection
     //! call collection method to tell MongoDB into which Collection that you wanna insert
     return db
       .collection('products')
@@ -44,7 +45,7 @@ class Product {
   }
 
   static async fetchAll() {
-    const db = getDB(); //! point to DB Connection instance
+    const db = getDB(); //! point to DB Connection
     return db
       .collection('products')
       .find({})
@@ -59,6 +60,26 @@ class Product {
       });
     //! find is asynchronous, find is find does not immediately return a Promise though, instead it return a Cursor (FindCursor)
     //! toArray should only be used that if we know that on ten, hunred Documents... (return Promise)
+  }
+
+  static async findById(productId: string) {
+    const db = getDB(); //! point to DB Connection
+    const query = { _id: new mongoDB.ObjectId(productId) };
+    //! ID in mongodb is actually stored a different type.
+
+    return (
+      db
+        .collection('products')
+        .find(query)
+        //! Get the next available document from the cursor, returns null if no more documents are available.
+        .next()
+        .then((product) => {
+          return product;
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    );
   }
 }
 
