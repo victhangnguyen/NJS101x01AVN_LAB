@@ -3,7 +3,7 @@ import path from 'path';
 import express from 'express';
 
 //! imp routes
-// import adminRoutes from './routes/admin';
+import adminRoutes from './routes/admin';
 // import shopRoutes from './routes/shop';
 
 //! imp controllers
@@ -18,7 +18,7 @@ import Order from './models/order';
 import OrderItem from './models/order-item';
 
 //! imp database
-import { mongoConnect} from './utils/database';
+import { mongoConnect } from './utils/database';
 
 // ! Extending the Request type
 declare global {
@@ -51,10 +51,11 @@ app.use((req, res, next) => {
   //     next();
   //   })
   //   .catch((err) => err);
-});
+  next();
+}); 
 
 //! implementing Routes
-// app.use('/admin', adminRoutes);
+app.use('/admin', adminRoutes);
 // app.use(shopRoutes); //! default: '/'
 
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
@@ -63,6 +64,3 @@ app.use(errorController.get404);
 mongoConnect(() => {
   app.listen(3000);
 });
-
-//! then<void, never>(onfulfilled?: ((value: Sequelize) => void | PromiseLike<void>) | null | undefined, onrejected?: ((reason: any) => PromiseLike<never>) | null | undefined): Promise<...>
-//! catch(onrejected?: ((reason: any) => PromiseLike<never>) | null | undefined): Promise<void>

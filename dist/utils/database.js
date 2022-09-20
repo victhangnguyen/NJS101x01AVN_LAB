@@ -38,7 +38,8 @@ const mongoConnect = (callbackFn) => {
     MongoClient.connect()
         .then((client) => {
         Logging_1.default.info('Connected!');
-        _db = client.db(); //! storing a Connection to our database in _db, and if we leaves it,
+        //! storing a Connection database in _db
+        _db = client.db(); //! Database Instance (client.db)
         callbackFn();
     })
         .catch((err) => {
@@ -50,7 +51,7 @@ exports.mongoConnect = mongoConnect;
 const getDB = () => {
     if (_db) {
         //! if _db is set
-        return _db;
+        return _db; //! return Database Instance (client.db)
     }
     //! else, throw error
     throw 'No database found';

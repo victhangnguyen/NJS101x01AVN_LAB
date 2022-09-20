@@ -17,7 +17,20 @@ class Product {
     public description: string,
     public imageUrl: string
   ) {}
-  save(): Product {}
+  async save() {
+    const db = getDB(); //! get Database Connection
+    //! call collection method to tell MongoDB into which Collection that you wanna insert
+    return db
+      .collection('products')
+      .insertOne(this) //! add one Document, insertMany([]) : multiple Documents pass Array of JavaScript
+      .then((result) => {
+        console.log('result: ', result);
+        // return result;
+      })
+      .catch((err) => {
+        console.log('Error: ', err);
+      });
+  }
 }
 
 //! We execute the callback and return connection Client, so that we can interact with it.

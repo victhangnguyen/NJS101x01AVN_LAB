@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.postDeleteProduct = exports.postEditProduct = exports.getEditProduct = exports.getProducts = exports.postAddProduct = exports.getAddProduct = void 0;
 //! imp library
 const Logging_1 = __importDefault(require("../library/Logging"));
-//! imp Models
+//! imp models
 const product_1 = __importDefault(require("../models/product"));
-//! GET admin/add-product -> Render page
+//@  /admin/add-product => GET
 const getAddProduct = (req, res, next) => {
     Logging_1.default.admin('GET getAddProduct');
     res.render('admin/edit-product', {
@@ -18,107 +18,137 @@ const getAddProduct = (req, res, next) => {
     });
 };
 exports.getAddProduct = getAddProduct;
-//! POST admin/add-product
+//@ /admin/add-product => POST
 const postAddProduct = (req, res, next) => {
-    var _a;
     Logging_1.default.admin('POST postAddProduct');
     const title = req.body.title;
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    // const userId: ProductAttributes['userId'] = req.user!.id;
-    (_a = req.user) === null || _a === void 0 ? void 0 : _a.createProduct({
+    const product = new product_1.default(title, price, description, imageUrl);
+    product
+        .save()
+        .then((result) => {
+        res.redirect('/admin/products');
+    })
+        .catch((err) => {
+        console.log('Error: ', err);
+    });
+    /*
+    req.user
+      ?.createProduct({
         title: title,
         imageUrl: imageUrl,
         price: price,
         description: description,
-    }).then((result) => {
+      })
+      .then((result) => {
         console.log('CREATED PRODUCT!');
         res.redirect('/admin/products');
-    }).catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+    */
 };
 exports.postAddProduct = postAddProduct;
 //@ /admin/products => GET
 const getProducts = (req, res, next) => {
-    var _a;
-    Logging_1.default.admin('GET getProducts');
+    /*
+    Logging.admin('GET getProducts');
+  
     // Product.findAll();
-    (_a = req.user) === null || _a === void 0 ? void 0 : _a.getProducts().then((products) => {
+    req.user
+      ?.getProducts()
+      .then((products) => {
         res.render('admin/products', {
-            prods: products,
-            pageTitle: 'Admin Products',
-            path: '/admin/products',
+          prods: products,
+          pageTitle: 'Admin Products',
+          path: '/admin/products',
         });
-    }).then((err) => console.log(err));
+      })
+      .then((err) => console.log(err));
+    */
 };
 exports.getProducts = getProducts;
 //@ /admin/edit-product/:productId => GET
 const getEditProduct = (req, res, next) => {
-    var _a;
-    Logging_1.default.admin('GET getEditProduct');
+    /*
+    Logging.admin('GET getEditProduct');
+  
     const editMode = req.query.edit;
     if (!editMode) {
-        return res.redirect('/');
+      return res.redirect('/');
     }
-    const prodId = Number(req.params.productId);
+    const prodId: Product['id'] = Number(req.params.productId);
     // Product.findByPk(prodId);
-    (_a = req.user) === null || _a === void 0 ? void 0 : _a.getProducts({ where: { id: prodId } }).then((products) => {
+    req.user
+      ?.getProducts({ where: { id: prodId } })
+      .then((products) => {
         const product = products[0];
         if (!product) {
-            return res.redirect('/');
+          return res.redirect('/');
         }
         res.render('admin/edit-product', {
-            product: product,
-            pageTitle: 'Edit Product',
-            path: '/admin/edit-product',
-            editing: editMode,
+          product: product,
+          pageTitle: 'Edit Product',
+          path: '/admin/edit-product',
+          editing: editMode,
         });
-    }).catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+    */
 };
 exports.getEditProduct = getEditProduct;
 const postEditProduct = (req, res, next) => {
-    Logging_1.default.admin('POST postEditProduct');
-    const prodId = req.body.productId;
-    const updatedTitle = req.body.title;
-    const updatedPrice = req.body.price;
-    const updatedImageUrl = req.body.imageUrl;
-    const updatedDesc = req.body.description;
+    /*
+    Logging.admin('POST postEditProduct');
+  
+    const prodId: Product['id'] = req.body.productId;
+    const updatedTitle: Product['title'] = req.body.title;
+    const updatedPrice: Product['price'] = req.body.price;
+    const updatedImageUrl: Product['imageUrl'] = req.body.imageUrl;
+    const updatedDesc: Product['description'] = req.body.description;
+  
     //! Updating Product
-    product_1.default.findByPk(prodId)
-        .then((product) => {
-        product.title = updatedTitle;
-        product.price = updatedPrice;
-        product.imageUrl = updatedImageUrl;
-        product.description = updatedDesc;
+    Product.findByPk(prodId)
+      .then((product) => {
+        product!.title = updatedTitle;
+        product!.price = updatedPrice;
+        product!.imageUrl = updatedImageUrl;
+        product!.description = updatedDesc;
+  
         //! save(): choose product with id and save() with exist id
         //! and if the product does not exist, it will create a new one, but it happen, it will override or update the old one with our new values.
-        return product.save(); //! return Product to continue then
+        return product!.save(); //! return Product to continue then
         //! Returns a Promise that resolves to the saved instance (or rejects with a Sequelize.ValidationError,
         //! which will have a property for each of the fields for which the validation failed, with the error message for that field).
-    })
-        .then((result) => {
+      })
+      .then((result) => {
         console.log('UPDATED PRODUCT!');
         res.redirect(`/admin/products`);
-    })
-        .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+    */
 };
 exports.postEditProduct = postEditProduct;
 const postDeleteProduct = (req, res, next) => {
-    Logging_1.default.admin('POST postDeleteProduct');
+    /*
+    Logging.admin('POST postDeleteProduct');
+  
     const prodId = req.body.productId;
     // Product.destroy({where}); //! Way 2: DELETE options
-    //! options?: DestroyOptions<ProductAttributes> | undefined
+    //! options?: DestroyOptions<Product> | undefined
     //! Delete multiple instances, or set their deletedAt timestamp to the current time if paranoid is enabled.
-    product_1.default.findByPk(prodId)
-        .then((product) => {
+    Product.findByPk(prodId)
+      .then((product) => {
         //! product is an instance of this Model
-        return product === null || product === void 0 ? void 0 : product.destroy(); //! Promise
-    })
-        .then((result) => {
+        return product?.destroy(); //! Promise
+      })
+      .then((result) => {
         console.log('DELETED PRODUCT!');
         res.redirect('/admin/products');
-    })
-        .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+    */
 };
 exports.postDeleteProduct = postDeleteProduct;
 //# sourceMappingURL=admin.js.map

@@ -29,7 +29,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = __importDefault(require("path"));
 const express_1 = __importDefault(require("express"));
 //! imp routes
-// import adminRoutes from './routes/admin';
+const admin_1 = __importDefault(require("./routes/admin"));
 // import shopRoutes from './routes/shop';
 //! imp controllers
 const errorController = __importStar(require("./controllers/error"));
@@ -53,15 +53,14 @@ app.use((req, res, next) => {
     //     next();
     //   })
     //   .catch((err) => err);
+    next();
 });
 //! implementing Routes
-// app.use('/admin', adminRoutes);
+app.use('/admin', admin_1.default);
 // app.use(shopRoutes); //! default: '/'
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(errorController.get404);
 (0, database_1.mongoConnect)(() => {
     app.listen(3000);
 });
-//! then<void, never>(onfulfilled?: ((value: Sequelize) => void | PromiseLike<void>) | null | undefined, onrejected?: ((reason: any) => PromiseLike<never>) | null | undefined): Promise<...>
-//! catch(onrejected?: ((reason: any) => PromiseLike<never>) | null | undefined): Promise<void>
 //# sourceMappingURL=app.js.map

@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 //! imp library
 const Logging_1 = __importDefault(require("../library/Logging"));
+//! imp ultils - database
+const database_1 = require("../utils/database");
 class Product {
     constructor(title, price, description, imageUrl) {
         this.title = title;
@@ -12,7 +14,20 @@ class Product {
         this.description = description;
         this.imageUrl = imageUrl;
     }
-    save() { }
+    async save() {
+        const db = (0, database_1.getDB)(); //! get Database Connection
+        //! call collection method to tell MongoDB into which Collection that you wanna insert
+        return db
+            .collection('products')
+            .insertOne(this) //! add one Document, insertMany([]) : multiple Documents pass Array of JavaScript
+            .then((result) => {
+            console.log('result: ', result);
+            // return result;
+        })
+            .catch((err) => {
+            console.log('Error: ', err);
+        });
+    }
 }
 //! We execute the callback and return connection Client, so that we can interact with it.
 //! However, if we would do this, we would have to connect to mongoDB for every Operation.
