@@ -162,10 +162,12 @@ export const getOrders: RequestHandler = (req, res, next) => {
 //@ /create-order => POST
 export const postOrder: RequestHandler = (req, res, next) => {
   Logging.shop('POST postOrder');
+  let fetchedCart: Cart;
 
   req.user
     ?.getCart()
     .then((cart) => {
+      fetchedCart = cart;
       return cart.getProducts();
     })
     .then((products) => {
@@ -183,7 +185,9 @@ export const postOrder: RequestHandler = (req, res, next) => {
         .catch((err) => err);
     })
     .then((result) => {
-      console.log(result);
+      return fetchedCart.setProducts(null!);
+    })
+    .then((result) => {
       Logging.shop('redirect to /orders');
       res.redirect('/orders');
     })

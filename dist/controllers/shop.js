@@ -146,7 +146,9 @@ exports.getOrders = getOrders;
 const postOrder = (req, res, next) => {
     var _a;
     Logging_1.default.shop('POST postOrder');
+    let fetchedCart;
     (_a = req.user) === null || _a === void 0 ? void 0 : _a.getCart().then((cart) => {
+        fetchedCart = cart;
         return cart.getProducts();
     }).then((products) => {
         var _a;
@@ -158,7 +160,8 @@ const postOrder = (req, res, next) => {
             }));
         }).catch((err) => err);
     }).then((result) => {
-        console.log(result);
+        return fetchedCart.setProducts(null);
+    }).then((result) => {
         Logging_1.default.shop('redirect to /orders');
         res.redirect('/orders');
     }).catch((err) => err);

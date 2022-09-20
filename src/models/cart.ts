@@ -7,6 +7,8 @@ import {
   Optional,
   HasManyGetAssociationsMixin,
   BelongsToManyAddAssociationMixin,
+  BelongsToManyGetAssociationsMixin,
+  BelongsToManySetAssociationsMixin
 } from 'sequelize';
 
 import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
@@ -24,8 +26,9 @@ class Cart extends Model<CartAttributes, ProductCreationAttributes> {
   // 'CreationOptional' is a special type that marks the field as optional
   // when creating an instance of the model (such as using Model.create()).
   declare id: number;
-  declare getProducts: HasManyGetAssociationsMixin<Product>;
+  declare getProducts: BelongsToManyGetAssociationsMixin<Product>; //! __change
   declare addProduct: BelongsToManyAddAssociationMixin<Product, number>;
+  declare setProducts: BelongsToManySetAssociationsMixin<Product, number>
   // other attributes...
 }
 
