@@ -33,6 +33,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   declare createProduct: HasManyCreateAssociationMixin<Product, 'id'>;
   declare getCart: HasOneGetAssociationMixin<Cart>;
   declare createCart: HasOneCreateAssociationMixin<Cart>;
+  declare getOrders: HasManyGetAssociationsMixin<Order>;
   declare createOrder: HasManyCreateAssociationMixin<Order, 'id'>;
 }
 
