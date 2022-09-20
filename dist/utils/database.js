@@ -53,7 +53,6 @@ const getDB = () => {
         //! if _db is set
         return _db; //! return Database Instance (client.db)
     }
-    //! else, throw error
     throw 'No database found';
 };
 exports.getDB = getDB;
