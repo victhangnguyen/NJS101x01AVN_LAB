@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //! imp library
 const Logging_1 = __importDefault(require("../library/Logging"));
 const sequelize_1 = require("sequelize");
-const database_1 = __importDefault(require("../utils/database")); //! imp Database Connection Pool sequelize
 class Product extends sequelize_1.Model {
 }
 Product.init({
@@ -35,10 +34,10 @@ Product.init({
     },
 }, {
     // Other model options go here
-    sequelize: database_1.default,
+    sequelize: sequelize,
     modelName: 'product', // We need to choose the model name
 });
 // the defined model is the class itself
-Logging_1.default.info('sequelize.models.product: ' + (Product === database_1.default.models.product)); // true
+Logging_1.default.info('sequelize.models.product: ' + (Product === sequelize.models.product)); // true
 exports.default = Product;
 //# sourceMappingURL=product.js.map

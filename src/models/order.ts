@@ -10,7 +10,7 @@ import {
   BelongsToManyAddAssociationsMixin,
 } from 'sequelize';
 
-import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
+
 import Product from './product';
 
 export type OrderAttributes = {

@@ -28,20 +28,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = __importDefault(require("path"));
 const express_1 = __importDefault(require("express"));
-//! imp Routes
-const admin_1 = __importDefault(require("./routes/admin"));
-const shop_1 = __importDefault(require("./routes/shop"));
-//! imp Controllers
+//! imp routes
+// import adminRoutes from './routes/admin';
+// import shopRoutes from './routes/shop';
+//! imp controllers
 const errorController = __importStar(require("./controllers/error"));
-//! imp Sequelize - Database Connection Pool
+//! imp database
 const database_1 = __importDefault(require("./utils/database"));
-//! imp Models
-const product_1 = __importDefault(require("./models/product"));
-const user_1 = __importDefault(require("./models//user"));
-const cart_1 = __importDefault(require("./models/cart"));
-const cart_item_1 = __importDefault(require("./models/cart-item"));
-const order_1 = __importDefault(require("./models/order"));
-const order_item_1 = __importDefault(require("./models/order-item"));
 //! createExpress -> instance Express()
 const app = (0, express_1.default)();
 app.set('view engine', 'ejs');
@@ -52,65 +45,24 @@ app.use(express_1.default.urlencoded({ extended: false }));
 const publicDir = path_1.default.join(__dirname, '..', 'public');
 app.use(express_1.default.static(publicDir));
 app.use((req, res, next) => {
-    user_1.default.findByPk(1)
-        .then((user) => {
-        //! Store it in a Request, we will set request.user
-        req.user = user;
-        next();
-    })
-        .catch((err) => err);
+    //! Register user id 1
+    // User.findByPk(1)
+    //   .then((user) => {
+    //     //! Store it in a Request, we will set request.user
+    //     req.user = user!;
+    //     next();
+    //   })
+    //   .catch((err) => err);
 });
 //! implementing Routes
-app.use('/admin', admin_1.default);
-app.use(shop_1.default); //! default: '/'
+// app.use('/admin', adminRoutes);
+// app.use(shopRoutes); //! default: '/'
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(errorController.get404);
-//! Association
-//! User <=> Product
-product_1.default.belongsTo(user_1.default, { constraints: true, onDelete: 'CASCADE' }); //! Talk about: User created this Product
-user_1.default.hasMany(product_1.default);
-//! User <=> Cart
-cart_1.default.belongsTo(user_1.default); //!  Cart hold a foreign key (userId)
-user_1.default.hasOne(cart_1.default);
-//! Cart <=> Product
-//! a Cart contain multiple Product and a Product typpe that is contained in multiple Cart
-cart_1.default.belongsToMany(product_1.default, { through: cart_item_1.default }); //! through tell Sequelize where these connection should be stored an that is cart-item model.
-product_1.default.belongsToMany(cart_1.default, { through: cart_item_1.default });
-//! Order <=> User (One-Many)
-//! a single Order is always belonging to one User who placed the order.
-order_1.default.belongsTo(user_1.default);
-user_1.default.hasMany(order_1.default);
-//! Order <=> Product
-order_1.default.belongsToMany(product_1.default, { through: order_item_1.default });
-product_1.default.belongsToMany(order_1.default, { through: order_item_1.default });
-//! Many-To-Many Relationship
-//! This only works with an intermediate Table that connects them which basically stores a combination of product IDs and cart IDs.
-//! Cart should belong to a User
-//! Cart holds products
-//! Many products with a Quantity associated to them.
-//! Sync all defined models to the DB.
-database_1.default
-    // .sync({ force: true })
-    .sync()
-    .then((result) => {
-    //! the Relations are set-up
-    return user_1.default.findByPk(1);
-})
-    .then((user) => {
-    if (!user) {
-        //! If user is null, means: we dont have a User, we need to create a new One
-        return user_1.default.create({ name: 'Max', email: 'test@test.  com' });
-        //! Builds a new model instance and calls save on it.
-    }
-    return user;
-})
-    .then((user) => {
-    return user.createCart(); //! create cart with user id = 1
-})
-    .then((cart) => {
+(0, database_1.default)(client => {
+    console.log(client);
     app.listen(3000);
-})
-    .catch((err) => console.log(err));
+});
 //! then<void, never>(onfulfilled?: ((value: Sequelize) => void | PromiseLike<void>) | null | undefined, onrejected?: ((reason: any) => PromiseLike<never>) | null | undefined): Promise<...>
 //! catch(onrejected?: ((reason: any) => PromiseLike<never>) | null | undefined): Promise<void>
 //# sourceMappingURL=app.js.map

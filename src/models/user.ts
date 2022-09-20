@@ -10,7 +10,7 @@ import {
   HasOneGetAssociationMixin,
   HasOneCreateAssociationMixin,
 } from 'sequelize';
-import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
+
 
 //! imp models
 import Cart from './cart';

@@ -1,33 +1,29 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-//! imp library
-const Logging_1 = __importDefault(require("../library/Logging"));
-const sequelize_1 = require("sequelize");
-const database_1 = __importDefault(require("../utils/database")); //! imp Database Connection Pool sequelize
 // type CartItemCreationAttributes = Optional<CartItemAttributes, 'id'>;
-class CartItem extends sequelize_1.Model {
+class CartItem {
 }
-CartItem.init({
-    // Model attributes are defined here
-    id: {
-        type: sequelize_1.DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
-    },
-    quantity: {
-        type: sequelize_1.DataTypes.INTEGER,
-        allowNull: false,
-    },
-}, {
-    // Other model options go here
-    sequelize: database_1.default,
-    modelName: 'cartItem', // We need to choose the model name
-});
-// the defined model is the class itself
-Logging_1.default.info('sequelize.models.cartItem: ' + (CartItem === database_1.default.models.cartItem)); // true
+// CartItem.init(
+//   {
+//     // Model attributes are defined here
+//     id: {
+//       type: DataTypes.INTEGER,
+//       autoIncrement: true,
+//       allowNull: false,
+//       primaryKey: true,
+//     },
+//     quantity: {
+//       type: DataTypes.INTEGER,
+//       allowNull: false,
+//     },
+//   },
+//   {
+//     // Other model options go here
+//     sequelize: sequelize, // We need to pass the connection instance
+//     modelName: 'cartItem', // We need to choose the model name
+//   }
+// );
+// // the defined model is the class itself
+// Logging.info('sequelize.models.cartItem: ' + (CartItem === sequelize.models.cartItem)); // true
 exports.default = CartItem;
 //# sourceMappingURL=cart-item.js.map

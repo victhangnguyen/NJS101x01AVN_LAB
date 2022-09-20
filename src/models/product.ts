@@ -3,7 +3,7 @@ import Logging from '../library/Logging';
 
 import { Model, DataTypes, Optional } from 'sequelize';
 
-import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
+
 import CartItem from './cart-item';
 
 import User from './user';

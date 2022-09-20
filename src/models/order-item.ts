@@ -9,7 +9,7 @@ import {
   InferCreationAttributes,
 } from 'sequelize';
 
-import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
+
 
 export type OrderItemItemAttributes = {
   id: number;

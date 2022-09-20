@@ -1,17 +1,6 @@
 //! imp library
 import Logging from '../library/Logging';
 
-import {
-  Model,
-  DataTypes,
-  Optional,
-  HasManyGetAssociationsMixin,
-  BelongsToManyAddAssociationMixin,
-  BelongsToManyGetAssociationsMixin,
-  BelongsToManySetAssociationsMixin
-} from 'sequelize';
-
-import sequelize from '../utils/database'; //! imp Database Connection Pool sequelize
 import Product from './product';
 import User from './user';
 import CartItem from './cart-item';
@@ -28,7 +17,7 @@ class Cart extends Model<CartAttributes, ProductCreationAttributes> {
   declare id: number;
   declare getProducts: BelongsToManyGetAssociationsMixin<Product>; //! __change
   declare addProduct: BelongsToManyAddAssociationMixin<Product, number>;
-  declare setProducts: BelongsToManySetAssociationsMixin<Product, number>
+  declare setProducts: BelongsToManySetAssociationsMixin<Product, number>;
   // other attributes...
 }
 

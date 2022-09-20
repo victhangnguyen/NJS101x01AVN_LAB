@@ -1,13 +1,24 @@
-//! npm i --save mysql2
-import mysql from 'mysql2';
+//! imp library
+import Logging from '../library/Logging';
 
-import { Sequelize } from 'sequelize'; //! Sequelize class
+import * as mongoDB from "mongodb";
 
-// constructor(database: string, username: string, password?: string, options?: Options);
-const sequelize = new Sequelize('node-complete', 'root', 'js123456', { //! servername: node-complete
-  host: 'localhost',
-  dialect: 'mysql',
-  port: 3306,
-});
+const usernameMongoDB = 'njs101x';
+const passwordMongoDB = 'njs101x';
 
-export default sequelize;
+const MongoClient : mongoDB.MongoClient = new mongoDB.MongoClient(`mongodb+srv://${usernameMongoDB}:${passwordMongoDB}@cluster0.nbojriq.mongodb.net/?retryWrites=true&w=majority`);
+
+const mongoConnect = (callbackFn: (client: mongoDB.MongoClient) => void) => {
+  MongoClient.connect(
+    
+  )
+    .then((client) => {
+      Logging.info('Connected!');
+      callbackFn(client);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export default mongoConnect;
