@@ -8,7 +8,7 @@ import OrderItem from './order-item';
 import Order from './order';
 
 //! imp ultils - database
-import mongoConnect from '../utils/database';
+import { getDB } from '../utils/database';
 
 class Product {
   constructor(
@@ -17,15 +17,12 @@ class Product {
     public description: string,
     public imageUrl: string
   ) {}
-  save(): Product {
-    
-  }
+  save(): Product {}
 }
 
 //! We execute the callback and return connection Client, so that we can interact with it.
 //! However, if we would do this, we would have to connect to mongoDB for every Operation.
 //! We would not event disconnect. This is not really a good way of Connecting to MongoDB.
-
 
 // declare id: number;
 // declare title: string;

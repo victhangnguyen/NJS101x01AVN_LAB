@@ -26,21 +26,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getDB = exports.mongoConnect = void 0;
 //! imp library
 const Logging_1 = __importDefault(require("../library/Logging"));
 const mongoDB = __importStar(require("mongodb"));
 const usernameMongoDB = 'njs101x';
 const passwordMongoDB = 'njs101x';
+let _db;
 const MongoClient = new mongoDB.MongoClient(`mongodb+srv://${usernameMongoDB}:${passwordMongoDB}@cluster0.nbojriq.mongodb.net/?retryWrites=true&w=majority`);
 const mongoConnect = (callbackFn) => {
     MongoClient.connect()
         .then((client) => {
         Logging_1.default.info('Connected!');
-        callbackFn(client);
+        _db = client.db(); //! storing a Connection to our database in _db, and if we leaves it,
+        callbackFn();
     })
         .catch((err) => {
-        console.log(err);
+        throw err;
     });
 };
-exports.default = mongoConnect;
+exports.mongoConnect = mongoConnect;
+//! This method will return access to that Connected-Database if _db exist.
+const getDB = () => {
+    if (_db) {
+        //! if _db is set
+        return _db;
+    }
+    //! else, throw error
+    throw 'No database found';
+};
+exports.getDB = getDB;
 //# sourceMappingURL=database.js.map

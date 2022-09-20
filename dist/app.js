@@ -34,7 +34,7 @@ const express_1 = __importDefault(require("express"));
 //! imp controllers
 const errorController = __importStar(require("./controllers/error"));
 //! imp database
-const database_1 = __importDefault(require("./utils/database"));
+const database_1 = require("./utils/database");
 //! createExpress -> instance Express()
 const app = (0, express_1.default)();
 app.set('view engine', 'ejs');
@@ -59,8 +59,7 @@ app.use((req, res, next) => {
 // app.use(shopRoutes); //! default: '/'
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(errorController.get404);
-(0, database_1.default)(client => {
-    console.log(client);
+(0, database_1.mongoConnect)(() => {
     app.listen(3000);
 });
 //! then<void, never>(onfulfilled?: ((value: Sequelize) => void | PromiseLike<void>) | null | undefined, onrejected?: ((reason: any) => PromiseLike<never>) | null | undefined): Promise<...>

@@ -12,8 +12,7 @@ class Product {
         this.description = description;
         this.imageUrl = imageUrl;
     }
-    save() {
-    }
+    save() { }
 }
 //! We execute the callback and return connection Client, so that we can interact with it.
 //! However, if we would do this, we would have to connect to mongoDB for every Operation.
