@@ -4,7 +4,7 @@ import express from 'express';
 
 //! imp routes
 import adminRoutes from './routes/admin';
-// import shopRoutes from './routes/shop';
+import shopRoutes from './routes/shop';
 
 //! imp controllers
 import * as errorController from './controllers/error';
@@ -56,7 +56,7 @@ app.use((req, res, next) => {
 
 //! implementing Routes
 app.use('/admin', adminRoutes);
-// app.use(shopRoutes); //! default: '/'
+app.use(shopRoutes); //! default: '/'
 
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(errorController.get404);

@@ -30,7 +30,7 @@ const path_1 = __importDefault(require("path"));
 const express_1 = __importDefault(require("express"));
 //! imp routes
 const admin_1 = __importDefault(require("./routes/admin"));
-// import shopRoutes from './routes/shop';
+const shop_1 = __importDefault(require("./routes/shop"));
 //! imp controllers
 const errorController = __importStar(require("./controllers/error"));
 //! imp database
@@ -57,7 +57,7 @@ app.use((req, res, next) => {
 });
 //! implementing Routes
 app.use('/admin', admin_1.default);
-// app.use(shopRoutes); //! default: '/'
+app.use(shop_1.default); //! default: '/'
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(errorController.get404);
 (0, database_1.mongoConnect)(() => {

@@ -9,7 +9,7 @@ const passwordMongoDB = 'njs101x';
 let _db: mongoDB.Db;
 
 const MongoClient: mongoDB.MongoClient = new mongoDB.MongoClient(
-  `mongodb+srv://${usernameMongoDB}:${passwordMongoDB}@cluster0.nbojriq.mongodb.net/?retryWrites=true&w=majority`
+  `mongodb+srv://${usernameMongoDB}:${passwordMongoDB}@cluster0.nbojriq.mongodb.net/shop?retryWrites=true&w=majority`
 );
 
 export const mongoConnect = (callbackFn: () => void) => {
@@ -30,6 +30,6 @@ export const getDB = () => {
     //! if _db is set
     return _db;  //! return Database Instance (client.db)
   }
-  
+
   throw 'No database found'
 };

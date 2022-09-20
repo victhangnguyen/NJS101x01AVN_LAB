@@ -29,25 +29,12 @@ const postAddProduct = (req, res, next) => {
     product
         .save()
         .then((result) => {
+        console.log('insertedObject: ', result);
         res.redirect('/admin/products');
     })
         .catch((err) => {
         console.log('Error: ', err);
     });
-    /*
-    req.user
-      ?.createProduct({
-        title: title,
-        imageUrl: imageUrl,
-        price: price,
-        description: description,
-      })
-      .then((result) => {
-        console.log('CREATED PRODUCT!');
-        res.redirect('/admin/products');
-      })
-      .catch((err) => console.log(err));
-    */
 };
 exports.postAddProduct = postAddProduct;
 //@ /admin/products => GET

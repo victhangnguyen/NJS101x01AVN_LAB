@@ -33,7 +33,7 @@ const mongoDB = __importStar(require("mongodb"));
 const usernameMongoDB = 'njs101x';
 const passwordMongoDB = 'njs101x';
 let _db;
-const MongoClient = new mongoDB.MongoClient(`mongodb+srv://${usernameMongoDB}:${passwordMongoDB}@cluster0.nbojriq.mongodb.net/?retryWrites=true&w=majority`);
+const MongoClient = new mongoDB.MongoClient(`mongodb+srv://${usernameMongoDB}:${passwordMongoDB}@cluster0.nbojriq.mongodb.net/shop?retryWrites=true&w=majority`);
 const mongoConnect = (callbackFn) => {
     MongoClient.connect()
         .then((client) => {

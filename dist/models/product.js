@@ -25,18 +25,34 @@ class Product {
         //! We execute the callback and return connection Client, so that we can interact with it.
         //! However, if we would do this, we would have to connect to mongoDB for every Operation.
         //! We would not event disconnect. This is not really a good way of Connecting to MongoDB.
-        const db = (0, database_1.getDB)(); //! get Database Connection
+        const db = (0, database_1.getDB)(); //! point to Database Connection instance
         //! call collection method to tell MongoDB into which Collection that you wanna insert
         return db
             .collection('products')
             .insertOne(this) //! add one Document, insertMany([]) : multiple Documents pass Array of JavaScript
             .then((result) => {
-            console.log('result: ', result);
-            // return result;
+            // console.log('result: ', result);
+            return result;
         })
             .catch((err) => {
             console.log('Error: ', err);
         });
+    }
+    static async fetchAll() {
+        const db = (0, database_1.getDB)(); //! point to DB Connection instance
+        return db
+            .collection('products')
+            .find({})
+            .toArray()
+            .then((products) => {
+            console.log(products);
+            return products;
+        })
+            .catch((err) => {
+            console.log(err);
+        });
+        //! find is asynchronous, find is find does not immediately return a Promise though, instead it return a Cursor (FindCursor)
+        //! toArray should only be used that if we know that on ten, hunred Documents... (return Promise)
     }
 }
 // the defined model is the class itself
