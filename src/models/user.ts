@@ -1,68 +1,62 @@
 //! imp library
 import Logging from '../library/Logging';
 
-import {
-  Model,
-  DataTypes,
-  Optional,
-  HasManyCreateAssociationMixin,
-  HasManyGetAssociationsMixin,
-  HasOneGetAssociationMixin,
-  HasOneCreateAssociationMixin,
-} from 'sequelize';
-
-
 //! imp models
 import Cart from './cart';
 import Product from './product';
 import Order from './order';
 
-export type UserAttributes = {
-  id: number;
-  name: string;
-  email: string;
-};
+//! imp ultils - database
+import * as mongoDB from 'mongodb';
+import { getDB } from '../utils/database';
 
-type UserCreationAttributes = Optional<UserAttributes, 'id'>;
+class User {
+  _id: mongoDB.ObjectId | undefined;
+  constructor(
+    public name: string,
+    public email: string,
+    id: string | undefined
+  ) {
+    this._id = id ? new mongoDB.ObjectId(id) : undefined;
+  }
 
-class User extends Model<UserAttributes, UserCreationAttributes> {
-  declare id: number;
-  declare name: string;
-  declare email: string;
-  declare getProducts: HasManyGetAssociationsMixin<Product>; // Note the null assertions!
-  declare createProduct: HasManyCreateAssociationMixin<Product, 'id'>;
-  declare getCart: HasOneGetAssociationMixin<Cart>;
-  declare createCart: HasOneCreateAssociationMixin<Cart>;
-  declare getOrders: HasManyGetAssociationsMixin<Order>;
-  declare createOrder: HasManyCreateAssociationMixin<Order, 'id'>;
+  save() {
+    const db = getDB();
+    let dbOperation;
+    if (this._id) {
+      //! update User
+      const query = { _id: this._id };
+
+      dbOperation = db.collection('users').updateOne(query, { $set: this });
+    } else {
+      //! create new User
+      dbOperation = db.collection('users').insertOne(this);
+    }
+    return dbOperation
+      .then((result) => {
+        return result;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  static findById(userId: string) {
+    const db = getDB();
+    const query = { _id: new mongoDB.ObjectId(userId) };
+    return db
+      .collection('users')
+      .findOne(query)
+      .then((userDoc) => {
+        return userDoc;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 }
 
-User.init(
-  {
-    // Model attributes are defined here
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      allowNull: false,
-      primaryKey: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  },
-  {
-    // Other model options go here
-    sequelize: sequelize, // We need to pass the connection instance
-    modelName: 'user', // We need to choose the model name
-  }
-);
-
 // the defined model is the class itself
-Logging.info('sequelize.models.user: ' + (User === sequelize.models.user)); // true
+Logging.info('models.user'); // true
 
 export default User;

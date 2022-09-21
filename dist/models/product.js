@@ -93,8 +93,8 @@ class Product {
             .find(query)
             //! Get the next available document from the cursor, returns null if no more documents are available.
             .next()
-            .then((product) => {
-            return product;
+            .then((productDoc) => {
+            return productDoc;
         })
             .catch((err) => {
             console.log(err);
@@ -115,6 +115,6 @@ class Product {
     }
 }
 // the defined model is the class itself
-Logging_1.default.info('models.product: '); // true : (Product === sequelize.models.product)
+Logging_1.default.info('models.product'); // true : (Product === sequelize.models.product)
 exports.default = Product;
 //# sourceMappingURL=product.js.map

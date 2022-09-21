@@ -19,12 +19,13 @@ import OrderItem from './models/order-item';
 
 //! imp database
 import { mongoConnect } from './utils/database';
+import mongoDB from 'mongodb';
 
 // ! Extending the Request type
 declare global {
   namespace Express {
     export interface Request {
-      user?: User;
+      user?: mongoDB.WithId<mongoDB.Document>;
     }
   }
 }
@@ -43,16 +44,17 @@ const publicDir = path.join(__dirname, '..', 'public');
 app.use(express.static(publicDir));
 
 app.use((req, res, next) => {
-  //! Register user id 1
-  // User.findByPk(1)
-  //   .then((user) => {
-  //     //! Store it in a Request, we will set request.user
-  //     req.user = user!;
-  //     next();
-  //   })
-  //   .catch((err) => err);
-  next();
-}); 
+  //! Init User instance
+  Logging.info('Init User instance');
+  const currentUserId = '632addf9a3992a1b7aa059f4';
+  User.findById(currentUserId)
+    .then((userDoc) => {
+      //! Store it in a Request, we will set request.user
+      req.user = userDoc!;
+      next();
+    })
+    .catch((err) => err);
+});
 
 //! implementing Routes
 app.use('/admin', adminRoutes);

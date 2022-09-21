@@ -1,35 +1,77 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 //! imp library
 const Logging_1 = __importDefault(require("../library/Logging"));
-const sequelize_1 = require("sequelize");
-class User extends sequelize_1.Model {
+//! imp ultils - database
+const mongoDB = __importStar(require("mongodb"));
+const database_1 = require("../utils/database");
+class User {
+    constructor(name, email, id) {
+        this.name = name;
+        this.email = email;
+        this._id = id ? new mongoDB.ObjectId(id) : undefined;
+    }
+    save() {
+        const db = (0, database_1.getDB)();
+        let dbOperation;
+        if (this._id) {
+            //! update User
+            const query = { _id: this._id };
+            dbOperation = db.collection('users').updateOne(query, { $set: this });
+        }
+        else {
+            //! create new User
+            dbOperation = db.collection('users').insertOne(this);
+        }
+        return dbOperation
+            .then((result) => {
+            return result;
+        })
+            .catch((err) => {
+            console.log(err);
+        });
+    }
+    static findById(userId) {
+        const db = (0, database_1.getDB)();
+        const query = { _id: new mongoDB.ObjectId(userId) };
+        return db
+            .collection('users')
+            .findOne(query)
+            .then((userDoc) => {
+            return userDoc;
+        })
+            .catch((err) => {
+            console.log(err);
+        });
+    }
 }
-User.init({
-    // Model attributes are defined here
-    id: {
-        type: sequelize_1.DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
-    },
-    name: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
-    email: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
-}, {
-    // Other model options go here
-    sequelize: sequelize,
-    modelName: 'user', // We need to choose the model name
-});
 // the defined model is the class itself
-Logging_1.default.info('sequelize.models.user: ' + (User === sequelize.models.user)); // true
+Logging_1.default.info('models.user'); // true
 exports.default = User;
 //# sourceMappingURL=user.js.map

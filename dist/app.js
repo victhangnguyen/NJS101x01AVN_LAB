@@ -26,6 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Logging_1 = __importDefault(require("./library/Logging"));
 const path_1 = __importDefault(require("path"));
 const express_1 = __importDefault(require("express"));
 //! imp routes
@@ -33,6 +34,7 @@ const admin_1 = __importDefault(require("./routes/admin"));
 const shop_1 = __importDefault(require("./routes/shop"));
 //! imp controllers
 const errorController = __importStar(require("./controllers/error"));
+const user_1 = __importDefault(require("./models//user"));
 //! imp database
 const database_1 = require("./utils/database");
 //! createExpress -> instance Express()
@@ -45,15 +47,16 @@ app.use(express_1.default.urlencoded({ extended: false }));
 const publicDir = path_1.default.join(__dirname, '..', 'public');
 app.use(express_1.default.static(publicDir));
 app.use((req, res, next) => {
-    //! Register user id 1
-    // User.findByPk(1)
-    //   .then((user) => {
-    //     //! Store it in a Request, we will set request.user
-    //     req.user = user!;
-    //     next();
-    //   })
-    //   .catch((err) => err);
-    next();
+    //! Init User instance
+    Logging_1.default.info('Init User instance');
+    const currentUserId = '632addf9a3992a1b7aa059f4';
+    user_1.default.findById(currentUserId)
+        .then((userDoc) => {
+        //! Store it in a Request, we will set request.user
+        req.user = userDoc;
+        next();
+    })
+        .catch((err) => err);
 });
 //! implementing Routes
 app.use('/admin', admin_1.default);
