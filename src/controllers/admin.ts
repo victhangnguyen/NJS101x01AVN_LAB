@@ -100,6 +100,7 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
   const updatedPrice: number = req.body.price;
   const updatedImageUrl: string = req.body.imageUrl;
   const updatedDesc: string = req.body.description;
+  const updatedUserId = req.body.userId;
 
   //! Updating Product
 
@@ -109,7 +110,7 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
     updatedDesc,
     updatedImageUrl,
     prodId!,
-    req.body.userId
+    updatedUserId
   );
 
   return updatedProduct

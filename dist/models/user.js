@@ -32,9 +32,10 @@ const Logging_1 = __importDefault(require("../library/Logging"));
 const mongoDB = __importStar(require("mongodb"));
 const database_1 = require("../utils/database");
 class User {
-    constructor(name, email, id) {
+    constructor(name, email, id, cart) {
         this.name = name;
         this.email = email;
+        this.cart = cart;
         this._id = id ? new mongoDB.ObjectId(id) : undefined;
     }
     save() {
@@ -56,6 +57,22 @@ class User {
             .catch((err) => {
             console.log(err);
         });
+    }
+    addToCart(product) {
+        const db = (0, database_1.getDB)();
+        //! We expect get a product in here.
+        //! Dont forget that addToCart will be called on a User Object with data we fetched from the Database with the help findById(userId) that return a User
+        //! SQL: req.user -> getCart() -> getProducts() return Products (where: {id: productId}) => product (check exist)
+        const productCart = this.cart.items.findIndex((item) => {
+            return item._id === product._id;
+        });
+        const updatedCart = { items: [{ ...product, quantity: 1 }] };
+        return db.collection('users').updateOne({ _id: this._id }, { $set: { cart: updatedCart } });
+        // if (productCart > 0) {
+        //   //! existing product => increase Quantity
+        // } else {
+        //   //! set new Item, with quantity = 1
+        // }
     }
     static findById(userId) {
         const db = (0, database_1.getDB)();

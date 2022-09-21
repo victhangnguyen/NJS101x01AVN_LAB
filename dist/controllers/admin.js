@@ -85,8 +85,9 @@ const postEditProduct = (req, res, next) => {
     const updatedPrice = req.body.price;
     const updatedImageUrl = req.body.imageUrl;
     const updatedDesc = req.body.description;
+    const updatedUserId = req.body.userId;
     //! Updating Product
-    const updatedProduct = new product_1.default(updatedTitle, updatedPrice, updatedDesc, updatedImageUrl, prodId, req.body.userId);
+    const updatedProduct = new product_1.default(updatedTitle, updatedPrice, updatedDesc, updatedImageUrl, prodId, updatedUserId);
     return updatedProduct
         .save()
         .then((result) => {

@@ -76,49 +76,34 @@ const getCart = (req, res, next) => {
 exports.getCart = getCart;
 //@ /cart => POST
 const postCart = (req, res, next) => {
+    var _a;
     Logging_1.default.shop('POST postCart');
-    // const prodId = req.body.productId;
-    // let fetchedCart: Cart;
-    // let newQuantity = 1;
-    // req.user
-    //   ?.getCart()
-    //   .then((cart) => {
-    //     //! find out if product
-    //     fetchedCart = cart;
-    //     return cart.getProducts({ where: { id: prodId } });
-    //   })
-    //   .then((products) => {
-    //     let product;
-    //     if (products.length > 0) {
-    //       //! already exist product id in Cart
-    //       product = products[0];
-    //     }
-    //     //! if exist product
-    //     if (product) {
-    //       //! get old Quantity fo this product, and then increase it.
-    //       //! return (product + qty)
-    //       const oldQuantity = product.cartItem.quantity;
-    //       newQuantity = oldQuantity + 1;
-    //       //! cartItem is extra field that added by Sequelize to give us access to this in-between table.
-    //       //! but to this exact product in the in-between table.
-    //       return product;
-    //     }
-    //     //! no product
-    //     //! we will return a Product (general product data)
-    //     return Product.findByPk(prodId);
-    //   })
-    //   .then((product) => {
-    //     return fetchedCart.addProduct(product!, {
-    //       //! product : {cartItem}
-    //       through: { quantity: newQuantity },
-    //     });
-    //     //! return fetchedCart to get access to the Cart, and then addProduct to add Product into in-between table base on id cart
-    //   })
-    //   .then(() => {
-    //     Logging.shop('redirect to /cart');
-    //     res.redirect('/cart');
-    //   })
-    //   .catch((err) => console.log(err));
+    const prodId = req.body.productId;
+    let fetchedCart;
+    let newQuantity = 1;
+    (_a = req.user) === null || _a === void 0 ? void 0 : _a.getCart().then((cart) => {
+        //! find out if product
+        fetchedCart = cart;
+        return cart.getProducts({ where: { id: prodId } });
+    }).then((products) => {
+        let product;
+        if (products.length > 0) {
+            product = products[0];
+        }
+        if (product) {
+            const oldQuantity = product.cartItem.quantity;
+            newQuantity = oldQuantity + 1;
+            return product;
+        }
+        return product_1.default.findByPk(prodId);
+    }).then((product) => {
+        return fetchedCart.addProduct(product, {
+            through: { quantity: newQuantity },
+        });
+    }).then(() => {
+        Logging_1.default.shop('redirect to /cart');
+        res.redirect('/cart');
+    }).catch((err) => console.log(err));
 };
 exports.postCart = postCart;
 const postCartDeleteProduct = (req, res, next) => {
