@@ -20,12 +20,14 @@ const getAddProduct = (req, res, next) => {
 exports.getAddProduct = getAddProduct;
 //@ /admin/add-product => POST
 const postAddProduct = (req, res, next) => {
+    var _a;
     Logging_1.default.admin('POST postAddProduct');
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
     const title = req.body.title;
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    const product = new product_1.default(title, price, description, imageUrl);
+    const product = new product_1.default(title, price, description, imageUrl, null, userId);
     product
         .save()
         .then((result) => {
@@ -84,7 +86,7 @@ const postEditProduct = (req, res, next) => {
     const updatedImageUrl = req.body.imageUrl;
     const updatedDesc = req.body.description;
     //! Updating Product
-    const updatedProduct = new product_1.default(updatedTitle, updatedPrice, updatedDesc, updatedImageUrl, prodId);
+    const updatedProduct = new product_1.default(updatedTitle, updatedPrice, updatedDesc, updatedImageUrl, prodId, req.body.userId);
     return updatedProduct
         .save()
         .then((result) => {

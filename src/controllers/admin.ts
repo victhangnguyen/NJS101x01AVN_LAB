@@ -1,6 +1,8 @@
 //! imp library
 import Logging from '../library/Logging';
 
+import mongoDB from 'mongodb';
+
 import { RequestHandler } from 'express';
 
 //! imp models
@@ -20,12 +22,21 @@ export const getAddProduct: RequestHandler = (req, res, next) => {
 export const postAddProduct: RequestHandler = (req, res, next) => {
   Logging.admin('POST postAddProduct');
 
+  const userId: mongoDB.ObjectId | undefined = req.user?._id;
+
   const title: Product['title'] = req.body.title;
   const imageUrl: Product['imageUrl'] = req.body.imageUrl;
   const price: Product['price'] = req.body.price;
   const description: Product['description'] = req.body.description;
 
-  const product = new Product(title, price, description, imageUrl);
+  const product = new Product(
+    title,
+    price,
+    description,
+    imageUrl,
+    null,
+    userId!
+  );
 
   product
     .save()
@@ -89,6 +100,7 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
   const updatedPrice: number = req.body.price;
   const updatedImageUrl: string = req.body.imageUrl;
   const updatedDesc: string = req.body.description;
+
   //! Updating Product
 
   const updatedProduct = new Product(
@@ -96,7 +108,8 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
     updatedPrice,
     updatedDesc,
     updatedImageUrl,
-    prodId!
+    prodId!,
+    req.body.userId
   );
 
   return updatedProduct

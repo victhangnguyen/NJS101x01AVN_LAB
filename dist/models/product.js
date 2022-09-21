@@ -39,11 +39,12 @@ const database_1 = require("../utils/database");
 // declare cartItem: CartItem;
 // declare orderItem: { quantity: number };
 class Product {
-    constructor(title, price, description, imageUrl, id = undefined) {
+    constructor(title, price, description, imageUrl, id = undefined, userId) {
         this.title = title;
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
+        this.userId = userId;
         //! guard clause
         //! __DEBUG ObjectID(undefined) => generate ID
         this._id = id ? new mongoDB.ObjectId(id) : undefined;
@@ -75,14 +76,12 @@ class Product {
             .collection('products')
             .find({})
             .toArray()
-            .then((products) => {
-            return products;
+            .then((productDocs) => {
+            return productDocs;
         })
             .catch((err) => {
             console.log(err);
         });
-        //! find is asynchronous, find is find does not immediately return a Promise though, instead it return a Cursor (FindCursor)
-        //! toArray should only be used that if we know that on ten, hunred Documents... (return Promise)
     }
     static findById(productId) {
         const db = (0, database_1.getDB)(); //! point to DB Connection

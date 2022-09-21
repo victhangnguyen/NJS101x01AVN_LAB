@@ -15,7 +15,7 @@ class User {
   constructor(
     public name: string,
     public email: string,
-    id: string | undefined
+    id: string | undefined,
   ) {
     this._id = id ? new mongoDB.ObjectId(id) : undefined;
   }

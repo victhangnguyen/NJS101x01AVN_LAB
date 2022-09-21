@@ -43,15 +43,15 @@ const getProduct = (req, res, next) => {
 exports.getProduct = getProduct;
 const getIndex = (req, res, next) => {
     Logging_1.default.shop('GET getIndex');
-    // Product.findAll()
-    //   .then((products) => {
-    //     res.render('shop/index', {
-    //       prods: products,
-    //       pageTitle: 'Shop',
-    //       path: '/',
-    //     });
-    //   })
-    //   .catch((err) => console.log(err));
+    product_1.default.fetchAll()
+        .then((productDocs) => {
+        res.render('shop/index', {
+            prods: productDocs,
+            pageTitle: 'Shop',
+            path: '/',
+        });
+    })
+        .catch((err) => console.log(err));
 };
 exports.getIndex = getIndex;
 const getCart = (req, res, next) => {

@@ -48,15 +48,16 @@ export const getProduct: RequestHandler = (req, res, next) => {
 
 export const getIndex: RequestHandler = (req, res, next) => {
   Logging.shop('GET getIndex');
-  // Product.findAll()
-  //   .then((products) => {
-  //     res.render('shop/index', {
-  //       prods: products,
-  //       pageTitle: 'Shop',
-  //       path: '/',
-  //     });
-  //   })
-  //   .catch((err) => console.log(err));
+
+  Product.fetchAll()
+    .then((productDocs) => {
+      res.render('shop/index', {
+        prods: productDocs,
+        pageTitle: 'Shop',
+        path: '/',
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 export const getCart: RequestHandler = (req, res, next) => {

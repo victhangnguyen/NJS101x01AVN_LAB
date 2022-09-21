@@ -26,7 +26,8 @@ class Product {
     public price: number,
     public description: string,
     public imageUrl: string,
-    id: string | undefined = undefined
+    id: string | null | undefined = undefined,
+    public userId: mongoDB.ObjectId, //!  userId that is Id of user create new product
   ) {
     //! guard clause
     //! __DEBUG ObjectID(undefined) => generate ID
@@ -61,14 +62,12 @@ class Product {
       .collection('products')
       .find({})
       .toArray()
-      .then((products) => {
-        return products;
+      .then((productDocs) => {
+        return productDocs;
       })
       .catch((err) => {
         console.log(err);
       });
-    //! find is asynchronous, find is find does not immediately return a Promise though, instead it return a Cursor (FindCursor)
-    //! toArray should only be used that if we know that on ten, hunred Documents... (return Promise)
   }
 
   static findById(productId: string) {
