@@ -24,17 +24,35 @@ class Product {
     public title: string,
     public price: number,
     public description: string,
-    public imageUrl: string
+    public imageUrl: string,
+    public _id: string | null = null
   ) {}
   async save() {
-    //! We execute the callback and return connection Client, so that we can interact with it.
-    //! However, if we would do this, we would have to connect to mongoDB for every Operation.
-    //! We would not event disconnect. This is not really a good way of Connecting to MongoDB.
     const db = getDB(); //! point to Database Connection
-    //! call collection method to tell MongoDB into which Collection that you wanna insert
-    return db
-      .collection('products')
-      .insertOne(this) //! add one Document, insertMany([]) : multiple Documents pass Array of JavaScript
+    let dbOp; //! Db Operation
+
+    if (this._id) {
+      //! update the product
+      const query = {};
+      // const updatedProduct = localVariable;
+
+      dbOp = db
+        .collection('products')
+        .updateOne({ _id: this._id }, { $set: this });
+    } else {
+      //! create new Product
+      const newProduct = {
+        // _id //! MongoDB is automatically generate ObjectId
+        title: this.title,
+        price: this.price,
+        description: this.description,
+        imageUrl: this.imageUrl,
+      };
+
+      dbOp = db.collection('products').insertOne(newProduct);
+    }
+
+    return dbOp
       .then((result) => {
         // console.log('result: ', result);
         return result;
