@@ -29,7 +29,7 @@ const postAddProduct = (req, res, next) => {
     product
         .save()
         .then((result) => {
-        console.log('insertedObject: ', result);
+        Logging_1.default.info('CREATED PRODUCT');
         res.redirect('/admin/products');
     })
         .catch((err) => {
@@ -88,7 +88,7 @@ const postEditProduct = (req, res, next) => {
     return updatedProduct
         .save()
         .then((result) => {
-        console.log('UPDATED PRODUCT');
+        Logging_1.default.info('UPDATED PRODUCT');
         res.redirect(`/admin/products`);
     })
         .catch((err) => {
@@ -98,23 +98,15 @@ const postEditProduct = (req, res, next) => {
 exports.postEditProduct = postEditProduct;
 const postDeleteProduct = (req, res, next) => {
     Logging_1.default.admin('POST postDeleteProduct');
-    /*
-  
     const prodId = req.body.productId;
-    // Product.destroy({where}); //! Way 2: DELETE options
-    //! options?: DestroyOptions<Product> | undefined
-    //! Delete multiple instances, or set their deletedAt timestamp to the current time if paranoid is enabled.
-    Product.findByPk(prodId)
-      .then((product) => {
+    product_1.default.deleteById(prodId)
+        .then((deleteResult) => {
         //! product is an instance of this Model
-        return product?.destroy(); //! Promise
-      })
-      .then((result) => {
-        console.log('DELETED PRODUCT!');
+        Logging_1.default.info('DELETED PRODUCT!');
+        console.log('deleteResult: ', deleteResult);
         res.redirect('/admin/products');
-      })
-      .catch((err) => console.log(err));
-    */
+    })
+        .catch((err) => console.log(err));
 };
 exports.postDeleteProduct = postDeleteProduct;
 //# sourceMappingURL=admin.js.map

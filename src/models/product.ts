@@ -54,15 +54,13 @@ class Product {
       });
   }
 
-  static async fetchAll() {
+  static fetchAll() {
     const db = getDB(); //! point to DB Connection
     return db
       .collection('products')
       .find({})
       .toArray()
       .then((products) => {
-        console.log(products);
-
         return products;
       })
       .catch((err) => {
@@ -72,7 +70,7 @@ class Product {
     //! toArray should only be used that if we know that on ten, hunred Documents... (return Promise)
   }
 
-  static async findById(productId: string) {
+  static findById(productId: string) {
     const db = getDB(); //! point to DB Connection
     const query = { _id: new mongoDB.ObjectId(productId) };
     //! ID in mongodb is actually stored a different type.
@@ -90,6 +88,21 @@ class Product {
           console.log(err);
         })
     );
+  }
+
+  static deleteById(productId: string) {
+    const db = getDB(); //! poin to DB Connection
+    const query = { _id: new mongoDB.ObjectId(productId) };
+
+    return db
+      .collection('products')
+      .deleteOne(query)
+      .then((deleteResult) => {
+        return deleteResult
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 }
 

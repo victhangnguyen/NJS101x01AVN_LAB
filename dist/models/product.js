@@ -67,14 +67,13 @@ class Product {
             console.log('Error: ', err);
         });
     }
-    static async fetchAll() {
+    static fetchAll() {
         const db = (0, database_1.getDB)(); //! point to DB Connection
         return db
             .collection('products')
             .find({})
             .toArray()
             .then((products) => {
-            console.log(products);
             return products;
         })
             .catch((err) => {
@@ -83,7 +82,7 @@ class Product {
         //! find is asynchronous, find is find does not immediately return a Promise though, instead it return a Cursor (FindCursor)
         //! toArray should only be used that if we know that on ten, hunred Documents... (return Promise)
     }
-    static async findById(productId) {
+    static findById(productId) {
         const db = (0, database_1.getDB)(); //! point to DB Connection
         const query = { _id: new mongoDB.ObjectId(productId) };
         //! ID in mongodb is actually stored a different type.
@@ -98,6 +97,19 @@ class Product {
             .catch((err) => {
             console.log(err);
         }));
+    }
+    static deleteById(productId) {
+        const db = (0, database_1.getDB)(); //! poin to DB Connection
+        const query = { _id: new mongoDB.ObjectId(productId) };
+        return db
+            .collection('products')
+            .deleteOne(query)
+            .then((deleteResult) => {
+            return deleteResult;
+        })
+            .catch((err) => {
+            console.log(err);
+        });
     }
 }
 // the defined model is the class itself
