@@ -25,7 +25,7 @@ class Product {
     public price: number,
     public description: string,
     public imageUrl: string,
-    public _id: string | null = null
+    public _id: mongoDB.ObjectId | undefined = undefined
   ) {}
   async save() {
     const db = getDB(); //! point to Database Connection
@@ -33,23 +33,12 @@ class Product {
 
     if (this._id) {
       //! update the product
-      const query = {};
-      // const updatedProduct = localVariable;
+      const query = { _id: this._id };
 
-      dbOp = db
-        .collection('products')
-        .updateOne({ _id: this._id }, { $set: this });
+      dbOp = db.collection('products').updateOne(query, { $set: this });
     } else {
       //! create new Product
-      const newProduct = {
-        // _id //! MongoDB is automatically generate ObjectId
-        title: this.title,
-        price: this.price,
-        description: this.description,
-        imageUrl: this.imageUrl,
-      };
-
-      dbOp = db.collection('products').insertOne(newProduct);
+      dbOp = db.collection('products').insertOne(this);
     }
 
     return dbOp

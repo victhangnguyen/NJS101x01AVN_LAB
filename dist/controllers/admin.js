@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -6,6 +29,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.postDeleteProduct = exports.postEditProduct = exports.getEditProduct = exports.getProducts = exports.postAddProduct = exports.getAddProduct = void 0;
 //! imp library
 const Logging_1 = __importDefault(require("../library/Logging"));
+const mongoDB = __importStar(require("mongodb"));
 //! imp models
 const product_1 = __importDefault(require("../models/product"));
 //@  /admin/add-product => GET
@@ -56,56 +80,44 @@ exports.getProducts = getProducts;
 //@ /admin/edit-product/:productId => GET
 const getEditProduct = (req, res, next) => {
     Logging_1.default.admin('GET getEditProduct');
-    // const editMode = req.query.edit;
-    // if (!editMode) {
-    //   return res.redirect('/');
-    // }
-    // const prodId: string = (req.params as { productId: string }).productId;
-    // Product.findById(prodId)
-    //   .then((product) => {
-    //     console.log('__product: ', product);
-    //     res.render('admin/edit-product', {
-    //       product: product,
-    //       pageTitle: 'Edit Product',
-    //       path: '/admin/edit-product',
-    //       editing: editMode,
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    const editMode = req.query.edit;
+    if (!editMode) {
+        return res.redirect('/');
+    }
+    const prodId = req.params.productId;
+    product_1.default.findById(prodId)
+        .then((product) => {
+        console.log('__product: ', product);
+        res.render('admin/edit-product', {
+            product: product,
+            pageTitle: 'Edit Product',
+            path: '/admin/edit-product',
+            editing: editMode,
+        });
+    })
+        .catch((err) => {
+        console.log(err);
+    });
 };
 exports.getEditProduct = getEditProduct;
 const postEditProduct = (req, res, next) => {
-    /*
-    Logging.admin('POST postEditProduct');
-  
-    const prodId: Product['id'] = req.body.productId;
-    const updatedTitle: Product['title'] = req.body.title;
-    const updatedPrice: Product['price'] = req.body.price;
-    const updatedImageUrl: Product['imageUrl'] = req.body.imageUrl;
-    const updatedDesc: Product['description'] = req.body.description;
-  
+    Logging_1.default.admin('POST postEditProduct');
+    const prodId = req.body.productId;
+    const updatedTitle = req.body.title;
+    const updatedPrice = req.body.price;
+    const updatedImageUrl = req.body.imageUrl;
+    const updatedDesc = req.body.description;
     //! Updating Product
-    Product.findByPk(prodId)
-      .then((product) => {
-        product!.title = updatedTitle;
-        product!.price = updatedPrice;
-        product!.imageUrl = updatedImageUrl;
-        product!.description = updatedDesc;
-  
-        //! save(): choose product with id and save() with exist id
-        //! and if the product does not exist, it will create a new one, but it happen, it will override or update the old one with our new values.
-        return product!.save(); //! return Product to continue then
-        //! Returns a Promise that resolves to the saved instance (or rejects with a Sequelize.ValidationError,
-        //! which will have a property for each of the fields for which the validation failed, with the error message for that field).
-      })
-      .then((result) => {
-        console.log('UPDATED PRODUCT!');
+    const updatedProduct = new product_1.default(updatedTitle, updatedPrice, updatedDesc, updatedImageUrl, new mongoDB.ObjectId(prodId));
+    return updatedProduct
+        .save()
+        .then((result) => {
+        console.log('UPDATED PRODUCT');
         res.redirect(`/admin/products`);
-      })
-      .catch((err) => console.log(err));
-    */
+    })
+        .catch((err) => {
+        console.log(err);
+    });
 };
 exports.postEditProduct = postEditProduct;
 const postDeleteProduct = (req, res, next) => {

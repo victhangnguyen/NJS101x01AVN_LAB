@@ -60,57 +60,55 @@ export const getProducts: RequestHandler = (req, res, next) => {
 export const getEditProduct: RequestHandler = (req, res, next) => {
   Logging.admin('GET getEditProduct');
 
-  // const editMode = req.query.edit;
-  // if (!editMode) {
-  //   return res.redirect('/');
-  // }
-  // const prodId: string = (req.params as { productId: string }).productId;
+  const editMode = req.query.edit;
+  if (!editMode) {
+    return res.redirect('/');
+  }
+  const prodId: string = (req.params as { productId: string }).productId;
 
-  // Product.findById(prodId)
-  //   .then((product) => {
-  //     console.log('__product: ', product);
-  //     res.render('admin/edit-product', {
-  //       product: product,
-  //       pageTitle: 'Edit Product',
-  //       path: '/admin/edit-product',
-  //       editing: editMode,
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
+  Product.findById(prodId)
+    .then((product) => {
+      console.log('__product: ', product);
+      res.render('admin/edit-product', {
+        product: product,
+        pageTitle: 'Edit Product',
+        path: '/admin/edit-product',
+        editing: editMode,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const postEditProduct: RequestHandler = (req, res, next) => {
-  /*
   Logging.admin('POST postEditProduct');
 
-  const prodId: Product['id'] = req.body.productId;
-  const updatedTitle: Product['title'] = req.body.title;
-  const updatedPrice: Product['price'] = req.body.price;
-  const updatedImageUrl: Product['imageUrl'] = req.body.imageUrl;
-  const updatedDesc: Product['description'] = req.body.description;
+  const prodId: string = req.body.productId;
 
+  const updatedTitle: string = req.body.title;
+  const updatedPrice: number = req.body.price;
+  const updatedImageUrl: string = req.body.imageUrl;
+  const updatedDesc: string = req.body.description;
   //! Updating Product
-  Product.findByPk(prodId)
-    .then((product) => {
-      product!.title = updatedTitle;
-      product!.price = updatedPrice;
-      product!.imageUrl = updatedImageUrl;
-      product!.description = updatedDesc;
 
-      //! save(): choose product with id and save() with exist id
-      //! and if the product does not exist, it will create a new one, but it happen, it will override or update the old one with our new values.
-      return product!.save(); //! return Product to continue then
-      //! Returns a Promise that resolves to the saved instance (or rejects with a Sequelize.ValidationError,
-      //! which will have a property for each of the fields for which the validation failed, with the error message for that field).
-    })
+  const updatedProduct = new Product(
+    updatedTitle,
+    updatedPrice,
+    updatedDesc,
+    updatedImageUrl,
+    new mongoDB.ObjectId(prodId!)
+  );
+
+  return updatedProduct
+    .save()
     .then((result) => {
-      console.log('UPDATED PRODUCT!');
+      console.log('UPDATED PRODUCT');
       res.redirect(`/admin/products`);
     })
-    .catch((err) => console.log(err));
-  */
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const postDeleteProduct: RequestHandler = (req, res, next) => {
