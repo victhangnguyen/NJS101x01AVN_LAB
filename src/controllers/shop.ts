@@ -37,7 +37,6 @@ export const getProduct: RequestHandler = (req, res, next) => {
     .then((product) => {
       res.render('shop/product-detail', {
         product: product,
-        // pageTitle: product?.getDataValue('title'),
         pageTitle: product?.title,
         path: '/products',
       });

@@ -39,50 +39,41 @@ const postAddProduct = (req, res, next) => {
 exports.postAddProduct = postAddProduct;
 //@ /admin/products => GET
 const getProducts = (req, res, next) => {
-    /*
-    Logging.admin('GET getProducts');
-  
-    // Product.findAll();
-    req.user
-      ?.getProducts()
-      .then((products) => {
+    Logging_1.default.admin('GET getProducts');
+    product_1.default.fetchAll()
+        .then((products) => {
         res.render('admin/products', {
-          prods: products,
-          pageTitle: 'Admin Products',
-          path: '/admin/products',
+            prods: products,
+            pageTitle: 'Admin Products',
+            path: '/admin/products',
         });
-      })
-      .then((err) => console.log(err));
-    */
+    })
+        .catch((err) => {
+        console.log(err);
+    });
 };
 exports.getProducts = getProducts;
 //@ /admin/edit-product/:productId => GET
 const getEditProduct = (req, res, next) => {
-    /*
-    Logging.admin('GET getEditProduct');
-  
-    const editMode = req.query.edit;
-    if (!editMode) {
-      return res.redirect('/');
-    }
-    const prodId: Product['id'] = Number(req.params.productId);
-    // Product.findByPk(prodId);
-    req.user
-      ?.getProducts({ where: { id: prodId } })
-      .then((products) => {
-        const product = products[0];
-        if (!product) {
-          return res.redirect('/');
-        }
-        res.render('admin/edit-product', {
-          product: product,
-          pageTitle: 'Edit Product',
-          path: '/admin/edit-product',
-          editing: editMode,
-        });
-      })
-      .catch((err) => console.log(err));
-    */
+    Logging_1.default.admin('GET getEditProduct');
+    // const editMode = req.query.edit;
+    // if (!editMode) {
+    //   return res.redirect('/');
+    // }
+    // const prodId: string = (req.params as { productId: string }).productId;
+    // Product.findById(prodId)
+    //   .then((product) => {
+    //     console.log('__product: ', product);
+    //     res.render('admin/edit-product', {
+    //       product: product,
+    //       pageTitle: 'Edit Product',
+    //       path: '/admin/edit-product',
+    //       editing: editMode,
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
 };
 exports.getEditProduct = getEditProduct;
 const postEditProduct = (req, res, next) => {
@@ -118,8 +109,8 @@ const postEditProduct = (req, res, next) => {
 };
 exports.postEditProduct = postEditProduct;
 const postDeleteProduct = (req, res, next) => {
+    Logging_1.default.admin('POST postDeleteProduct');
     /*
-    Logging.admin('POST postDeleteProduct');
   
     const prodId = req.body.productId;
     // Product.destroy({where}); //! Way 2: DELETE options

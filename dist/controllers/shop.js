@@ -32,7 +32,6 @@ const getProduct = (req, res, next) => {
         .then((product) => {
         res.render('shop/product-detail', {
             product: product,
-            // pageTitle: product?.getDataValue('title'),
             pageTitle: product === null || product === void 0 ? void 0 : product.title,
             path: '/products',
         });
