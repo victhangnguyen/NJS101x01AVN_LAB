@@ -2,7 +2,6 @@
 import Logging from '../library/Logging';
 
 import { RequestHandler } from 'express';
-import * as mongoDB from 'mongodb';
 
 //! imp models
 import Product from '../models/product';
@@ -84,7 +83,7 @@ export const getEditProduct: RequestHandler = (req, res, next) => {
 export const postEditProduct: RequestHandler = (req, res, next) => {
   Logging.admin('POST postEditProduct');
 
-  const prodId: string = req.body.productId;
+  const prodId: string = (req.body as { productId: string }).productId;
 
   const updatedTitle: string = req.body.title;
   const updatedPrice: number = req.body.price;
@@ -97,7 +96,7 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
     updatedPrice,
     updatedDesc,
     updatedImageUrl,
-    new mongoDB.ObjectId(prodId!)
+    prodId!
   );
 
   return updatedProduct

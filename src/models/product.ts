@@ -20,13 +20,16 @@ import { getDB } from '../utils/database';
 // declare orderItem: { quantity: number };
 
 class Product {
+  _id: mongoDB.ObjectId | undefined;
   constructor(
     public title: string,
     public price: number,
     public description: string,
     public imageUrl: string,
-    public _id: mongoDB.ObjectId | undefined = undefined
-  ) {}
+    id: string | undefined = undefined
+  ) {
+    this._id = new mongoDB.ObjectId(id);
+  }
   async save() {
     const db = getDB(); //! point to Database Connection
     let dbOp; //! Db Operation

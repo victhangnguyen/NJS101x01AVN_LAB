@@ -39,12 +39,12 @@ const database_1 = require("../utils/database");
 // declare cartItem: CartItem;
 // declare orderItem: { quantity: number };
 class Product {
-    constructor(title, price, description, imageUrl, _id = undefined) {
+    constructor(title, price, description, imageUrl, id = undefined) {
         this.title = title;
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
-        this._id = _id;
+        this._id = new mongoDB.ObjectId(id);
     }
     async save() {
         const db = (0, database_1.getDB)(); //! point to Database Connection
