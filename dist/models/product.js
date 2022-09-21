@@ -44,7 +44,9 @@ class Product {
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
-        this._id = new mongoDB.ObjectId(id);
+        //! guard clause
+        //! __DEBUG ObjectID(undefined) => generate ID
+        this._id = id ? new mongoDB.ObjectId(id) : undefined;
     }
     async save() {
         const db = (0, database_1.getDB)(); //! point to Database Connection

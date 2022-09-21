@@ -28,12 +28,13 @@ class Product {
     public imageUrl: string,
     id: string | undefined = undefined
   ) {
-    this._id = new mongoDB.ObjectId(id);
+    //! guard clause
+    //! __DEBUG ObjectID(undefined) => generate ID
+    this._id = id ? new mongoDB.ObjectId(id) : undefined;
   }
   async save() {
     const db = getDB(); //! point to Database Connection
     let dbOp; //! Db Operation
-
     if (this._id) {
       //! update the product
       const query = { _id: this._id };
@@ -98,7 +99,7 @@ class Product {
       .collection('products')
       .deleteOne(query)
       .then((deleteResult) => {
-        return deleteResult
+        return deleteResult;
       })
       .catch((err) => {
         console.log(err);

@@ -113,12 +113,12 @@ export const postEditProduct: RequestHandler = (req, res, next) => {
 export const postDeleteProduct: RequestHandler = (req, res, next) => {
   Logging.admin('POST postDeleteProduct');
 
-  const prodId = req.body.productId;
+  const prodId: string = (req.body as { productId: string }).productId;
   Product.deleteById(prodId)
     .then((deleteResult) => {
       //! product is an instance of this Model
       Logging.info('DELETED PRODUCT!');
-      console.log('deleteResult: ', deleteResult)
+      console.log('deleteResult: ', deleteResult);
       res.redirect('/admin/products');
     })
     .catch((err) => console.log(err));
