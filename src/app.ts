@@ -49,7 +49,7 @@ app.use((req, res, next) => {
   User.findById(currentUserId)
     .then((userDoc) => {
       //! Store it in a Request, we will set request.user
-      console.log('__Debugger__req.user.cart: ', userDoc!.cart)
+      // console.log('__Debugger__req.user.cart: ', userDoc!.cart)
       req.user = new User(
         userDoc!.name,
         userDoc!.email,

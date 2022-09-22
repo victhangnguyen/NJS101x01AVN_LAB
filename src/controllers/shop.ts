@@ -61,24 +61,22 @@ export const getIndex: RequestHandler = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
+//@ /cart => GET
 export const getCart: RequestHandler = (req, res, next) => {
   Logging.shop('GET getCart');
-  // req.user
-  //   ?.getCart()
-  //   .then(
-  //     (cart) => {
-  //       cart.getProducts().then((cartProducts) => {
-  //         // console.log('hello')
-  //         res.render('shop/cart', {
-  //           path: '/cart',
-  //           pageTitle: 'Your Cart',
-  //           products: cartProducts,
-  //         });
-  //       });
-  //     }
-  //     //! we can use cart to fetch the Products that inside of it
-  //   )
-  //   .catch((err) => err);
+  req.user
+    ?.getCart()
+    .then((products) => {
+      console.log('__Debugger__productDocs: ', products);
+      res.render('shop/cart', {
+        path: '/cart',
+        pageTitle: 'Your Cart',
+        products: products,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 //@ /cart => POST

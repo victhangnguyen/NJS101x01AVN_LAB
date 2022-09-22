@@ -10,10 +10,6 @@ import * as mongoDB from 'mongodb';
 import { getDB } from '../utils/database';
 import { json } from 'sequelize';
 
-// interface ICartProduct extends Product {
-//   quantity: number,
-// }
-
 interface ICartProduct {
   productId: mongoDB.ObjectId;
   quantity: number;
@@ -62,6 +58,39 @@ class User {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  getCart() {
+    // return this.cart;
+    const db = getDB();
+    const productIds = this.cart.items.map((item) => item.productId);
+    // console.log('__Debugger__productIds: ', productIds);
+    return db
+      .collection('products')
+      .find({ _id: { $in: productIds } })
+      .toArray()
+      .then((productDocs) => {
+        console.log('__Debugger__productDocs: ', productDocs);
+        //! map productIds with productDocs
+        return productDocs.map((pDoc) => {
+          return {
+            ...pDoc,
+            quantity: this.cart.items.find(
+              (i) => i.productId.toString() === pDoc._id.toString()
+            )?.quantity,
+          };
+        });
+      })
+      .then((result) => {
+        return result;
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+    //! pass an Object allow us to use some specail mongodb query operators.
+    //! $in operator: in this operator takes an Array of IDs and therefore every ID into the Array will be accepted (duyệt)
+    //! and will get back a Cursor which holds reference to all products with one of the IDs mentioned in this Array.
   }
 
   addToCart(productDoc: mongoDB.Document) {
