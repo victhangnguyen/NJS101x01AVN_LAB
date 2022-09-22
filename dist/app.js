@@ -50,13 +50,13 @@ const publicDir = path_1.default.join(__dirname, '..', 'public');
 app.use(express_1.default.static(publicDir));
 //! Authentication
 app.use((req, res, next) => {
-    //! Init User instance
-    Logging_1.default.info('Init User instance');
+    Logging_1.default.info('Authentication');
     const currentUserId = '632addf9a3992a1b7aa059f4';
     user_1.default.findById(currentUserId)
         .then((userDoc) => {
         //! Store it in a Request, we will set request.user
-        req.user = new user_1.default(userDoc.name, userDoc.email, userDoc.card, userDoc._id);
+        console.log('__Debugger__req.user.cart: ', userDoc.cart);
+        req.user = new user_1.default(userDoc.name, userDoc.email, userDoc.cart, userDoc._id);
         next();
     })
         .catch((err) => err);

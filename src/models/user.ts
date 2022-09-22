@@ -127,6 +127,18 @@ class User {
       });
   }
 
+  resetCart() {
+    const db = getDB();
+
+    this.cart.items = [];
+    return db
+      .collection('users')
+      .updateOne(
+        { _id: new mongoDB.ObjectId(this._id) },
+        { $set: { cart: { items: [] } } }
+      );
+  }
+
   deleteItemFromCart(productId: string) {
     const db = getDB();
     // console.log('__Debugger__productId: ', productId);
@@ -143,6 +155,27 @@ class User {
       .updateOne(query, { $set: { cart: { items: updatedCartItems } } })
       .then((updateResult) => {
         return updateResult;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  addOrder() {
+    const db = getDB();
+
+    return db
+      .collection('orders')
+      .insertOne(this.cart)
+      .then((orderDoc) => {
+        this.resetCart() //! return updateResult (collection('user').updateOne)
+          .then((updateResult) => {
+            console.log('__Debugger__updateResult ', updateResult);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        return orderDoc;
       })
       .catch((err) => {
         console.log(err);

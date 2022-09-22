@@ -132,36 +132,17 @@ export const getOrders: RequestHandler = (req, res, next) => {
 //@ /create-order => POST
 export const postOrder: RequestHandler = (req, res, next) => {
   Logging.shop('POST postOrder');
-  // let fetchedCart: Cart;
 
-  // req.user
-  //   ?.getCart()
-  //   .then((cart) => {
-  //     fetchedCart = cart;
-  //     return cart.getProducts();
-  //   })
-  //   .then((products) => {
-  //     return req.user
-  //       ?.createOrder()
-  //       .then((order) => {
-  //         //! this Promise return order
-  //         return order.addProducts(
-  //           products.map((product) => {
-  //             product.orderItem = { quantity: product.cartItem.quantity };
-  //             return product;
-  //           })
-  //         );
-  //       })
-  //       .catch((err) => err);
-  //   })
-  //   .then((result) => {
-  //     return fetchedCart.setProducts(null!);
-  //   })
-  //   .then((result) => {
-  //     Logging.shop('redirect to /orders');
-  //     res.redirect('/orders');
-  //   })
-  //   .catch((err) => err);
+  req.user
+    ?.addOrder()
+    .then((orderDoc) => {
+      console.log('__Debugger__orderDoc ', orderDoc);
+      Logging.shop('redirect to /orders');
+      res.redirect('/orders');
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const getCheckout: RequestHandler = (req, res, next) => {
