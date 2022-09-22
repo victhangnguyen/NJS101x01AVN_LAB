@@ -39,7 +39,8 @@ const database_1 = require("../utils/database");
 // declare cartItem: CartItem;
 // declare orderItem: { quantity: number };
 class Product {
-    constructor(title, price, description, imageUrl, id = undefined, userId) {
+    constructor(title, price, description, imageUrl, id = undefined, userId //!  userId that is Id of user create new product
+    ) {
         this.title = title;
         this.price = price;
         this.description = description;

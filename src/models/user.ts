@@ -12,13 +12,14 @@ import { getDB } from '../utils/database';
 // interface IProductCart extends Product {
 //   quantity: number,
 // }
-interface ICart {
+
+export interface ICart {
   items: Array<{
     title: string;
     price: number;
     description: string;
     imageUrl: string;
-    _id: mongoDB.ObjectId | undefined;
+    // _id: string | undefined;
     userId: mongoDB.ObjectId; //!  userId that is Id of user create new product
     quantity: number;
   }>;
@@ -29,8 +30,8 @@ class User {
   constructor(
     public name: string,
     public email: string,
-    id: string | undefined,
-    public cart: ICart
+    public cart: ICart,
+    id: mongoDB.ObjectId | string | undefined
   ) {
     this._id = id ? new mongoDB.ObjectId(id) : undefined;
   }
@@ -56,21 +57,28 @@ class User {
       });
   }
 
-  addToCart(product: Product) {
+  addToCart(productDoc: mongoDB.Document) {
     const db = getDB();
     //! We expect get a product in here.
     //! Dont forget that addToCart will be called on a User Object with data we fetched from the Database with the help findById(userId) that return a User
     //! SQL: req.user -> getCart() -> getProducts() return Products (where: {id: productId}) => product (check exist)
-    const productCart = this.cart.items.findIndex((item) => {
-      return item._id === product._id;
-    });
 
-    const updatedCart: ICart = { items: [{ ...product!, quantity: 1 }] };
+    // const productCart = this.cart.items.findIndex((item) => {
+    //   return item._id === product._id;
+    // });
 
-    return db.collection('users').updateOne(
-      { _id: this._id },
-      { $set: { cart: updatedCart } }
-    );
+    const updatedCart = { items: [{ productId: productDoc._id, quantity: 1 }] };
+    // console.log('__Debugger__updatedCart: ', updatedCart);
+
+    return db
+      .collection('users')
+      .updateOne({ _id: this._id }, { $set: { cart: updatedCart } })
+      .then((updateResult) => {
+        // console.log('__Debugger__updateResult: ', updateResult)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     // if (productCart > 0) {
     //   //! existing product => increase Quantity

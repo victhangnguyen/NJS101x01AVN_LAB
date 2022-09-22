@@ -32,7 +32,7 @@ const Logging_1 = __importDefault(require("../library/Logging"));
 const mongoDB = __importStar(require("mongodb"));
 const database_1 = require("../utils/database");
 class User {
-    constructor(name, email, id, cart) {
+    constructor(name, email, cart, id) {
         this.name = name;
         this.email = email;
         this.cart = cart;
@@ -58,16 +58,25 @@ class User {
             console.log(err);
         });
     }
-    addToCart(product) {
+    addToCart(productDoc) {
         const db = (0, database_1.getDB)();
         //! We expect get a product in here.
         //! Dont forget that addToCart will be called on a User Object with data we fetched from the Database with the help findById(userId) that return a User
         //! SQL: req.user -> getCart() -> getProducts() return Products (where: {id: productId}) => product (check exist)
-        const productCart = this.cart.items.findIndex((item) => {
-            return item._id === product._id;
+        // const productCart = this.cart.items.findIndex((item) => {
+        //   return item._id === product._id;
+        // });
+        const updatedCart = { items: [{ productId: productDoc._id, quantity: 1 }] };
+        // console.log('__Debugger__updatedCart: ', updatedCart);
+        return db
+            .collection('users')
+            .updateOne({ _id: this._id }, { $set: { cart: updatedCart } })
+            .then((updateResult) => {
+            // console.log('__Debugger__updateResult: ', updateResult)
+        })
+            .catch((err) => {
+            console.log(err);
         });
-        const updatedCart = { items: [{ ...product, quantity: 1 }] };
-        return db.collection('users').updateOne({ _id: this._id }, { $set: { cart: updatedCart } });
         // if (productCart > 0) {
         //   //! existing product => increase Quantity
         // } else {

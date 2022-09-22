@@ -12,8 +12,6 @@ import * as errorController from './controllers/error';
 //! imp models
 import Product from './models/product';
 import User from './models//user';
-import Cart from './models/cart';
-import CartItem from './models/cart-item';
 import Order from './models/order';
 import OrderItem from './models/order-item';
 
@@ -25,7 +23,7 @@ import mongoDB from 'mongodb';
 declare global {
   namespace Express {
     export interface Request {
-      user?: mongoDB.WithId<mongoDB.Document>;
+      user?: User;
     }
   }
 }
@@ -43,6 +41,7 @@ app.use(express.urlencoded({ extended: false }));
 const publicDir = path.join(__dirname, '..', 'public');
 app.use(express.static(publicDir));
 
+//! Authentication
 app.use((req, res, next) => {
   //! Init User instance
   Logging.info('Init User instance');
@@ -50,7 +49,12 @@ app.use((req, res, next) => {
   User.findById(currentUserId)
     .then((userDoc) => {
       //! Store it in a Request, we will set request.user
-      req.user = userDoc!;
+      req.user = new User(
+        userDoc!.name,
+        userDoc!.email,
+        userDoc!.card,
+        userDoc!._id
+      );
       next();
     })
     .catch((err) => err);

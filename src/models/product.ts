@@ -2,7 +2,6 @@
 import Logging from '../library/Logging';
 
 //! imp models
-import CartItem from './cart-item';
 import User from './user';
 import OrderItem from './order-item';
 import Order from './order';
@@ -27,7 +26,7 @@ class Product {
     public description: string,
     public imageUrl: string,
     id: string | null | undefined = undefined,
-    public userId: mongoDB.ObjectId, //!  userId that is Id of user create new product
+    public userId: mongoDB.ObjectId //!  userId that is Id of user create new product
   ) {
     //! guard clause
     //! __DEBUG ObjectID(undefined) => generate ID
