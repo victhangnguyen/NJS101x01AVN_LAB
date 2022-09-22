@@ -127,6 +127,28 @@ class User {
       });
   }
 
+  deleteItemFromCart(productId: string) {
+    const db = getDB();
+    // console.log('__Debugger__productId: ', productId);
+    const updatedCartItems = this.cart.items.filter(
+      //! filter is not async
+      (i) => i.productId.toString() !== productId
+    );
+    // console.log('__Debugger__updatedCartItems: ', updatedCartItems);
+
+    const query = { _id: this._id }; //! filter userId
+
+    return db
+      .collection('users')
+      .updateOne(query, { $set: { cart: { items: updatedCartItems } } })
+      .then((updateResult) => {
+        return updateResult;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   static findById(userId: string) {
     const db = getDB();
     const query = { _id: new mongoDB.ObjectId(userId) };

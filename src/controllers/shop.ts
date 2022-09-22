@@ -94,61 +94,22 @@ export const postCart: RequestHandler = (req, res, next) => {
     .catch((err) => {
       console.log(err);
     });
-
-  // req.user
-
-  // let fetchedCart: Cart;
-  // let newQuantity = 1;
-
-  // req.user
-  //   ?.getCart()
-  //   .then((cart) => {
-  //     //! find out if product
-  //     fetchedCart = cart;
-  //     return cart.getProducts({ where: { id: prodId } });
-  //   })
-  //   .then((products) => {
-  //     let product;
-  //     if (products.length > 0) {
-  //       product = products[0];
-  //     }
-  //     if (product) {
-  //       const oldQuantity = product.cartItem.quantity;
-  //       newQuantity = oldQuantity + 1;
-  //       return product;
-  //     }
-  //     return Product.findByPk(prodId);
-  //   })
-  //   .then((product) => {
-  //     return fetchedCart.addProduct(product!, {
-  //       through: { quantity: newQuantity },
-  //     });
-  //   })
-  //   .then(() => {
-  //     Logging.shop('redirect to /cart');
-  //     res.redirect('/cart');
-  //   })
-  //   .catch((err) => console.log(err));
 };
 
 export const postCartDeleteProduct: RequestHandler = (req, res, next) => {
   Logging.shop('POST postCartDeleteProduct');
-  // const prodId: string = req.body.productId;
+  const prodId: string = (req.body as { productId: string }).productId;
 
-  // req.user
-  //   ?.getCart()
-  //   .then((cart) => {
-  //     return cart.getProducts({ where: { id: prodId } });
-  //   })
-  //   .then((products) => {
-  //     const product = products[0];
-  //     product.cartItem.destroy();
-  //   })
-  //   .then((result) => {
-  //     Logging.admin('redirect /cart');
-  //     res.redirect('/cart');
-  //   })
-  //   .catch((err) => err);
+  req.user
+    ?.deleteItemFromCart(prodId)
+    .then((result) => {
+      // console.log('__Debugger__result: ', result);
+      Logging.admin('redirect /cart');
+      res.redirect('/cart');
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const getOrders: RequestHandler = (req, res, next) => {
