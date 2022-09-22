@@ -35,6 +35,8 @@ const shop_1 = __importDefault(require("./routes/shop"));
 //! imp controllers
 const errorController = __importStar(require("./controllers/error"));
 const user_1 = __importDefault(require("./models//user"));
+// import Order from './models/order';
+// import OrderItem from './models/order-item';
 //! imp database
 const database_1 = require("./utils/database");
 //! createExpress -> instance Express()

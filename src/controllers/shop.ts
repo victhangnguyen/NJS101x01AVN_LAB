@@ -7,8 +7,8 @@ import { RequestHandler } from 'express';
 import Product from '../models/product';
 import { ICart } from '../models/user';
 
-import Order from '../models/order';
-import OrderItem from '../models/order-item';
+// import Order from '../models/order';
+// import OrderItem from '../models/order-item';
 import * as mongoDB from 'mongodb';
 
 //@ /products => GET
@@ -90,13 +90,9 @@ export const postCart: RequestHandler = (req, res, next) => {
     .then((productDoc) => {
       return req.user?.addToCart(productDoc!);
     })
-    .then((result) => console.log(result))
-
     .catch((err) => {
       console.log(err);
     });
-
-  console.log('req.user: ', req.user);
 
   // req.user
 

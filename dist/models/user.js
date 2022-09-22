@@ -28,15 +28,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 //! imp library
 const Logging_1 = __importDefault(require("../library/Logging"));
+// import Order from './order';
 //! imp ultils - database
 const mongoDB = __importStar(require("mongodb"));
 const database_1 = require("../utils/database");
+const initialCart = {
+    items: [],
+    total: 0,
+};
 class User {
     constructor(name, email, cart, id) {
         this.name = name;
         this.email = email;
-        this.cart = cart;
         this._id = id ? new mongoDB.ObjectId(id) : undefined;
+        this.cart = cart ? cart : initialCart;
+        console.log('__Debugger__this.User: ', this);
     }
     save() {
         const db = (0, database_1.getDB)();
@@ -60,13 +66,26 @@ class User {
     }
     addToCart(productDoc) {
         const db = (0, database_1.getDB)();
-        //! We expect get a product in here.
-        //! Dont forget that addToCart will be called on a User Object with data we fetched from the Database with the help findById(userId) that return a User
         //! SQL: req.user -> getCart() -> getProducts() return Products (where: {id: productId}) => product (check exist)
-        // const productCart = this.cart.items.findIndex((item) => {
-        //   return item._id === product._id;
-        // });
-        const updatedCart = { items: [{ productId: productDoc._id, quantity: 1 }] };
+        const cartProductIndex = this.cart.items.findIndex((item) => {
+            console.log('__Debugger__item.productId: ', item.productId);
+            console.log('__Debugger__productDoc._id: ', productDoc._id);
+            return item.productId === productDoc._id;
+        });
+        let newQuantity = 1;
+        const updatedCartItems = [...this.cart.items]; //! JavaScript Object works with Referenece
+        if (cartProductIndex >= 0) {
+            //! increase
+            newQuantity = this.cart.items[cartProductIndex].quantity + 1;
+            updatedCartItems[cartProductIndex].quantity = newQuantity;
+        }
+        else {
+            updatedCartItems.push({
+                productId: productDoc._id,
+                quantity: newQuantity,
+            });
+        }
+        const updatedCart = { items: updatedCartItems };
         // console.log('__Debugger__updatedCart: ', updatedCart);
         return db
             .collection('users')

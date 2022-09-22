@@ -3,37 +3,44 @@ import Logging from '../library/Logging';
 
 //! imp models
 import Product from './product';
-import Order from './order';
+// import Order from './order';
 
 //! imp ultils - database
 import * as mongoDB from 'mongodb';
 import { getDB } from '../utils/database';
+import { json } from 'sequelize';
 
-// interface IProductCart extends Product {
+// interface ICartProduct extends Product {
 //   quantity: number,
 // }
 
-export interface ICart {
-  items: Array<{
-    title: string;
-    price: number;
-    description: string;
-    imageUrl: string;
-    // _id: string | undefined;
-    userId: mongoDB.ObjectId; //!  userId that is Id of user create new product
-    quantity: number;
-  }>;
+interface ICartProduct {
+  productId: mongoDB.ObjectId;
+  quantity: number;
 }
+export interface ICart {
+  items: Array<ICartProduct>;
+  total: number;
+}
+
+// const initialCart: ICart = {
+//   items: [],
+//   total: 0,
+// };
 
 class User {
   _id: mongoDB.ObjectId | undefined;
+  // cart: ICart;
+
   constructor(
     public name: string,
     public email: string,
-    public cart: ICart,
+    public cart: ICart = { items: [], total: 0 }, //! initialCart
+    // cart: ICart,
     id: mongoDB.ObjectId | string | undefined
   ) {
     this._id = id ? new mongoDB.ObjectId(id) : undefined;
+    // this.cart = cart ? cart : initialCart;
   }
 
   save() {
@@ -59,32 +66,36 @@ class User {
 
   addToCart(productDoc: mongoDB.Document) {
     const db = getDB();
-    //! We expect get a product in here.
-    //! Dont forget that addToCart will be called on a User Object with data we fetched from the Database with the help findById(userId) that return a User
-    //! SQL: req.user -> getCart() -> getProducts() return Products (where: {id: productId}) => product (check exist)
 
-    // const productCart = this.cart.items.findIndex((item) => {
-    //   return item._id === product._id;
-    // });
+    const cartProductIndex = this.cart.items.findIndex((item: ICartProduct) => {
+      return item.productId.toString() === productDoc._id.toString();
+    });
 
-    const updatedCart = { items: [{ productId: productDoc._id, quantity: 1 }] };
-    // console.log('__Debugger__updatedCart: ', updatedCart);
+    let newQuantity = 1;
+    const updatedCartItems = [...this.cart.items]; //! JavaScript Object works with Referenece
+
+    if (cartProductIndex >= 0) {
+      //! increase
+      newQuantity = this.cart.items[cartProductIndex].quantity + 1;
+      updatedCartItems[cartProductIndex].quantity = newQuantity;
+    } else {
+      updatedCartItems.push({
+        productId: productDoc._id,
+        quantity: newQuantity,
+      });
+    }
+
+    const updatedCart = { items: updatedCartItems };
 
     return db
       .collection('users')
       .updateOne({ _id: this._id }, { $set: { cart: updatedCart } })
       .then((updateResult) => {
-        // console.log('__Debugger__updateResult: ', updateResult)
+        console.log('__Debugger__updateResult: ', updateResult);
       })
       .catch((err) => {
         console.log(err);
       });
-
-    // if (productCart > 0) {
-    //   //! existing product => increase Quantity
-    // } else {
-    //   //! set new Item, with quantity = 1
-    // }
   }
 
   static findById(userId: string) {
