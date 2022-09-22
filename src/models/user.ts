@@ -70,7 +70,7 @@ class User {
       .find({ _id: { $in: productIds } })
       .toArray()
       .then((productDocs) => {
-        console.log('__Debugger__productDocs: ', productDocs);
+        // console.log('__Debugger__productDocs: ', productDocs);
         //! map productIds with productDocs
         return productDocs.map((pDoc) => {
           return {
@@ -84,7 +84,6 @@ class User {
       .then((result) => {
         return result;
       })
-
       .catch((err) => {
         console.log(err);
       });
@@ -120,7 +119,8 @@ class User {
       .collection('users')
       .updateOne({ _id: this._id }, { $set: { cart: updatedCart } })
       .then((updateResult) => {
-        console.log('__Debugger__updateResult: ', updateResult);
+        // console.log('__Debugger__updateResult: ', updateResult);
+        return updateResult;
       })
       .catch((err) => {
         console.log(err);
