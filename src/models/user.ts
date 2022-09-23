@@ -166,10 +166,10 @@ class User {
 
     return db
       .collection('orders')
-      .find({})
+      .find({'user._id': new mongoDB.ObjectId(this._id)}) //! find all of orders base on userId
       .toArray()
       .then((orderDocs) => {
-        console.log('__Debugger__orderDocs: ', orderDocs);
+        return orderDocs;
       })
       .catch((err) => {
         console.log(err);
@@ -198,7 +198,7 @@ class User {
         //! RESET CART
         this.resetCart()
           .then((result) => {
-          Logging.info('addOrder successful! Reset cart')
+            Logging.info('addOrder successful! Reset cart');
           })
           .catch((err) => {
             console.log(err);

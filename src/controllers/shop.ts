@@ -115,18 +115,18 @@ export const postCartDeleteProduct: RequestHandler = (req, res, next) => {
 export const getOrders: RequestHandler = (req, res, next) => {
   Logging.shop('GET getOrders');
 
-  // req.user
-  //   ?.getOrders({ include: ['products'] })
-  //   //! __Eager__Loading
-  //   .then((orders) => {
-  //     console.log('__orders: ', orders); //! We have an Array of Orders
-  //     res.render('shop/orders', {
-  //       path: '/orders',
-  //       pageTitle: 'Your Orders',
-  //       orders: orders,
-  //     });
-  //   })
-  //   .catch((err) => err);
+  req.user
+    ?.getOrders()
+    .then((orderDocs) => {
+      res.render('shop/orders', {
+        path: '/orders',
+        pageTitle: 'Your Orders',
+        orders: orderDocs,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 //@ /create-order => POST

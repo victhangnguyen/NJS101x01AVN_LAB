@@ -156,10 +156,10 @@ class User {
         const db = (0, database_1.getDB)();
         return db
             .collection('orders')
-            .find({})
+            .find({ 'user._id': new mongoDB.ObjectId(this._id) }) //! find all of orders base on userId
             .toArray()
             .then((orderDocs) => {
-            console.log('__Debugger__orderDocs: ', orderDocs);
+            return orderDocs;
         })
             .catch((err) => {
             console.log(err);

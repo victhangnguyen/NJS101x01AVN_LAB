@@ -101,19 +101,17 @@ const postCartDeleteProduct = (req, res, next) => {
 };
 exports.postCartDeleteProduct = postCartDeleteProduct;
 const getOrders = (req, res, next) => {
+    var _a;
     Logging_1.default.shop('GET getOrders');
-    // req.user
-    //   ?.getOrders({ include: ['products'] })
-    //   //! __Eager__Loading
-    //   .then((orders) => {
-    //     console.log('__orders: ', orders); //! We have an Array of Orders
-    //     res.render('shop/orders', {
-    //       path: '/orders',
-    //       pageTitle: 'Your Orders',
-    //       orders: orders,
-    //     });
-    //   })
-    //   .catch((err) => err);
+    (_a = req.user) === null || _a === void 0 ? void 0 : _a.getOrders().then((orderDocs) => {
+        res.render('shop/orders', {
+            path: '/orders',
+            pageTitle: 'Your Orders',
+            orders: orderDocs,
+        });
+    }).catch((err) => {
+        console.log(err);
+    });
 };
 exports.getOrders = getOrders;
 //@ /create-order => POST
