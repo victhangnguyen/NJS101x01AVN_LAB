@@ -152,15 +152,42 @@ class User {
             console.log(err);
         });
     }
-    addOrder() {
+    getOrders() {
         const db = (0, database_1.getDB)();
         return db
             .collection('orders')
-            .insertOne(this.cart)
+            .find({})
+            .toArray()
+            .then((orderDocs) => {
+            console.log('__Debugger__orderDocs: ', orderDocs);
+        })
+            .catch((err) => {
+            console.log(err);
+        });
+    }
+    addOrder() {
+        const db = (0, database_1.getDB)();
+        return this.getCart()
+            .then((products) => {
+            //! each product: productInfo + quantity
+            const order = {
+                //! implement products information
+                items: products,
+                //! add some information adbout the user
+                user: {
+                    //! user: this
+                    _id: new mongoDB.ObjectId(this._id),
+                    name: this.name,
+                    // email: this.email, //! if email that we care that need update, we should not add.
+                },
+            };
+            return db.collection('orders').insertOne(order);
+        })
             .then((orderDoc) => {
-            this.resetCart() //! return updateResult (collection('user').updateOne)
-                .then((updateResult) => {
-                console.log('__Debugger__updateResult ', updateResult);
+            //! RESET CART
+            this.resetCart()
+                .then((result) => {
+                Logging_1.default.info('addOrder successful! Reset cart');
             })
                 .catch((err) => {
                 console.log(err);
