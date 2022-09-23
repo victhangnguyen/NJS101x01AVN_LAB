@@ -16,8 +16,7 @@ import User from './models//user';
 // import OrderItem from './models/order-item';
 
 //! imp database
-import { mongoConnect } from './utils/database';
-import mongoDB from 'mongodb';
+import mongoose from 'mongoose';
 
 // ! Extending the Request type
 declare global {
@@ -45,20 +44,22 @@ app.use(express.static(publicDir));
 app.use((req, res, next) => {
   Logging.info('Authentication');
 
-  const currentUserId = '632addf9a3992a1b7aa059f4';
-  User.findById(currentUserId)
-    .then((userDoc) => {
-      //! Store it in a Request, we will set request.user
-      console.log('__Debugger__req.user.cart: ', userDoc!.cart)
-      req.user = new User(
-        userDoc!.name,
-        userDoc!.email,
-        userDoc!.cart,
-        userDoc!._id
-      );
-      next();
-    })
-    .catch((err) => err);
+  // const currentUserId = '632addf9a3992a1b7aa059f4';
+  // User.findById(currentUserId)
+  //   .then((userDoc) => {
+  //     //! Store it in a Request, we will set request.user
+  //     console.log('__Debugger__req.user.cart: ', userDoc!.cart);
+  //     req.user = new User(
+  //       userDoc!.name,
+  //       userDoc!.email,
+  //       userDoc!.cart,
+  //       userDoc!._id
+  //     );
+  //     next();
+  //   })
+  //   .catch((err) => err);
+
+  next();
 });
 
 //! implementing Routes
@@ -68,6 +69,17 @@ app.use(shopRoutes); //! default: '/'
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(errorController.get404);
 
-mongoConnect(() => {
-  app.listen(3000);
-});
+const usernameMongoDB = 'njs101x';
+const passwordMongoDB = 'njs101x';
+
+//! connect method that takes the URL we used for connecting before
+mongoose
+  .connect(
+    `mongodb+srv://${usernameMongoDB}:${passwordMongoDB}@cluster0.nbojriq.mongodb.net/shop?retryWrites=true&w=majority`
+  )
+  .then((mongooseConnection) => {
+    console.log('__Debugger__mongooseConnection: ', mongooseConnection);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
