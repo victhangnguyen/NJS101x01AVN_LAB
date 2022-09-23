@@ -11,7 +11,7 @@ import * as errorController from './controllers/error';
 
 //! imp models
 import Product from './models/product';
-import User from './models//user';
+// import User from './models//user';
 // import Order from './models/order';
 // import OrderItem from './models/order-item';
 
@@ -22,7 +22,7 @@ import mongoose from 'mongoose';
 declare global {
   namespace Express {
     export interface Request {
-      user?: User;
+      user?: any;
     }
   }
 }
@@ -78,7 +78,7 @@ mongoose
     `mongodb+srv://${usernameMongoDB}:${passwordMongoDB}@cluster0.nbojriq.mongodb.net/shop?retryWrites=true&w=majority`
   )
   .then((mongooseConnection) => {
-    console.log('__Debugger__mongooseConnection: ', mongooseConnection);
+    // console.log('__Debugger__mongooseConnection: ', mongooseConnection);
   })
   .catch((err) => {
     console.log(err);

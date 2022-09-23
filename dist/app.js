@@ -34,6 +34,7 @@ const admin_1 = __importDefault(require("./routes/admin"));
 const shop_1 = __importDefault(require("./routes/shop"));
 //! imp controllers
 const errorController = __importStar(require("./controllers/error"));
+// import User from './models//user';
 // import Order from './models/order';
 // import OrderItem from './models/order-item';
 //! imp database
@@ -77,7 +78,7 @@ const passwordMongoDB = 'njs101x';
 mongoose_1.default
     .connect(`mongodb+srv://${usernameMongoDB}:${passwordMongoDB}@cluster0.nbojriq.mongodb.net/shop?retryWrites=true&w=majority`)
     .then((mongooseConnection) => {
-    console.log('__Debugger__mongooseConnection: ', mongooseConnection);
+    // console.log('__Debugger__mongooseConnection: ', mongooseConnection);
 })
     .catch((err) => {
     console.log(err);
