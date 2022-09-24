@@ -42,23 +42,22 @@ app.use(express.static(publicDir));
 
 //! Authentication
 app.use((req, res, next) => {
-  Logging.info('Authentication');
-
-  // const currentUserId = '632addf9a3992a1b7aa059f4';
-  // User.findById(currentUserId)
-  //   .then((userDoc) => {
-  //     //! Store it in a Request, we will set request.user
-  //     console.log('__Debugger__req.user.cart: ', userDoc!.cart);
-  //     req.user = new User(
-  //       userDoc!.name,
-  //       userDoc!.email,
-  //       userDoc!.cart,
-  //       userDoc!._id
-  //     );
-  //     next();
-  //   })
-  //   .catch((err) => err);
-
+  // Logging.infoAsync('Authentication', () => {
+  //   const currentUserId = '632addf9a3992a1b7aa059f4';
+  //   User.findById(currentUserId)
+  //     .then((userDoc) => {
+  //       //! Store it in a Request, we will set request.user
+  //       console.log('__Debugger__req.user.cart: ', userDoc!.cart);
+  //       req.user = new User(
+  //         userDoc!.name,
+  //         userDoc!.email,
+  //         userDoc!.cart,
+  //         userDoc!._id
+  //       );
+  //       next();
+  //     })
+  //     .catch((err) => err);
+  // });
   next();
 });
 
@@ -69,16 +68,21 @@ app.use(shopRoutes); //! default: '/'
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(errorController.get404);
 
-const usernameMongoDB = 'njs101x';
-const passwordMongoDB = 'njs101x';
+const MONGODB_USERNAME = 'njs101x';
+const MONGODB_PASSWORD = 'njs101x';
+const DATABASE = 'shop';
 
 //! connect method that takes the URL we used for connecting before
 mongoose
   .connect(
-    `mongodb+srv://${usernameMongoDB}:${passwordMongoDB}@cluster0.nbojriq.mongodb.net/shop?retryWrites=true&w=majority`
+    `mongodb+srv://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@cluster0.nbojriq.mongodb.net/${DATABASE}?retryWrites=true&w=majority`
   )
   .then((mongooseConnection) => {
     // console.log('__Debugger__mongooseConnection: ', mongooseConnection);
+    const PORT = 3000;
+    app.listen(PORT, () => {
+      Logging.info('Server is running in port ' + PORT);
+    });
   })
   .catch((err) => {
     console.log(err);

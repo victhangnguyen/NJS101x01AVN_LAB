@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import fs from 'fs';
 
 //! imp library
 import Logging from '../library/Logging';
@@ -8,15 +9,16 @@ import mongoDB from 'mongodb';
 import { RequestHandler } from 'express';
 
 //! imp models
-import Product, {IProduct} from '../models/product';
+import Product, { IProduct } from '../models/product';
 
 //@  /admin/add-product => GET
 export const getAddProduct: RequestHandler = (req, res, next) => {
-  Logging.admin('GET getAddProduct');
-  res.render('admin/edit-product', {
-    pageTitle: 'Add Product',
-    path: '/admin/add-product',
-    editing: false,
+  Logging.infoAsync('GET getAddProduct', () => {
+    res.render('admin/edit-product', {
+      pageTitle: 'Add Product',
+      path: '/admin/add-product',
+      editing: false,
+    });
   });
 };
 
@@ -24,31 +26,30 @@ export const getAddProduct: RequestHandler = (req, res, next) => {
 export const postAddProduct: RequestHandler = (req, res, next) => {
   Logging.admin('POST postAddProduct');
 
-  // const userId: mongoDB.ObjectId | undefined = req.user?._id;
+  const userId: mongoDB.ObjectId | undefined = req.user?._id;
 
-  // const title: IProduct['title'] = req.body.title;
-  // const imageUrl: IProduct['imageUrl'] = req.body.imageUrl;
-  // const price: IProduct['price'] = req.body.price;
-  // const description: IProduct['description'] = req.body.description;
+  const title: IProduct['title'] = req.body.title;
+  const imageUrl: IProduct['imageUrl'] = req.body.imageUrl;
+  const price: IProduct['price'] = req.body.price;
+  const description: IProduct['description'] = req.body.description;
 
-  // const product = new Product(
-  //   title,
-  //   price,
-  //   description,
-  //   imageUrl,
-  //   null,
-  //   userId!
-  // );
+  const product = new Product({
+    title: title,
+    price: price,
+    description: description,
+    imageUrl: imageUrl,
+  });
 
-  // product
-  //   .save()
-  //   .then((result) => {
-  //     Logging.info('CREATED PRODUCT');
-  //     res.redirect('/admin/products');
-  //   })
-  //   .catch((err) => {
-  //     console.log('Error: ', err);
-  //   });
+  product
+    .save()
+    .then((product) => {
+      Logging.infoAsync('Created Product!', () => {
+        console.log('__Debugger__product: ', product);
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 //@ /admin/products => GET

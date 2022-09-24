@@ -6,41 +6,44 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.postDeleteProduct = exports.postEditProduct = exports.getEditProduct = exports.getProducts = exports.postAddProduct = exports.getAddProduct = void 0;
 //! imp library
 const Logging_1 = __importDefault(require("../library/Logging"));
+//! imp models
+const product_1 = __importDefault(require("../models/product"));
 //@  /admin/add-product => GET
 const getAddProduct = (req, res, next) => {
-    Logging_1.default.admin('GET getAddProduct');
-    res.render('admin/edit-product', {
-        pageTitle: 'Add Product',
-        path: '/admin/add-product',
-        editing: false,
+    Logging_1.default.infoAsync('GET getAddProduct', () => {
+        res.render('admin/edit-product', {
+            pageTitle: 'Add Product',
+            path: '/admin/add-product',
+            editing: false,
+        });
     });
 };
 exports.getAddProduct = getAddProduct;
 //@ /admin/add-product => POST
 const postAddProduct = (req, res, next) => {
+    var _a;
     Logging_1.default.admin('POST postAddProduct');
-    // const userId: mongoDB.ObjectId | undefined = req.user?._id;
-    // const title: IProduct['title'] = req.body.title;
-    // const imageUrl: IProduct['imageUrl'] = req.body.imageUrl;
-    // const price: IProduct['price'] = req.body.price;
-    // const description: IProduct['description'] = req.body.description;
-    // const product = new Product(
-    //   title,
-    //   price,
-    //   description,
-    //   imageUrl,
-    //   null,
-    //   userId!
-    // );
-    // product
-    //   .save()
-    //   .then((result) => {
-    //     Logging.info('CREATED PRODUCT');
-    //     res.redirect('/admin/products');
-    //   })
-    //   .catch((err) => {
-    //     console.log('Error: ', err);
-    //   });
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
+    const title = req.body.title;
+    const imageUrl = req.body.imageUrl;
+    const price = req.body.price;
+    const description = req.body.description;
+    const product = new product_1.default({
+        title: title,
+        price: price,
+        description: description,
+        imageUrl: imageUrl,
+    });
+    product
+        .save()
+        .then((product) => {
+        Logging_1.default.infoAsync('Created Product!', () => {
+            console.log('__Debugger__product: ', product);
+        });
+    })
+        .catch((err) => {
+        console.log(err);
+    });
 };
 exports.postAddProduct = postAddProduct;
 //@ /admin/products => GET
