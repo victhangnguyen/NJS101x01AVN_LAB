@@ -6,50 +6,57 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCheckout = exports.postOrder = exports.getOrders = exports.postCartDeleteProduct = exports.postCart = exports.getCart = exports.getIndex = exports.getProduct = exports.getProducts = void 0;
 //! imp library
 const Logging_1 = __importDefault(require("../library/Logging"));
+//! Models
+const product_1 = __importDefault(require("../models/product"));
 //@ /products => GET
 const getProducts = (req, res, next) => {
-    Logging_1.default.shop('GET getProducts');
-    // Product.fetchAll()
-    //   .then((products) => {
-    //     res.render('shop/product-list', {
-    //       prods: products,
-    //       pageTitle: 'All Products',
-    //       path: '/products',
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    Logging_1.default.infoAsync('GET getProducts', () => {
+        product_1.default.find({})
+            .then((productDocs) => {
+            console.log('__Debugger__productDocs: ', productDocs);
+            res.render('shop/product-list', {
+                prods: productDocs,
+                pageTitle: 'All Products',
+                path: '/products',
+            });
+        })
+            .catch((err) => {
+            console.log(err);
+        });
+    });
 };
 exports.getProducts = getProducts;
 //! Render Details Product
 const getProduct = (req, res, next) => {
-    Logging_1.default.shop('GET getProduct');
-    // const prodId: string = (req.params as { productId: string }).productId;
-    // Product.findById(prodId)
-    //   .then((product) => {
-    //     res.render('shop/product-detail', {
-    //       product: product,
-    //       pageTitle: product?.title,
-    //       path: '/products',
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    Logging_1.default.infoAsync('GET getProduct', () => {
+        // const prodId: string = (req.params as { productId: string }).productId;
+        // Product.findById(prodId)
+        //   .then((product) => {
+        //     res.render('shop/product-detail', {
+        //       product: product,
+        //       pageTitle: product?.title,
+        //       path: '/products',
+        //     });
+        //   })
+        //   .catch((err) => {
+        //     console.log(err);
+        //   });
+    });
 };
 exports.getProduct = getProduct;
 const getIndex = (req, res, next) => {
-    Logging_1.default.shop('GET getIndex');
-    // Product.fetchAll()
-    //   .then((productDocs) => {
-    //     res.render('shop/index', {
-    //       prods: productDocs,
-    //       pageTitle: 'Shop',
-    //       path: '/',
-    //     });
-    //   })
-    //   .catch((err) => console.log(err));
+    // Logging.infoAsync('GET getIndex', () => {
+    //   Product.find({}) //! QueryWithHelpers<Array<ResultDoc>, ResultDoc, TQueryHelpers, T>
+    //     .then((productDocs) => {
+    //       console.log('__Debugger__productDocs: ', productDocs);
+    //       res.render('shop/index', {
+    //         prods: productDocs,
+    //         pageTitle: 'Shop',
+    //         path: '/',
+    //       });
+    //     })
+    //     .catch((err) => console.log(err));
+    // });
 };
 exports.getIndex = getIndex;
 //@ /cart => GET

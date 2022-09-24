@@ -5,11 +5,11 @@ import * as shopController from '../controllers/shop';
 
 const router = express.Router();
 
-// //@ / => GET
-// router.get('/', shopController.getIndex);
+//@ / => GET
+router.get('/', shopController.getIndex);
 
-// //@ /products => GET
-// router.get('/products', shopController.getProducts);
+//@ /products => GET
+router.get('/products', shopController.getProducts);
 
 // //@ /products/:productId => GET
 // router.get('/products/:productId', shopController.getProduct);
