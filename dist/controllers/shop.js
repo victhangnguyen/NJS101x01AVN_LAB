@@ -3,17 +3,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCheckout = exports.postOrder = exports.getOrders = exports.postCartDeleteProduct = exports.postCart = exports.getCart = exports.getIndex = exports.getProduct = exports.getProducts = void 0;
+exports.getCheckout = exports.postOrder = exports.getOrders = exports.postCartDeleteProduct = exports.postCart = exports.getCart = exports.getProduct = exports.getProducts = exports.getIndex = void 0;
 //! imp library
 const Logging_1 = __importDefault(require("../library/Logging"));
 //! Models
 const product_1 = __importDefault(require("../models/product"));
+//@ /=> GET
+const getIndex = (req, res, next) => {
+    Logging_1.default.infoAsync('GET getIndex', () => {
+        product_1.default.find({}) //! QueryWithHelpers<Array<ResultDoc>, ResultDoc, TQueryHelpers, T>
+            .then((productDocs) => {
+            // console.log('__Debugger__productDocs: ', productDocs);
+            res.render('shop/index', {
+                prods: productDocs,
+                pageTitle: 'Shop',
+                path: '/',
+            });
+        })
+            .catch((err) => console.log(err));
+    });
+};
+exports.getIndex = getIndex;
 //@ /products => GET
 const getProducts = (req, res, next) => {
     Logging_1.default.infoAsync('GET getProducts', () => {
         product_1.default.find({})
             .then((productDocs) => {
-            console.log('__Debugger__productDocs: ', productDocs);
+            // console.log('__Debugger__productDocs: ', productDocs);
             res.render('shop/product-list', {
                 prods: productDocs,
                 pageTitle: 'All Products',
@@ -26,39 +42,26 @@ const getProducts = (req, res, next) => {
     });
 };
 exports.getProducts = getProducts;
+//@ /products/:productId => GET
 //! Render Details Product
 const getProduct = (req, res, next) => {
     Logging_1.default.infoAsync('GET getProduct', () => {
-        // const prodId: string = (req.params as { productId: string }).productId;
-        // Product.findById(prodId)
-        //   .then((product) => {
-        //     res.render('shop/product-detail', {
-        //       product: product,
-        //       pageTitle: product?.title,
-        //       path: '/products',
-        //     });
-        //   })
-        //   .catch((err) => {
-        //     console.log(err);
-        //   });
+        const prodId = req.params.productId;
+        product_1.default.findById(prodId)
+            .then((productDoc) => {
+            console.log('__Debugger__productDoc: ', productDoc);
+            res.render('shop/product-detail', {
+                product: productDoc,
+                pageTitle: productDoc === null || productDoc === void 0 ? void 0 : productDoc.title,
+                path: '/products',
+            });
+        })
+            .catch((err) => {
+            console.log(err);
+        });
     });
 };
 exports.getProduct = getProduct;
-const getIndex = (req, res, next) => {
-    // Logging.infoAsync('GET getIndex', () => {
-    //   Product.find({}) //! QueryWithHelpers<Array<ResultDoc>, ResultDoc, TQueryHelpers, T>
-    //     .then((productDocs) => {
-    //       console.log('__Debugger__productDocs: ', productDocs);
-    //       res.render('shop/index', {
-    //         prods: productDocs,
-    //         pageTitle: 'Shop',
-    //         path: '/',
-    //       });
-    //     })
-    //     .catch((err) => console.log(err));
-    // });
-};
-exports.getIndex = getIndex;
 //@ /cart => GET
 const getCart = (req, res, next) => {
     Logging_1.default.shop('GET getCart');

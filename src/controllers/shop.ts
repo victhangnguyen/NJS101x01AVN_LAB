@@ -11,12 +11,29 @@ import Product from '../models/product';
 // import OrderItem from '../models/order-item';
 import mongoose from 'mongoose';
 
+//@ /=> GET
+export const getIndex: RequestHandler = (req, res, next) => {
+  Logging.infoAsync('GET getIndex', () => {
+    Product.find({}) //! QueryWithHelpers<Array<ResultDoc>, ResultDoc, TQueryHelpers, T>
+      .then((productDocs) => {
+        // console.log('__Debugger__productDocs: ', productDocs);
+
+        res.render('shop/index', {
+          prods: productDocs,
+          pageTitle: 'Shop',
+          path: '/',
+        });
+      })
+      .catch((err) => console.log(err));
+  });
+};
+
 //@ /products => GET
 export const getProducts: RequestHandler = (req, res, next) => {
   Logging.infoAsync('GET getProducts', () => {
     Product.find({})
       .then((productDocs) => {
-        console.log('__Debugger__productDocs: ', productDocs);
+        // console.log('__Debugger__productDocs: ', productDocs);
         res.render('shop/product-list', {
           prods: productDocs,
           pageTitle: 'All Products',
@@ -29,38 +46,25 @@ export const getProducts: RequestHandler = (req, res, next) => {
   });
 };
 
+//@ /products/:productId => GET
 //! Render Details Product
 export const getProduct: RequestHandler = (req, res, next) => {
   Logging.infoAsync('GET getProduct', () => {
-    // const prodId: string = (req.params as { productId: string }).productId;
-    // Product.findById(prodId)
-    //   .then((product) => {
-    //     res.render('shop/product-detail', {
-    //       product: product,
-    //       pageTitle: product?.title,
-    //       path: '/products',
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    const prodId: string = (req.params as { productId: string }).productId;
+
+    Product.findById(prodId)
+      .then((productDoc) => {
+        console.log('__Debugger__productDoc: ', productDoc);
+        res.render('shop/product-detail', {
+          product: productDoc,
+          pageTitle: productDoc?.title,
+          path: '/products',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
-};
-
-export const getIndex: RequestHandler = (req, res, next) => {
-  // Logging.infoAsync('GET getIndex', () => {
-  //   Product.find({}) //! QueryWithHelpers<Array<ResultDoc>, ResultDoc, TQueryHelpers, T>
-  //     .then((productDocs) => {
-  //       console.log('__Debugger__productDocs: ', productDocs);
-
-  //       res.render('shop/index', {
-  //         prods: productDocs,
-  //         pageTitle: 'Shop',
-  //         path: '/',
-  //       });
-  //     })
-  //     .catch((err) => console.log(err));
-  // });
 };
 
 //@ /cart => GET
