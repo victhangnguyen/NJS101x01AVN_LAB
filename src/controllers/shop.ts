@@ -129,7 +129,20 @@ export const postCartDeleteProduct: RequestHandler = (req, res, next) => {
 };
 
 export const getOrders: RequestHandler = (req, res, next) => {
-  Logging.shop('GET getOrders');
+  Logging.infoAsync('GET getOrders', () => {
+    Order.find({ 'user.userId': req.user._id })
+      .then((orderDocs) => {
+        console.log('__Debugger__orderDocs: ', orderDocs);
+        res.render('shop/orders', {
+          path: '/orders',
+          pageTitle: 'Your Orders',
+          orders: orderDocs,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 
   // req.user
   //   ?.getOrders()

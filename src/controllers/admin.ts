@@ -46,6 +46,7 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
       Logging.infoAsync('Created Product!', () => {
         console.log('__Debugger__product: ', product);
       });
+      res.redirect('/products')
     })
     .catch((err) => {
       console.log(err);

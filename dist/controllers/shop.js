@@ -116,7 +116,20 @@ const postCartDeleteProduct = (req, res, next) => {
 };
 exports.postCartDeleteProduct = postCartDeleteProduct;
 const getOrders = (req, res, next) => {
-    Logging_1.default.shop('GET getOrders');
+    Logging_1.default.infoAsync('GET getOrders', () => {
+        order_1.default.find({ 'user.userId': req.user._id })
+            .then((orderDocs) => {
+            console.log('__Debugger__orderDocs: ', orderDocs);
+            res.render('shop/orders', {
+                path: '/orders',
+                pageTitle: 'Your Orders',
+                orders: orderDocs,
+            });
+        })
+            .catch((err) => {
+            console.log(err);
+        });
+    });
     // req.user
     //   ?.getOrders()
     //   .then((orderDocs) => {

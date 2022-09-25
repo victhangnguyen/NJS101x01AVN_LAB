@@ -40,6 +40,7 @@ const postAddProduct = (req, res, next) => {
         Logging_1.default.infoAsync('Created Product!', () => {
             console.log('__Debugger__product: ', product);
         });
+        res.redirect('/products');
     })
         .catch((err) => {
         console.log(err);
