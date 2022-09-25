@@ -49,7 +49,9 @@ exports.postAddProduct = postAddProduct;
 //@ /admin/products => GET
 const getProducts = (req, res, next) => {
     Logging_1.default.infoAsync('GET getProducts', () => {
-        product_1.default.find({})
+        product_1.default.find()
+            // .select('title price -_id')
+            // .populate('userId', 'name')
             .then((productDocs) => {
             console.log('__Debugger__productDocs: ', productDocs);
             res.render('admin/products', {

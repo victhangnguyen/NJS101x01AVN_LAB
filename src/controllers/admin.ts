@@ -55,7 +55,9 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
 //@ /admin/products => GET
 export const getProducts: RequestHandler = (req, res, next) => {
   Logging.infoAsync('GET getProducts', () => {
-    Product.find({})
+    Product.find()
+      // .select('title price -_id')
+      // .populate('userId', 'name')
       .then((productDocs) => {
         console.log('__Debugger__productDocs: ', productDocs);
         res.render('admin/products', {
