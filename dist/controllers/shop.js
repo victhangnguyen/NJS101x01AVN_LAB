@@ -151,6 +151,9 @@ const postOrder = (req, res, next) => {
         })
             .then((result) => {
             console.log('__Debugger__result: ', result);
+            return req.user.clearCart();
+        })
+            .then(() => {
             res.redirect('/orders');
         })
             .catch((err) => {

@@ -166,6 +166,9 @@ export const postOrder: RequestHandler = (req, res, next) => {
       })
       .then((result: any) => {
         console.log('__Debugger__result: ', result);
+        return req.user.clearCart();
+      })
+      .then(() => {
         res.redirect('/orders');
       })
       .catch((err: any) => {

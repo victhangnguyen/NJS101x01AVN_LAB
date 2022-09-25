@@ -11,7 +11,6 @@ export interface IUser {
 export interface ICartProduct {
   items: Array<ICartItem>;
   quantity: number;
-  
 }
 
 export interface IUserDocument extends IUser, mongoose.Document {
@@ -99,6 +98,10 @@ userSchema.methods.removeFromCart = function (productId: string) {
   return this.save(); //! return Promise UserDoc
 };
 
+userSchema.methods.clearCart = function () {
+  this.cart = { items: [] };
+  return this.save();
+};
 //! User Model
 const User = mongoose.model<IUserDocument, IUserModel>('User', userSchema);
 export default User;

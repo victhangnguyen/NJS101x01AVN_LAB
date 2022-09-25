@@ -67,6 +67,10 @@ userSchema.methods.removeFromCart = function (productId) {
     this.cart.items = updatedCartItems;
     return this.save(); //! return Promise UserDoc
 };
+userSchema.methods.clearCart = function () {
+    this.cart = { items: [] };
+    return this.save();
+};
 //! User Model
 const User = mongoose_1.default.model('User', userSchema);
 exports.default = User;
