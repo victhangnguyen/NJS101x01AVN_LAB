@@ -25,7 +25,7 @@ const productSchema = new mongoose_1.default.Schema({
     userId: {
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: 'User',
-        require
+        require,
     },
 });
 //! Product Model

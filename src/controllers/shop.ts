@@ -151,8 +151,8 @@ export const postOrder: RequestHandler = (req, res, next) => {
     req.user
       .populate('cart.items.productId') //! return Promise
       .then((user: any) => {
-        const products = user.cart.items.map((i: ICartItem) => {
-          return { product: i.productId, quantity: i.quantity }; //! productId is populated it will be object
+        const products = user.cart.items.map((i: any) => {
+          return { product: { ...i.productId._doc }, quantity: i.quantity }; //! productId is populated it will be object
         });
 
         const order = new Order({
@@ -172,17 +172,6 @@ export const postOrder: RequestHandler = (req, res, next) => {
         console.log(err);
       });
   });
-
-  // req.user
-  //   ?.addOrder()
-  //   .then((orderDoc) => {
-  //     console.log('__Debugger__orderDoc ', orderDoc);
-  //     Logging.shop('redirect to /orders');
-  //     res.redirect('/orders');
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
 };
 
 export const getCheckout: RequestHandler = (req, res, next) => {

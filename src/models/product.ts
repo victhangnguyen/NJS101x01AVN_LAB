@@ -14,12 +14,13 @@ export interface IProduct {
   price: number;
   imageUrl: string;
   description: string;
-  userId: mongoose.Types.ObjectId
+  userId: mongoose.Types.ObjectId;
   // cartItem: CartItem;
   // orderItem: { quantity: number };
 }
 
-export interface IProductDocument extends mongoose.Document, IProduct {}
+export interface IProductDocument extends mongoose.Document, IProduct {
+}
 
 interface IProductModel extends mongoose.Model<IProductDocument> {}
 
@@ -44,7 +45,7 @@ const productSchema: mongoose.Schema = new mongoose.Schema<IProductDocument>({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    require
+    require,
   },
 });
 

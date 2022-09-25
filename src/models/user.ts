@@ -11,6 +11,7 @@ export interface IUser {
 export interface ICartProduct {
   items: Array<ICartItem>;
   quantity: number;
+  
 }
 
 export interface IUserDocument extends IUser, mongoose.Document {
