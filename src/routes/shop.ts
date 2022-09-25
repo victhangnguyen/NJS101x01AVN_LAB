@@ -23,13 +23,10 @@ router.post('/cart', shopController.postCart);
 //@ /cart-delete-item => POST
 router.post('/cart-delete-item', shopController.postCartDeleteProduct);
 
-// //@ /orders => GET
-// router.get('/orders', shopController.getOrders);
+//@ /orders => GET
+router.get('/orders', shopController.getOrders);
 
-// //@ /create-order => POST
-// router.post('/create-order', shopController.postOrder);
-
-// //@ /checkout => GET
-// router.get('/checkout', shopController.getCheckout);
+//@ /create-order => POST
+router.post('/create-order', shopController.postOrder);
 
 export default router;

@@ -5,7 +5,13 @@ import { RequestHandler } from 'express';
 
 //! Models
 import Product from '../models/product';
-// import { ICart } from '../models/user';
+import User, { IUser, IUserDocument, ICartItem } from '../models/user';
+import Order, {
+  IOrder,
+  IOrderDocument,
+  IOrderModel,
+  IOrderProduct,
+} from '../models/order';
 
 // import Order from '../models/order';
 // import OrderItem from '../models/order-item';
@@ -111,8 +117,8 @@ export const postCartDeleteProduct: RequestHandler = (req, res, next) => {
 
     req.user
       ?.removeFromCart(prodId)
-      .then((result: any) => {
-        // console.log('__Debugger__result: ', result);
+      .then((userDoc: IUserDocument) => {
+        console.log('__Debugger postCartDeleteProduct__userDoc (): ', userDoc);
         Logging.admin('redirect /cart');
         res.redirect('/cart');
       })
@@ -141,7 +147,31 @@ export const getOrders: RequestHandler = (req, res, next) => {
 
 //@ /create-order => POST
 export const postOrder: RequestHandler = (req, res, next) => {
-  Logging.shop('POST postOrder');
+  Logging.infoAsync('POST postOrder', () => {
+    req.user
+      .populate('cart.items.productId') //! return Promise
+      .then((user: any) => {
+        const products = user.cart.items.map((i: ICartItem) => {
+          return { product: i.productId, quantity: i.quantity }; //! productId is populated it will be object
+        });
+
+        const order = new Order({
+          products: products,
+          user: {
+            name: req.user.name,
+            userId: req.user, //! this mongoose Object will pick the Id from there
+          },
+        });
+        return order.save();
+      })
+      .then((result: any) => {
+        console.log('__Debugger__result: ', result);
+        res.redirect('/orders');
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  });
 
   // req.user
   //   ?.addOrder()

@@ -42,11 +42,9 @@ router.get('/cart', shopController.getCart);
 router.post('/cart', shopController.postCart);
 //@ /cart-delete-item => POST
 router.post('/cart-delete-item', shopController.postCartDeleteProduct);
-// //@ /orders => GET
-// router.get('/orders', shopController.getOrders);
-// //@ /create-order => POST
-// router.post('/create-order', shopController.postOrder);
-// //@ /checkout => GET
-// router.get('/checkout', shopController.getCheckout);
+//@ /orders => GET
+router.get('/orders', shopController.getOrders);
+//@ /create-order => POST
+router.post('/create-order', shopController.postOrder);
 exports.default = router;
 //# sourceMappingURL=shop.js.map

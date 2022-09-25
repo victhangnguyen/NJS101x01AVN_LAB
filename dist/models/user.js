@@ -79,12 +79,12 @@ exports.default = User;
 // import * as mongoDB from 'mongodb';
 // import { getDB } from '../utils/database';
 // import { json } from 'sequelize';
-// interface ICartProduct {
+// interface ICartItem {
 //   productId: mongoDB.ObjectId;
 //   quantity: number;
 // }
 // export interface ICart {
-//   items: Array<ICartProduct>;
+//   items: Array<ICartItem>;
 //   total: number;
 // }
 // // const initialCart: ICart = {
@@ -156,7 +156,7 @@ exports.default = User;
 //   }
 //   addToCart(productDoc: mongoDB.Document) {
 //     const db = getDB();
-//     const cartProductIndex = this.cart.items.findIndex((item: ICartProduct) => {
+//     const cartProductIndex = this.cart.items.findIndex((item: ICartItem) => {
 //       return item.productId.toString() === productDoc._id.toString();
 //     });
 //     let newQuantity = 1;

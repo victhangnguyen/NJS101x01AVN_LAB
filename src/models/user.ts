@@ -5,28 +5,28 @@ import { IProduct, IProductDocument } from './product';
 export interface IUser {
   name: string;
   email: string;
-  cart: [
-    {
-      items: Array<ICartProduct>;
-      quantity: number;
-    }
-  ];
+  cart: Array<ICartProduct>;
 }
 
-interface IUserDocument extends IUser, mongoose.Document {
+export interface ICartProduct {
+  items: Array<ICartItem>;
+  quantity: number;
+}
+
+export interface IUserDocument extends IUser, mongoose.Document {
   addToCart: (product: IProductDocument) => IProductDocument;
   removeFromCart: (productId: string) => Promise<IUserDocument>;
 }
 interface IUserModel extends mongoose.Model<IUserDocument> {}
 //! Put all of instance methods in this interface
 
-interface ICartProduct {
+export interface ICartItem {
   productId: mongoose.Types.ObjectId;
   quantity: number;
 }
 
 export interface ICart {
-  items: Array<ICartProduct>;
+  items: Array<ICartItem>;
 }
 
 //! User Schema
@@ -58,7 +58,7 @@ const userSchema = new mongoose.Schema<IUserDocument>({
 //! assign a function to the "methods" object of our userSchema
 userSchema.methods.addToCart = function (productDoc: IProductDocument) {
   //! duplicate or not
-  const cartProductIndex = this.cart.items.findIndex((item: ICartProduct) => {
+  const cartProductIndex = this.cart.items.findIndex((item: ICartItem) => {
     return item.productId.toString() === productDoc._id.toString();
   });
 
@@ -88,7 +88,7 @@ userSchema.methods.removeFromCart = function (productId: string) {
   // console.log('__Debugger__productId: ', productId);
   const updatedCartItems = this.cart.items.filter(
     //! filter is not async
-    (i: ICartProduct) => {
+    (i: ICartItem) => {
       return i.productId.toString() !== productId.toString();
     }
   );
@@ -113,12 +113,12 @@ export default User;
 // import { getDB } from '../utils/database';
 // import { json } from 'sequelize';
 
-// interface ICartProduct {
+// interface ICartItem {
 //   productId: mongoDB.ObjectId;
 //   quantity: number;
 // }
 // export interface ICart {
-//   items: Array<ICartProduct>;
+//   items: Array<ICartItem>;
 //   total: number;
 // }
 
@@ -198,7 +198,7 @@ export default User;
 //   addToCart(productDoc: mongoDB.Document) {
 //     const db = getDB();
 
-//     const cartProductIndex = this.cart.items.findIndex((item: ICartProduct) => {
+//     const cartProductIndex = this.cart.items.findIndex((item: ICartItem) => {
 //       return item.productId.toString() === productDoc._id.toString();
 //     });
 
