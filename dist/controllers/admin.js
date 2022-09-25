@@ -118,17 +118,20 @@ const postEditProduct = (req, res, next) => {
     });
 };
 exports.postEditProduct = postEditProduct;
+//@ /admin/delete-product => POST
 const postDeleteProduct = (req, res, next) => {
-    Logging_1.default.admin('POST postDeleteProduct');
-    // const prodId: string = (req.body as { productId: string }).productId;
-    // Product.deleteById(prodId)
-    //   .then((deleteResult) => {
-    //     //! product is an instance of this Model
-    //     Logging.info('DELETED PRODUCT!');
-    //     console.log('deleteResult: ', deleteResult);
-    //     res.redirect('/admin/products');
-    //   })
-    //   .catch((err) => console.log(err));
+    Logging_1.default.infoAsync('POST postDeleteProduct', () => {
+        const prodId = req.body.productId;
+        product_1.default.findByIdAndRemove(prodId) //! this is a built-in method provided by mongoose that should remove a Document
+            .then((deletedDoc) => {
+            //! product is an instance of this Model
+            Logging_1.default.infoAsync('Deleted Product!', () => {
+                console.log('__debugger__deletedDoc: ', deletedDoc);
+                res.redirect('/admin/products');
+            });
+        })
+            .catch((err) => console.log(err));
+    });
 };
 exports.postDeleteProduct = postDeleteProduct;
 //# sourceMappingURL=admin.js.map
