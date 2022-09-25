@@ -106,19 +106,20 @@ export const postCart: RequestHandler = (req, res, next) => {
 };
 
 export const postCartDeleteProduct: RequestHandler = (req, res, next) => {
-  Logging.shop('POST postCartDeleteProduct');
-  // const prodId: string = (req.body as { productId: string }).productId;
+  Logging.infoAsync('POST postCartDeleteProduct', () => {
+    const prodId = req.body.productId;
 
-  // req.user
-  //   ?.deleteItemFromCart(prodId)
-  //   .then((result) => {
-  //     // console.log('__Debugger__result: ', result);
-  //     Logging.admin('redirect /cart');
-  //     res.redirect('/cart');
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
+    req.user
+      ?.removeFromCart(prodId)
+      .then((result: any) => {
+        // console.log('__Debugger__result: ', result);
+        Logging.admin('redirect /cart');
+        res.redirect('/cart');
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  });
 };
 
 export const getOrders: RequestHandler = (req, res, next) => {

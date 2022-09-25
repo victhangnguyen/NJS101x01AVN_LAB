@@ -101,18 +101,17 @@ const postCart = (req, res, next) => {
 };
 exports.postCart = postCart;
 const postCartDeleteProduct = (req, res, next) => {
-    Logging_1.default.shop('POST postCartDeleteProduct');
-    // const prodId: string = (req.body as { productId: string }).productId;
-    // req.user
-    //   ?.deleteItemFromCart(prodId)
-    //   .then((result) => {
-    //     // console.log('__Debugger__result: ', result);
-    //     Logging.admin('redirect /cart');
-    //     res.redirect('/cart');
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    Logging_1.default.infoAsync('POST postCartDeleteProduct', () => {
+        var _a;
+        const prodId = req.body.productId;
+        (_a = req.user) === null || _a === void 0 ? void 0 : _a.removeFromCart(prodId).then((result) => {
+            // console.log('__Debugger__result: ', result);
+            Logging_1.default.admin('redirect /cart');
+            res.redirect('/cart');
+        }).catch((err) => {
+            console.log(err);
+        });
+    });
 };
 exports.postCartDeleteProduct = postCartDeleteProduct;
 const getOrders = (req, res, next) => {
