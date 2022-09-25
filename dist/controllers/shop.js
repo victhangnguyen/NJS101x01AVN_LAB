@@ -82,18 +82,20 @@ const getCart = (req, res, next) => {
 exports.getCart = getCart;
 //@ /cart => POST
 const postCart = (req, res, next) => {
-    Logging_1.default.shop('POST postCart');
-    // const prodId = req.body.productId;
-    // Product.findById(prodId)
-    //   .then((productDoc) => {
-    //     return req.user?.addToCart(productDoc!);
-    //   })
-    //   .then((result) => {
-    //     res.redirect('/cart');
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    Logging_1.default.infoAsync('POST postCart', () => {
+        const prodId = req.body.productId;
+        product_1.default.findById(prodId)
+            .then((productDoc) => {
+            var _a;
+            return (_a = req.user) === null || _a === void 0 ? void 0 : _a.addToCart(productDoc);
+        })
+            .then((result) => {
+            res.redirect('/cart');
+        })
+            .catch((err) => {
+            console.log(err);
+        });
+    });
 };
 exports.postCart = postCart;
 const postCartDeleteProduct = (req, res, next) => {

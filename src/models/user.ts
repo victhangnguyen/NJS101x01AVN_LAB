@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { IProduct, IProductDocument } from './product';
 
 //! User Interface
 export interface IUser {
@@ -12,13 +13,17 @@ export interface IUser {
   ];
 }
 
-interface IUserDocument extends mongoose.Document, IUser {}
+interface IUserDocument extends IUser, mongoose.Document {
+  addToCart: (product: IProductDocument) => IProductDocument;
+}
 interface IUserModel extends mongoose.Model<IUserDocument> {}
+//! Put all of instance methods in this interface
 
 interface ICartProduct {
   productId: mongoose.Types.ObjectId;
   quantity: number;
 }
+
 export interface ICart {
   items: Array<ICartProduct>;
 }
@@ -28,11 +33,11 @@ const userSchema = new mongoose.Schema<IUserDocument>({
   //! ORM
   name: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
-    required: true
+    required: true,
   },
   cart: {
     items: [
@@ -40,13 +45,44 @@ const userSchema = new mongoose.Schema<IUserDocument>({
         productId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Product',
-          required: true
+          required: true,
         },
         quantity: { type: Number, required: true },
       },
     ],
   },
 });
+
+//! Instance methods
+//! assign a function to the "methods" object of our userSchema
+userSchema.methods.addToCart = function (productDoc: IProductDocument) {
+  console.log('userSchema.methods.addToCart');
+  //! duplicate or not
+  const cartProductIndex = this.cart.items.findIndex((item: ICartProduct) => {
+    return item.productId.toString() === productDoc._id.toString();
+  });
+
+  let newQuantity = 1;
+  //! Therefor JavaScript Object works with Referenece, we should use Shallow Array
+  const updatedCartItems = [...this.cart.items];
+
+  if (cartProductIndex >= 0) {
+    //! increase
+    newQuantity = this.cart.items[cartProductIndex].quantity + 1;
+    updatedCartItems[cartProductIndex].quantity = newQuantity;
+  } else {
+    //! add new
+    updatedCartItems.push({
+      productId: productDoc._id,
+      quantity: newQuantity,
+    });
+  }
+
+  const updatedCart = { items: updatedCartItems };
+  this.cart = updatedCart;
+  console.log('__Debugger__this.cart: ', this.cart);
+  return this.save();
+};
 
 //! User Model
 const User = mongoose.model<IUserDocument, IUserModel>('User', userSchema);

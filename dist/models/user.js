@@ -9,11 +9,11 @@ const userSchema = new mongoose_1.default.Schema({
     //! ORM
     name: {
         type: String,
-        required: true
+        required: true,
     },
     email: {
         type: String,
-        required: true
+        required: true,
     },
     cart: {
         items: [
@@ -21,13 +21,41 @@ const userSchema = new mongoose_1.default.Schema({
                 productId: {
                     type: mongoose_1.default.Schema.Types.ObjectId,
                     ref: 'Product',
-                    required: true
+                    required: true,
                 },
                 quantity: { type: Number, required: true },
             },
         ],
     },
 });
+//! Instance methods
+//! assign a function to the "methods" object of our userSchema
+userSchema.methods.addToCart = function (productDoc) {
+    console.log('userSchema.methods.addToCart');
+    //! duplicate or not
+    const cartProductIndex = this.cart.items.findIndex((item) => {
+        return item.productId.toString() === productDoc._id.toString();
+    });
+    let newQuantity = 1;
+    //! Therefor JavaScript Object works with Referenece, we should use Shallow Array
+    const updatedCartItems = [...this.cart.items];
+    if (cartProductIndex >= 0) {
+        //! increase
+        newQuantity = this.cart.items[cartProductIndex].quantity + 1;
+        updatedCartItems[cartProductIndex].quantity = newQuantity;
+    }
+    else {
+        //! add new
+        updatedCartItems.push({
+            productId: productDoc._id,
+            quantity: newQuantity,
+        });
+    }
+    const updatedCart = { items: updatedCartItems };
+    this.cart = updatedCart;
+    console.log('__Debugger__this.cart: ', this.cart);
+    return this.save();
+};
 //! User Model
 const User = mongoose_1.default.model('User', userSchema);
 exports.default = User;

@@ -87,20 +87,20 @@ export const getCart: RequestHandler = (req, res, next) => {
 
 //@ /cart => POST
 export const postCart: RequestHandler = (req, res, next) => {
-  Logging.shop('POST postCart');
+  Logging.infoAsync('POST postCart', () => {
+    const prodId = req.body.productId;
 
-  // const prodId = req.body.productId;
-
-  // Product.findById(prodId)
-  //   .then((productDoc) => {
-  //     return req.user?.addToCart(productDoc!);
-  //   })
-  //   .then((result) => {
-  //     res.redirect('/cart');
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
+    Product.findById(prodId)
+      .then((productDoc) => {
+        return req.user?.addToCart(productDoc!);
+      })
+      .then((result) => {
+        res.redirect('/cart');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 };
 
 export const postCartDeleteProduct: RequestHandler = (req, res, next) => {

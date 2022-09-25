@@ -36,10 +36,10 @@ router.get('/', shopController.getIndex);
 router.get('/products', shopController.getProducts);
 //@ /products/:productId => GET
 router.get('/products/:productId', shopController.getProduct);
-// //@ /cart => GET
-// router.get('/cart', shopController.getCart);
-// //@ /cart => POST
-// router.post('/cart', shopController.postCart);
+//@ /cart => GET
+router.get('/cart', shopController.getCart);
+//@ /cart => POST
+router.post('/cart', shopController.postCart);
 // //@ /cart-delete-item => POST
 // router.post('/cart-delete-item', shopController.postCartDeleteProduct);
 // //@ /orders => GET
