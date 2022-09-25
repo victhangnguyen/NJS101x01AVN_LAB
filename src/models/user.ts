@@ -84,6 +84,7 @@ userSchema.methods.addToCart = function (productDoc: IProductDocument) {
   return this.save();
 };
 
+
 //! User Model
 const User = mongoose.model<IUserDocument, IUserModel>('User', userSchema);
 export default User;

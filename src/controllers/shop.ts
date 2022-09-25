@@ -69,20 +69,22 @@ export const getProduct: RequestHandler = (req, res, next) => {
 
 //@ /cart => GET
 export const getCart: RequestHandler = (req, res, next) => {
-  Logging.shop('GET getCart');
-  // req.user
-  //   ?.getCart()
-  //   .then((products) => {
-  //     // console.log('__Debugger__productDocs: ', products);
-  //     res.render('shop/cart', {
-  //       path: '/cart',
-  //       pageTitle: 'Your Cart',
-  //       products: products,
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
+  Logging.infoAsync('GET getCart', () => {
+    req.user
+      .populate('cart.items.productId') //! return Promise
+      .then((user: any) => {
+        // console.log('user.cart.items', user.cart.items)
+        const products = user.cart.items;
+        res.render('shop/cart', {
+          path: '/cart',
+          pageTitle: 'Your Cart',
+          products: products,
+        });
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  });
 };
 
 //@ /cart => POST

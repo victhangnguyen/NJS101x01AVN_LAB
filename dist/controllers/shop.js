@@ -64,20 +64,22 @@ const getProduct = (req, res, next) => {
 exports.getProduct = getProduct;
 //@ /cart => GET
 const getCart = (req, res, next) => {
-    Logging_1.default.shop('GET getCart');
-    // req.user
-    //   ?.getCart()
-    //   .then((products) => {
-    //     // console.log('__Debugger__productDocs: ', products);
-    //     res.render('shop/cart', {
-    //       path: '/cart',
-    //       pageTitle: 'Your Cart',
-    //       products: products,
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    Logging_1.default.infoAsync('GET getCart', () => {
+        req.user
+            .populate('cart.items.productId') //! return Promise
+            .then((user) => {
+            // console.log('user.cart.items', user.cart.items)
+            const products = user.cart.items;
+            res.render('shop/cart', {
+                path: '/cart',
+                pageTitle: 'Your Cart',
+                products: products,
+            });
+        })
+            .catch((err) => {
+            console.log(err);
+        });
+    });
 };
 exports.getCart = getCart;
 //@ /cart => POST
