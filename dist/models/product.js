@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-//! Schema that is corresponding to the Document Interface
+//! Product Schema
 const productSchema = new mongoose_1.default.Schema({
     title: {
         type: String,
@@ -21,6 +21,11 @@ const productSchema = new mongoose_1.default.Schema({
     description: {
         type: String,
         required: true,
+    },
+    userId: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: 'User',
+        require
     },
 });
 //! Product Model

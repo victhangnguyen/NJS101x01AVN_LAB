@@ -46,9 +46,7 @@ app.use((req, res, next) => {
     const currentUserId = '632fe0941cb168613f986706';
     User.findById(currentUserId)
       .then((userDoc) => {
-        //! Store it in a Request, we will set request.user
-        // console.log('__Debugger__req.user.cart: ', userDoc!.cart);
-        req.user = userDoc;
+        req.user = userDoc; //! Mongoose Model Object
         next();
       })
       .catch((err) => err);

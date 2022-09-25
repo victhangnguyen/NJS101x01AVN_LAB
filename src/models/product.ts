@@ -8,21 +8,22 @@ import Logging from '../library/Logging';
 
 //! imp ultils - database
 
-//! Interface that represent a Document in MongoDB
+//! Product Interface
 export interface IProduct {
   title: string;
   price: number;
   imageUrl: string;
   description: string;
+  userId: mongoose.Types.ObjectId
   // cartItem: CartItem;
   // orderItem: { quantity: number };
 }
 
-interface IProductDocument extends mongoose.Document, IProduct {}
+export interface IProductDocument extends mongoose.Document, IProduct {}
 
 interface IProductModel extends mongoose.Model<IProductDocument> {}
 
-//! Schema that is corresponding to the Document Interface
+//! Product Schema
 const productSchema: mongoose.Schema = new mongoose.Schema<IProductDocument>({
   title: {
     type: String,
@@ -39,6 +40,11 @@ const productSchema: mongoose.Schema = new mongoose.Schema<IProductDocument>({
   description: {
     type: String,
     required: true,
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    require
   },
 });
 

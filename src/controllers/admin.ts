@@ -9,7 +9,7 @@ import mongoDB from 'mongodb';
 import { RequestHandler } from 'express';
 
 //! imp models
-import Product, { IProduct } from '../models/product';
+import Product, { IProduct, IProductDocument } from '../models/product';
 
 //@  /admin/add-product => GET
 export const getAddProduct: RequestHandler = (req, res, next) => {
@@ -25,24 +25,24 @@ export const getAddProduct: RequestHandler = (req, res, next) => {
 //@ /admin/add-product => POST
 export const postAddProduct: RequestHandler = (req, res, next) => {
   Logging.admin('POST postAddProduct');
-
-  const userId: mongoDB.ObjectId | undefined = req.user?._id;
-
   const title: IProduct['title'] = req.body.title;
   const imageUrl: IProduct['imageUrl'] = req.body.imageUrl;
   const price: IProduct['price'] = req.body.price;
   const description: IProduct['description'] = req.body.description;
 
-  const product = new Product({
+  const userId: IProduct['userId'] = req.user._id;
+
+  const product: IProductDocument = new Product({
     title: title,
     price: price,
     description: description,
     imageUrl: imageUrl,
+    userId: userId,
   });
 
   product
     .save()
-    .then((product) => {
+    .then((product: IProductDocument) => {
       Logging.infoAsync('Created Product!', () => {
         console.log('__Debugger__product: ', product);
       });

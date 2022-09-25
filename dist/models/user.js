@@ -4,25 +4,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
+//! User Schema
 const userSchema = new mongoose_1.default.Schema({
     //! ORM
     name: {
         type: String,
-        require: true,
+        required: true
     },
     email: {
         type: String,
-        require: true,
+        required: true
     },
     cart: {
         items: [
             {
-                productId: { type: mongoose_1.default.Schema.Types.ObjectId, require: true },
-                quantity: { type: Number, require: true },
+                productId: {
+                    type: mongoose_1.default.Schema.Types.ObjectId,
+                    ref: 'Product',
+                    required: true
+                },
+                quantity: { type: Number, required: true },
             },
         ],
     },
 });
+//! User Model
 const User = mongoose_1.default.model('User', userSchema);
 exports.default = User;
 // //! imp library

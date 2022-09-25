@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+//! User Interface
 export interface IUser {
   name: string;
   email: string;
@@ -15,33 +16,39 @@ interface IUserDocument extends mongoose.Document, IUser {}
 interface IUserModel extends mongoose.Model<IUserDocument> {}
 
 interface ICartProduct {
-  productId: mongoose.ObjectId;
+  productId: mongoose.Types.ObjectId;
   quantity: number;
 }
 export interface ICart {
   items: Array<ICartProduct>;
 }
 
+//! User Schema
 const userSchema = new mongoose.Schema<IUserDocument>({
   //! ORM
   name: {
     type: String,
-    require: true,
+    required: true
   },
   email: {
     type: String,
-    require: true,
+    required: true
   },
   cart: {
     items: [
       {
-        productId: { type: mongoose.Schema.Types.ObjectId, require: true },
-        quantity: { type: Number, require: true },
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Product',
+          required: true
+        },
+        quantity: { type: Number, required: true },
       },
     ],
   },
 });
 
+//! User Model
 const User = mongoose.model<IUserDocument, IUserModel>('User', userSchema);
 export default User;
 // //! imp library
