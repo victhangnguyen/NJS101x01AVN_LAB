@@ -54,77 +54,78 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
 
 //@ /admin/products => GET
 export const getProducts: RequestHandler = (req, res, next) => {
-  Logging.admin('GET getProducts');
-
-  // Product.fetchAll()
-  //   .then((products) => {
-  //     res.render('admin/products', {
-  //       prods: products,
-  //       pageTitle: 'Admin Products',
-  //       path: '/admin/products',
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
+  Logging.infoAsync('GET getProducts', () => {
+    Product.find({})
+      .then((productDocs) => {
+        console.log('__Debugger__productDocs: ', productDocs);
+        res.render('admin/products', {
+          prods: productDocs,
+          pageTitle: 'Admin Products',
+          path: '/admin/products',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 };
 
 //@ /admin/edit-product/:productId => GET
 export const getEditProduct: RequestHandler = (req, res, next) => {
-  Logging.admin('GET getEditProduct');
+  Logging.infoAsync('GET getEditProduct', () => {
+    const editMode = req.query.edit;
+    if (!editMode) {
+      return res.redirect('/');
+    }
+    const prodId: string = (req.params as { productId: string }).productId;
 
-  // const editMode = req.query.edit;
-  // if (!editMode) {
-  //   return res.redirect('/');
-  // }
-  // const prodId: string = (req.params as { productId: string }).productId;
-
-  // Product.findById(prodId)
-  //   .then((product) => {
-  //     console.log('__product: ', product);
-  //     res.render('admin/edit-product', {
-  //       product: product,
-  //       pageTitle: 'Edit Product',
-  //       path: '/admin/edit-product',
-  //       editing: editMode,
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
+    Product.findById(prodId)
+      .then((productDoc) => {
+        console.log('__Debugger__productDoc: ', productDoc);
+        res.render('admin/edit-product', {
+          product: productDoc,
+          pageTitle: 'Edit Product',
+          path: '/admin/edit-product',
+          editing: editMode,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 };
 
+//@ /admin/edit-product/:productId => POST
 export const postEditProduct: RequestHandler = (req, res, next) => {
-  Logging.admin('POST postEditProduct');
+  Logging.infoAsync('POST postEditProduct', () => {
+    const prodId: string = (req.body as { productId: string }).productId;
 
-  // const prodId: string = (req.body as { productId: string }).productId;
+    const updatedTitle: string = req.body.title;
+    const updatedPrice: number = req.body.price;
+    const updatedImageUrl: string = req.body.imageUrl;
+    const updatedDesc: string = req.body.description;
+    const updatedUserId = req.body.userId;
 
-  // const updatedTitle: string = req.body.title;
-  // const updatedPrice: number = req.body.price;
-  // const updatedImageUrl: string = req.body.imageUrl;
-  // const updatedDesc: string = req.body.description;
-  // const updatedUserId = req.body.userId;
+    Product.findById(prodId)
+      .then((productDoc) => {
+        // console.log('__Debugger__productDoc: ', productDoc);
+        productDoc!.title = updatedTitle;
+        productDoc!.price = updatedPrice;
+        productDoc!.description = updatedDesc;
+        productDoc!.imageUrl = updatedImageUrl;
 
-  // //! Updating Product
-
-  // const updatedProduct = new Product(
-  //   updatedTitle,
-  //   updatedPrice,
-  //   updatedDesc,
-  //   updatedImageUrl,
-  //   prodId!,
-  //   updatedUserId
-  // );
-
-  // return updatedProduct
-  //   .save()
-  //   .then((result) => {
-  //     Logging.info('UPDATED PRODUCT');
-  //     res.redirect(`/admin/products`);
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
+        return productDoc?.save();
+      })
+      .then((productDoc) => {
+        Logging.infoAsync('Updated Product', () => {
+          console.log('__Debugger__productDoc: ', productDoc);
+          res.redirect(`/admin/products`);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 };
 
 export const postDeleteProduct: RequestHandler = (req, res, next) => {

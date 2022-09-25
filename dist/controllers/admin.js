@@ -48,69 +48,74 @@ const postAddProduct = (req, res, next) => {
 exports.postAddProduct = postAddProduct;
 //@ /admin/products => GET
 const getProducts = (req, res, next) => {
-    Logging_1.default.admin('GET getProducts');
-    // Product.fetchAll()
-    //   .then((products) => {
-    //     res.render('admin/products', {
-    //       prods: products,
-    //       pageTitle: 'Admin Products',
-    //       path: '/admin/products',
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    Logging_1.default.infoAsync('GET getProducts', () => {
+        product_1.default.find({})
+            .then((productDocs) => {
+            console.log('__Debugger__productDocs: ', productDocs);
+            res.render('admin/products', {
+                prods: productDocs,
+                pageTitle: 'Admin Products',
+                path: '/admin/products',
+            });
+        })
+            .catch((err) => {
+            console.log(err);
+        });
+    });
 };
 exports.getProducts = getProducts;
 //@ /admin/edit-product/:productId => GET
 const getEditProduct = (req, res, next) => {
-    Logging_1.default.admin('GET getEditProduct');
-    // const editMode = req.query.edit;
-    // if (!editMode) {
-    //   return res.redirect('/');
-    // }
-    // const prodId: string = (req.params as { productId: string }).productId;
-    // Product.findById(prodId)
-    //   .then((product) => {
-    //     console.log('__product: ', product);
-    //     res.render('admin/edit-product', {
-    //       product: product,
-    //       pageTitle: 'Edit Product',
-    //       path: '/admin/edit-product',
-    //       editing: editMode,
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    Logging_1.default.infoAsync('GET getEditProduct', () => {
+        const editMode = req.query.edit;
+        if (!editMode) {
+            return res.redirect('/');
+        }
+        const prodId = req.params.productId;
+        product_1.default.findById(prodId)
+            .then((productDoc) => {
+            console.log('__Debugger__productDoc: ', productDoc);
+            res.render('admin/edit-product', {
+                product: productDoc,
+                pageTitle: 'Edit Product',
+                path: '/admin/edit-product',
+                editing: editMode,
+            });
+        })
+            .catch((err) => {
+            console.log(err);
+        });
+    });
 };
 exports.getEditProduct = getEditProduct;
+//@ /admin/edit-product/:productId => POST
 const postEditProduct = (req, res, next) => {
-    Logging_1.default.admin('POST postEditProduct');
-    // const prodId: string = (req.body as { productId: string }).productId;
-    // const updatedTitle: string = req.body.title;
-    // const updatedPrice: number = req.body.price;
-    // const updatedImageUrl: string = req.body.imageUrl;
-    // const updatedDesc: string = req.body.description;
-    // const updatedUserId = req.body.userId;
-    // //! Updating Product
-    // const updatedProduct = new Product(
-    //   updatedTitle,
-    //   updatedPrice,
-    //   updatedDesc,
-    //   updatedImageUrl,
-    //   prodId!,
-    //   updatedUserId
-    // );
-    // return updatedProduct
-    //   .save()
-    //   .then((result) => {
-    //     Logging.info('UPDATED PRODUCT');
-    //     res.redirect(`/admin/products`);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    Logging_1.default.infoAsync('POST postEditProduct', () => {
+        const prodId = req.body.productId;
+        const updatedTitle = req.body.title;
+        const updatedPrice = req.body.price;
+        const updatedImageUrl = req.body.imageUrl;
+        const updatedDesc = req.body.description;
+        const updatedUserId = req.body.userId;
+        product_1.default.findById(prodId)
+            .then((productDoc) => {
+            // console.log('__Debugger__productDoc: ', productDoc);
+            productDoc.title = updatedTitle;
+            productDoc.price = updatedPrice;
+            productDoc.description = updatedDesc;
+            productDoc.imageUrl = updatedImageUrl;
+            return productDoc === null || productDoc === void 0 ? void 0 : productDoc.save();
+        })
+            .then((productDoc) => {
+            Logging_1.default.infoAsync('Updated Product', () => {
+                console.log('__Debugger__productDoc: ', productDoc);
+                res.redirect(`/admin/products`);
+            });
+        })
+            .catch((err) => {
+            console.log(err);
+        });
+    });
 };
 exports.postEditProduct = postEditProduct;
 const postDeleteProduct = (req, res, next) => {
