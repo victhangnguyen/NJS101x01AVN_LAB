@@ -1,3 +1,49 @@
+import mongoose from 'mongoose';
+
+export interface IUser {
+  name: string;
+  email: string;
+  cart: [
+    {
+      items: Array<ICartProduct>;
+      quantity: number;
+    }
+  ];
+}
+
+interface IUserDocument extends mongoose.Document, IUser {}
+interface IUserModel extends mongoose.Model<IUserDocument> {}
+
+interface ICartProduct {
+  productId: mongoose.ObjectId;
+  quantity: number;
+}
+export interface ICart {
+  items: Array<ICartProduct>;
+}
+
+const userSchema = new mongoose.Schema<IUserDocument>({
+  //! ORM
+  name: {
+    type: String,
+    require: true,
+  },
+  email: {
+    type: String,
+    require: true,
+  },
+  cart: {
+    items: [
+      {
+        productId: { type: mongoose.Schema.Types.ObjectId, require: true },
+        quantity: { type: Number, require: true },
+      },
+    ],
+  },
+});
+
+const User = mongoose.model<IUserDocument, IUserModel>('User', userSchema);
+export default User;
 // //! imp library
 // import Logging from '../library/Logging';
 

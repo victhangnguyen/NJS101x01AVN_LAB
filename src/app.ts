@@ -11,7 +11,7 @@ import * as errorController from './controllers/error';
 
 //! imp models
 import Product from './models/product';
-// import User from './models//user';
+import User from './models//user';
 // import Order from './models/order';
 // import OrderItem from './models/order-item';
 
@@ -42,23 +42,17 @@ app.use(express.static(publicDir));
 
 //! Authentication
 app.use((req, res, next) => {
-  // Logging.infoAsync('Authentication', () => {
-  //   const currentUserId = '632addf9a3992a1b7aa059f4';
-  //   User.findById(currentUserId)
-  //     .then((userDoc) => {
-  //       //! Store it in a Request, we will set request.user
-  //       console.log('__Debugger__req.user.cart: ', userDoc!.cart);
-  //       req.user = new User(
-  //         userDoc!.name,
-  //         userDoc!.email,
-  //         userDoc!.cart,
-  //         userDoc!._id
-  //       );
-  //       next();
-  //     })
-  //     .catch((err) => err);
-  // });
-  next();
+  Logging.infoAsync('Authentication', () => {
+    const currentUserId = '632fe0941cb168613f986706';
+    User.findById(currentUserId)
+      .then((userDoc) => {
+        //! Store it in a Request, we will set request.user
+        // console.log('__Debugger__req.user.cart: ', userDoc!.cart);
+        req.user = userDoc;
+        next();
+      })
+      .catch((err) => err);
+  });
 });
 
 //! implementing Routes
@@ -79,6 +73,27 @@ mongoose
   )
   .then((mongooseConnection) => {
     // console.log('__Debugger__mongooseConnection: ', mongooseConnection);
+    const initialCart = {
+      items: [],
+      total: 0,
+    };
+
+    User.findOne({})
+      .then((userDoc) => {
+        if (!userDoc) {
+          const user = new User({
+            name: 'thangncfx16840',
+            email: 'thangncfx16840@funix.edu.vn',
+            cart: initialCart,
+          });
+
+          user.save();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     const PORT = 3000;
     app.listen(PORT, () => {
       Logging.info('Server is running in port ' + PORT);

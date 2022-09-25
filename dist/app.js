@@ -34,7 +34,7 @@ const admin_1 = __importDefault(require("./routes/admin"));
 const shop_1 = __importDefault(require("./routes/shop"));
 //! imp controllers
 const errorController = __importStar(require("./controllers/error"));
-// import User from './models//user';
+const user_1 = __importDefault(require("./models//user"));
 // import Order from './models/order';
 // import OrderItem from './models/order-item';
 //! imp database
@@ -50,23 +50,17 @@ const publicDir = path_1.default.join(__dirname, '..', 'public');
 app.use(express_1.default.static(publicDir));
 //! Authentication
 app.use((req, res, next) => {
-    // Logging.infoAsync('Authentication', () => {
-    //   const currentUserId = '632addf9a3992a1b7aa059f4';
-    //   User.findById(currentUserId)
-    //     .then((userDoc) => {
-    //       //! Store it in a Request, we will set request.user
-    //       console.log('__Debugger__req.user.cart: ', userDoc!.cart);
-    //       req.user = new User(
-    //         userDoc!.name,
-    //         userDoc!.email,
-    //         userDoc!.cart,
-    //         userDoc!._id
-    //       );
-    //       next();
-    //     })
-    //     .catch((err) => err);
-    // });
-    next();
+    Logging_1.default.infoAsync('Authentication', () => {
+        const currentUserId = '632fe0941cb168613f986706';
+        user_1.default.findById(currentUserId)
+            .then((userDoc) => {
+            //! Store it in a Request, we will set request.user
+            // console.log('__Debugger__req.user.cart: ', userDoc!.cart);
+            req.user = userDoc;
+            next();
+        })
+            .catch((err) => err);
+    });
 });
 //! implementing Routes
 app.use('/admin', admin_1.default);
@@ -81,6 +75,24 @@ mongoose_1.default
     .connect(`mongodb+srv://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@cluster0.nbojriq.mongodb.net/${DATABASE}?retryWrites=true&w=majority`)
     .then((mongooseConnection) => {
     // console.log('__Debugger__mongooseConnection: ', mongooseConnection);
+    const initialCart = {
+        items: [],
+        total: 0,
+    };
+    user_1.default.findOne({})
+        .then((userDoc) => {
+        if (!userDoc) {
+            const user = new user_1.default({
+                name: 'thangncfx16840',
+                email: 'thangncfx16840@funix.edu.vn',
+                cart: initialCart,
+            });
+            user.save();
+        }
+    })
+        .catch((err) => {
+        console.log(err);
+    });
     const PORT = 3000;
     app.listen(PORT, () => {
         Logging_1.default.info('Server is running in port ' + PORT);
