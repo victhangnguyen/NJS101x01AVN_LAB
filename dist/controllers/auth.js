@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.postLogin = exports.getLogin = void 0;
 const getLogin = (req, res, next) => {
     var _a;
-    const isLoggedIn = (_a = req.get('Cookie')) === null || _a === void 0 ? void 0 : _a.split(';')[0].trim().split('=')[1];
+    const isLoggedIn = ((_a = req.get('Cookie')) === null || _a === void 0 ? void 0 : _a.split(';')[0].trim().split('=')[1]) === 'true';
     res.render('auth/login', {
         path: '/login',
         pageTitle: 'Login',
