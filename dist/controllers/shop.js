@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCheckout = exports.postOrder = exports.getOrders = exports.postCartDeleteProduct = exports.postCart = exports.getCart = exports.getProduct = exports.getProducts = exports.getIndex = void 0;
+exports.postOrder = exports.getOrders = exports.postCartDeleteProduct = exports.postCart = exports.getCart = exports.getProduct = exports.getProducts = exports.getIndex = void 0;
 //! imp library
 const Logging_1 = __importDefault(require("../library/Logging"));
 //! Models
@@ -16,9 +16,10 @@ const getIndex = (req, res, next) => {
             .then((productDocs) => {
             // console.log('__Debugger__productDocs: ', productDocs);
             res.render('shop/index', {
-                prods: productDocs,
-                pageTitle: 'Shop',
                 path: '/',
+                pageTitle: 'Shop',
+                prods: productDocs,
+                isAuthenticated: req.isLoggedIn,
             });
         })
             .catch((err) => console.log(err));
@@ -32,9 +33,10 @@ const getProducts = (req, res, next) => {
             .then((productDocs) => {
             // console.log('__Debugger__productDocs: ', productDocs);
             res.render('shop/product-list', {
-                prods: productDocs,
-                pageTitle: 'All Products',
                 path: '/products',
+                pageTitle: 'All Products',
+                prods: productDocs,
+                isAuthenticated: req.isLoggedIn,
             });
         })
             .catch((err) => {
@@ -52,9 +54,10 @@ const getProduct = (req, res, next) => {
             .then((productDoc) => {
             console.log('__Debugger__productDoc: ', productDoc);
             res.render('shop/product-detail', {
-                product: productDoc,
-                pageTitle: productDoc === null || productDoc === void 0 ? void 0 : productDoc.title,
                 path: '/products',
+                pageTitle: productDoc === null || productDoc === void 0 ? void 0 : productDoc.title,
+                product: productDoc,
+                isAuthenticated: req.isLoggedIn,
             });
         })
             .catch((err) => {
@@ -75,6 +78,7 @@ const getCart = (req, res, next) => {
                 path: '/cart',
                 pageTitle: 'Your Cart',
                 products: products,
+                isAuthenticated: req.isLoggedIn,
             });
         })
             .catch((err) => {
@@ -124,24 +128,13 @@ const getOrders = (req, res, next) => {
                 path: '/orders',
                 pageTitle: 'Your Orders',
                 orders: orderDocs,
+                isAuthenticated: req.isLoggedIn,
             });
         })
             .catch((err) => {
             console.log(err);
         });
     });
-    // req.user
-    //   ?.getOrders()
-    //   .then((orderDocs) => {
-    //     res.render('shop/orders', {
-    //       path: '/orders',
-    //       pageTitle: 'Your Orders',
-    //       orders: orderDocs,
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
 };
 exports.getOrders = getOrders;
 //@ /create-order => POST
@@ -175,12 +168,4 @@ const postOrder = (req, res, next) => {
     });
 };
 exports.postOrder = postOrder;
-const getCheckout = (req, res, next) => {
-    Logging_1.default.shop('GET getCheckout');
-    // res.render('shop/checkout', {
-    //   path: '/checkout',
-    //   pageTitle: 'Checkout',
-    // });
-};
-exports.getCheckout = getCheckout;
 //# sourceMappingURL=shop.js.map

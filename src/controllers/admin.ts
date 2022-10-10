@@ -18,6 +18,7 @@ export const getAddProduct: RequestHandler = (req, res, next) => {
       pageTitle: 'Add Product',
       path: '/admin/add-product',
       editing: false,
+      isAuthenticated: req.isLoggedIn,
     });
   });
 };
@@ -46,7 +47,7 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
       Logging.infoAsync('Created Product!', () => {
         console.log('__Debugger__product: ', product);
       });
-      res.redirect('/products')
+      res.redirect('/products');
     })
     .catch((err) => {
       console.log(err);
@@ -62,9 +63,10 @@ export const getProducts: RequestHandler = (req, res, next) => {
       .then((productDocs) => {
         console.log('__Debugger__productDocs: ', productDocs);
         res.render('admin/products', {
-          prods: productDocs,
-          pageTitle: 'Admin Products',
           path: '/admin/products',
+          pageTitle: 'Admin Products',
+          prods: productDocs,
+          isAuthenticated: req.isLoggedIn,
         });
       })
       .catch((err) => {
@@ -86,10 +88,11 @@ export const getEditProduct: RequestHandler = (req, res, next) => {
       .then((productDoc) => {
         console.log('__Debugger__productDoc: ', productDoc);
         res.render('admin/edit-product', {
-          product: productDoc,
-          pageTitle: 'Edit Product',
           path: '/admin/edit-product',
+          pageTitle: 'Edit Product',
+          product: productDoc,
           editing: editMode,
+          isAuthenticated: req.isLoggedIn,
         });
       })
       .catch((err) => {

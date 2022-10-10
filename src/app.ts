@@ -5,6 +5,7 @@ import express from 'express';
 //! imp routes
 import adminRoutes from './routes/admin';
 import shopRoutes from './routes/shop';
+import authRoutes from './routes/auth';
 
 //! imp controllers
 import * as errorController from './controllers/error';
@@ -23,6 +24,7 @@ declare global {
   namespace Express {
     export interface Request {
       user?: any;
+      isLoggedIn?: any;
     }
   }
 }
@@ -56,6 +58,7 @@ app.use((req, res, next) => {
 //! implementing Routes
 app.use('/admin', adminRoutes);
 app.use(shopRoutes); //! default: '/'
+app.use(authRoutes);
 
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(errorController.get404);

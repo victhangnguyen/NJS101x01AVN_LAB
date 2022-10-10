@@ -32,6 +32,7 @@ const express_1 = __importDefault(require("express"));
 //! imp routes
 const admin_1 = __importDefault(require("./routes/admin"));
 const shop_1 = __importDefault(require("./routes/shop"));
+const auth_1 = __importDefault(require("./routes/auth"));
 //! imp controllers
 const errorController = __importStar(require("./controllers/error"));
 const user_1 = __importDefault(require("./models//user"));
@@ -63,6 +64,7 @@ app.use((req, res, next) => {
 //! implementing Routes
 app.use('/admin', admin_1.default);
 app.use(shop_1.default); //! default: '/'
+app.use(auth_1.default);
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(errorController.get404);
 const MONGODB_USERNAME = 'njs101x';

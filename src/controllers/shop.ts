@@ -25,9 +25,10 @@ export const getIndex: RequestHandler = (req, res, next) => {
         // console.log('__Debugger__productDocs: ', productDocs);
 
         res.render('shop/index', {
-          prods: productDocs,
-          pageTitle: 'Shop',
           path: '/',
+          pageTitle: 'Shop',
+          prods: productDocs,
+          isAuthenticated: req.isLoggedIn,
         });
       })
       .catch((err) => console.log(err));
@@ -41,9 +42,10 @@ export const getProducts: RequestHandler = (req, res, next) => {
       .then((productDocs) => {
         // console.log('__Debugger__productDocs: ', productDocs);
         res.render('shop/product-list', {
-          prods: productDocs,
-          pageTitle: 'All Products',
           path: '/products',
+          pageTitle: 'All Products',
+          prods: productDocs,
+          isAuthenticated: req.isLoggedIn,
         });
       })
       .catch((err) => {
@@ -62,9 +64,10 @@ export const getProduct: RequestHandler = (req, res, next) => {
       .then((productDoc) => {
         console.log('__Debugger__productDoc: ', productDoc);
         res.render('shop/product-detail', {
-          product: productDoc,
-          pageTitle: productDoc?.title,
           path: '/products',
+          pageTitle: productDoc?.title,
+          product: productDoc,
+          isAuthenticated: req.isLoggedIn,
         });
       })
       .catch((err) => {
@@ -85,6 +88,7 @@ export const getCart: RequestHandler = (req, res, next) => {
           path: '/cart',
           pageTitle: 'Your Cart',
           products: products,
+          isAuthenticated: req.isLoggedIn,
         });
       })
       .catch((err: any) => {
@@ -137,25 +141,13 @@ export const getOrders: RequestHandler = (req, res, next) => {
           path: '/orders',
           pageTitle: 'Your Orders',
           orders: orderDocs,
+          isAuthenticated: req.isLoggedIn,
         });
       })
       .catch((err) => {
         console.log(err);
       });
   });
-
-  // req.user
-  //   ?.getOrders()
-  //   .then((orderDocs) => {
-  //     res.render('shop/orders', {
-  //       path: '/orders',
-  //       pageTitle: 'Your Orders',
-  //       orders: orderDocs,
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
 };
 
 //@ /create-order => POST
@@ -188,12 +180,4 @@ export const postOrder: RequestHandler = (req, res, next) => {
         console.log(err);
       });
   });
-};
-
-export const getCheckout: RequestHandler = (req, res, next) => {
-  Logging.shop('GET getCheckout');
-  // res.render('shop/checkout', {
-  //   path: '/checkout',
-  //   pageTitle: 'Checkout',
-  // });
 };
