@@ -2,15 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postLogin = exports.getLogin = void 0;
 const getLogin = (req, res, next) => {
+    var _a;
+    const isLoggedIn = (_a = req.get('Cookie')) === null || _a === void 0 ? void 0 : _a.split(';')[0].trim().split('=')[1];
     res.render('auth/login', {
         path: '/login',
         pageTitle: 'Login',
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: isLoggedIn,
     });
 };
 exports.getLogin = getLogin;
 const postLogin = (req, res, next) => {
-    req.isLoggedIn = true;
+    res.setHeader('Set-Cookie', 'loggedIn=true');
     res.redirect('/');
 };
 exports.postLogin = postLogin;
