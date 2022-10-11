@@ -5,6 +5,6 @@ export const get404: RequestHandler = (req, res, next) => {
   res.render('404', {
     path: '',
     pageTitle: 'Page Not Found',
-    isAuthenticated: req.isLoggedIn,
+    isAuthenticated: true,
   });
 };

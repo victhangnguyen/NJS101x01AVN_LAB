@@ -18,11 +18,17 @@ import User from './models//user';
 import * as errorController from './controllers/error';
 
 // ! Extending the Request type
+
+declare module 'express-session' {
+  export interface SessionData {
+    isLoggedIn: boolean;
+  }
+}
+
 declare global {
   namespace Express {
     export interface Request {
       user?: any;
-      isLoggedIn?: any;
     }
   }
 }
@@ -37,7 +43,9 @@ app.set('views', 'src/views');
 app.use(express.urlencoded({ extended: false }));
 const publicDir = path.join(__dirname, '..', 'public');
 app.use(express.static(publicDir));
-app.use(session({ secret: 'mySecret', resave: false, saveUninitialized: false, cookie: }));
+app.use(
+  session({ secret: 'mySecret', resave: false, saveUninitialized: false })
+);
 
 //! Authentication
 app.use((req, res, next) => {
