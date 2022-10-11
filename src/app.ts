@@ -1,23 +1,21 @@
 import Logging from './library/Logging';
 import path from 'path';
 import express from 'express';
+import session from 'express-session';
+
+//! imp database
+import mongoose from 'mongoose';
 
 //! imp routes
 import adminRoutes from './routes/admin';
 import shopRoutes from './routes/shop';
 import authRoutes from './routes/auth';
 
+//! imp models
+import User from './models//user';
+
 //! imp controllers
 import * as errorController from './controllers/error';
-
-//! imp models
-import Product from './models/product';
-import User from './models//user';
-// import Order from './models/order';
-// import OrderItem from './models/order-item';
-
-//! imp database
-import mongoose from 'mongoose';
 
 // ! Extending the Request type
 declare global {
@@ -35,12 +33,11 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', 'src/views');
 
-//! Register Middlewares
+//! Register __middlewares
 app.use(express.urlencoded({ extended: false }));
-
-//! app.ts => root Directory : src
 const publicDir = path.join(__dirname, '..', 'public');
 app.use(express.static(publicDir));
+app.use(session({ secret: 'mySecret', resave: false, saveUninitialized: false, cookie: }));
 
 //! Authentication
 app.use((req, res, next) => {
