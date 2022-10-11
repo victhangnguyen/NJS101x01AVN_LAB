@@ -23,6 +23,7 @@
   "homepage": "https://github.com/victhangnguyen/RJS101x_LAB_thangncfx16840#readme",
   "dependencies": {
     "chalk": "^4.1.2",
+    "connect-mongodb-session": "^3.1.1",
     "ejs": "^3.1.8",
     "express": "^4.18.1",
     "express-handlebars": "^3.1.0",
@@ -35,6 +36,7 @@
     "tedious": "^15.1.0"
   },
   "devDependencies": {
+    "@types/connect-mongodb-session": "^2.4.4",
     "@types/express": "^4.17.13",
     "@types/express-handlebars": "3.1",
     "@types/express-session": "^1.17.5",

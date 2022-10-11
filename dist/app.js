@@ -29,26 +29,40 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Logging_1 = __importDefault(require("./library/Logging"));
 const path_1 = __importDefault(require("path"));
 const express_1 = __importDefault(require("express"));
+// import session from 'express-session';
+const session = require('express-session');
+// const MongoDBStore = require('connect-mongodb-session')(session);
+const connect_mongodb_session_1 = __importDefault(require("connect-mongodb-session"));
+const MongoDBStore = (0, connect_mongodb_session_1.default)(session);
+//! imp database
+const mongoose_1 = __importDefault(require("mongoose"));
 //! imp routes
 const admin_1 = __importDefault(require("./routes/admin"));
 const shop_1 = __importDefault(require("./routes/shop"));
 const auth_1 = __importDefault(require("./routes/auth"));
+//! imp models
+const user_1 = __importDefault(require("./models//user"));
 //! imp controllers
 const errorController = __importStar(require("./controllers/error"));
-const user_1 = __importDefault(require("./models//user"));
-// import Order from './models/order';
-// import OrderItem from './models/order-item';
-//! imp database
-const mongoose_1 = __importDefault(require("mongoose"));
+const MONGODB_USERNAME = 'njs101x';
+const MONGODB_PASSWORD = 'njs101x';
+const DATABASE = 'shop';
+const MONGODB_URI = `mongodb+srv://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@cluster0.nbojriq.mongodb.net/${DATABASE}?retryWrites=true&w=majority`;
 //! createExpress -> instance Express()
 const app = (0, express_1.default)();
+const store = new MongoDBStore({ uri: MONGODB_URI, collection: 'sessions' });
 app.set('view engine', 'ejs');
 app.set('views', 'src/views');
-//! Register Middlewares
+//! Register __middlewares
 app.use(express_1.default.urlencoded({ extended: false }));
-//! app.ts => root Directory : src
 const publicDir = path_1.default.join(__dirname, '..', 'public');
 app.use(express_1.default.static(publicDir));
+app.use(session({
+    secret: 'mySecret',
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+}));
 //! Authentication
 app.use((req, res, next) => {
     Logging_1.default.infoAsync('Authentication', () => {
@@ -67,12 +81,9 @@ app.use(shop_1.default); //! default: '/'
 app.use(auth_1.default);
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(errorController.get404);
-const MONGODB_USERNAME = 'njs101x';
-const MONGODB_PASSWORD = 'njs101x';
-const DATABASE = 'shop';
 //! connect method that takes the URL we used for connecting before
 mongoose_1.default
-    .connect(`mongodb+srv://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@cluster0.nbojriq.mongodb.net/${DATABASE}?retryWrites=true&w=majority`)
+    .connect(MONGODB_URI)
     .then((mongooseConnection) => {
     // console.log('__Debugger__mongooseConnection: ', mongooseConnection);
     const initialCart = {

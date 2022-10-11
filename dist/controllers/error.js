@@ -6,7 +6,7 @@ const get404 = (req, res, next) => {
     res.render('404', {
         path: '',
         pageTitle: 'Page Not Found',
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: true,
     });
 };
 exports.get404 = get404;

@@ -1,7 +1,12 @@
 import Logging from './library/Logging';
 import path from 'path';
 import express from 'express';
-import session from 'express-session';
+// import session from 'express-session';
+const session = require('express-session');
+
+// const MongoDBStore = require('connect-mongodb-session')(session);
+import connectMongoDBSession from 'connect-mongodb-session';
+const MongoDBStore = connectMongoDBSession(session);
 
 //! imp database
 import mongoose from 'mongoose';
@@ -33,8 +38,15 @@ declare global {
   }
 }
 
+const MONGODB_USERNAME = 'njs101x';
+const MONGODB_PASSWORD = 'njs101x';
+const DATABASE = 'shop';
+
+const MONGODB_URI = `mongodb+srv://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@cluster0.nbojriq.mongodb.net/${DATABASE}?retryWrites=true&w=majority`;
+
 //! createExpress -> instance Express()
 const app = express();
+const store = new MongoDBStore({ uri: MONGODB_URI, collection: 'sessions' });
 
 app.set('view engine', 'ejs');
 app.set('views', 'src/views');
@@ -44,7 +56,12 @@ app.use(express.urlencoded({ extended: false }));
 const publicDir = path.join(__dirname, '..', 'public');
 app.use(express.static(publicDir));
 app.use(
-  session({ secret: 'mySecret', resave: false, saveUninitialized: false })
+  session({
+    secret: 'mySecret',
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+  })
 );
 
 //! Authentication
@@ -68,15 +85,9 @@ app.use(authRoutes);
 //! default '/', this will also handle all http methods, GET, POST, DELTE, PATCH, PUT...
 app.use(errorController.get404);
 
-const MONGODB_USERNAME = 'njs101x';
-const MONGODB_PASSWORD = 'njs101x';
-const DATABASE = 'shop';
-
 //! connect method that takes the URL we used for connecting before
 mongoose
-  .connect(
-    `mongodb+srv://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@cluster0.nbojriq.mongodb.net/${DATABASE}?retryWrites=true&w=majority`
-  )
+  .connect(MONGODB_URI)
   .then((mongooseConnection) => {
     // console.log('__Debugger__mongooseConnection: ', mongooseConnection);
     const initialCart = {

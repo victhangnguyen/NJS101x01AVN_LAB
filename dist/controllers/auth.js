@@ -2,17 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postLogin = exports.getLogin = void 0;
 const getLogin = (req, res, next) => {
-    var _a;
-    const isLoggedIn = ((_a = req.get('Cookie')) === null || _a === void 0 ? void 0 : _a.split(';')[0].trim().split('=')[1]) === 'true';
+    // const isLoggedIn =
+    //   req.get('Cookie')?.split(';')[0].trim().split('=')[1] === 'true';
+    console.log('__Debugger__ctrls__auth__getLogin__req.session.isLoggedIn: ', req.session.isLoggedIn);
     res.render('auth/login', {
         path: '/login',
         pageTitle: 'Login',
-        isAuthenticated: isLoggedIn,
+        isAuthenticated: false,
     });
 };
 exports.getLogin = getLogin;
 const postLogin = (req, res, next) => {
-    res.setHeader('Set-Cookie', 'loggedIn=true');
+    req.session.isLoggedIn = true;
     res.redirect('/');
 };
 exports.postLogin = postLogin;
