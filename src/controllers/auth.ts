@@ -12,6 +12,6 @@ export const getLogin: RequestHandler = (req, res, next) => {
 };
 
 export const postLogin: RequestHandler = (req, res, next) => {
-  res.setHeader('Set-Cookie', 'loggedIn=true');
+  res.setHeader('Set-Cookie', 'loggedIn=true; HttpOnly');
   res.redirect('/');
 };
