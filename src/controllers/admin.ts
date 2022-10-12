@@ -31,7 +31,7 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
   const price: IProduct['price'] = req.body.price;
   const description: IProduct['description'] = req.body.description;
 
-  const userId: IProduct['userId'] = req.user._id;
+  const userId: IProduct['userId'] = req.session.user._id;
 
   const product: IProductDocument = new Product({
     title: title,

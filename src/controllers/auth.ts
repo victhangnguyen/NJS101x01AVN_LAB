@@ -33,7 +33,6 @@ export const postLogin: RequestHandler = (req, res, next) => {
 //@ /logout => POST
 export const postLogout: RequestHandler = (req, res, next) => {
   req.session.destroy((err: Error) => {
-    Logging.success('LOGOUT -> clear session!')
     console.log(err);
     res.redirect('/');
   });

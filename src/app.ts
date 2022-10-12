@@ -27,7 +27,7 @@ import * as errorController from './controllers/error';
 declare module 'express-session' {
   export interface SessionData {
     isLoggedIn: boolean;
-    user: IUser;
+    user: any;
     destroy: any;
   }
 }
@@ -68,18 +68,18 @@ app.use(
   })
 );
 
-//! Authentication
-app.use((req, res, next) => {
-  Logging.infoAsync('Authentication', () => {
-    const currentUserId = CURRENT_USER_ID;
-    User.findById(currentUserId)
-      .then((userDoc) => {
-        req.user = userDoc; //! Mongoose Model Object
-        next();
-      })
-      .catch((err) => err);
-  });
-});
+// //! Authentication
+// app.use((req, res, next) => {
+//   Logging.infoAsync('Authentication', () => {
+//     const currentUserId = CURRENT_USER_ID;
+//     User.findById(currentUserId)
+//       .then((userDoc) => {
+//         req.session.user = userDoc; //! Mongoose Model Object
+//         next();
+//       })
+//       .catch((err) => err);
+//   });
+// });
 
 //! implementing Routes
 app.use('/admin', adminRoutes);
