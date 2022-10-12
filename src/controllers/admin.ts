@@ -18,7 +18,7 @@ export const getAddProduct: RequestHandler = (req, res, next) => {
       pageTitle: 'Add Product',
       path: '/admin/add-product',
       editing: false,
-      isAuthenticated: true,
+      isAuthenticated: req.session.isLoggedIn,
     });
   });
 };
@@ -66,7 +66,7 @@ export const getProducts: RequestHandler = (req, res, next) => {
           path: '/admin/products',
           pageTitle: 'Admin Products',
           prods: productDocs,
-          isAuthenticated: true,
+          isAuthenticated: req.session.isLoggedIn,
         });
       })
       .catch((err) => {
@@ -92,7 +92,7 @@ export const getEditProduct: RequestHandler = (req, res, next) => {
           pageTitle: 'Edit Product',
           product: productDoc,
           editing: editMode,
-          isAuthenticated: true,
+          isAuthenticated: req.session.isLoggedIn,
         });
       })
       .catch((err) => {

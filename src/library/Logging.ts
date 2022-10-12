@@ -12,7 +12,7 @@ export default class Logging {
       chalk.blue(`[${new Date().toLocaleString()}] [INFO]`),
       typeof args === 'string' ? chalk.blueBright(args) : args
     );
-    callbackFn()
+    callbackFn();
   };
   public static warn = (args: any) =>
     console.log(
@@ -33,5 +33,10 @@ export default class Logging {
     console.log(
       chalk.cyan(`[${new Date().toLocaleString()}] [ADMIN]`),
       typeof args === 'string' ? chalk.cyanBright(args) : args
+    );
+  public static success = (args: any) =>
+    console.log(
+      chalk.green(`[${new Date().toLocaleString()}] [ADMIN]`),
+      typeof args === 'string' ? chalk.greenBright(args) : args
     );
 }

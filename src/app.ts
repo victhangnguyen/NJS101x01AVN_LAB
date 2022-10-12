@@ -17,7 +17,7 @@ import shopRoutes from './routes/shop';
 import authRoutes from './routes/auth';
 
 //! imp models
-import User from './models//user';
+import User, { IUser } from './models//user';
 
 //! imp controllers
 import * as errorController from './controllers/error';
@@ -27,6 +27,8 @@ import * as errorController from './controllers/error';
 declare module 'express-session' {
   export interface SessionData {
     isLoggedIn: boolean;
+    user: IUser;
+    destroy: any;
   }
 }
 
@@ -37,6 +39,8 @@ declare global {
     }
   }
 }
+
+export const CURRENT_USER_ID = '632fe0941cb168613f986706';
 
 const MONGODB_USERNAME = 'njs101x';
 const MONGODB_PASSWORD = 'njs101x';
@@ -67,7 +71,7 @@ app.use(
 //! Authentication
 app.use((req, res, next) => {
   Logging.infoAsync('Authentication', () => {
-    const currentUserId = '632fe0941cb168613f986706';
+    const currentUserId = CURRENT_USER_ID;
     User.findById(currentUserId)
       .then((userDoc) => {
         req.user = userDoc; //! Mongoose Model Object

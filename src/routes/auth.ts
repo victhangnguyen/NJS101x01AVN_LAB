@@ -7,7 +7,10 @@ const router = express.Router();
 //@ /login => GET
 router.get('/login', authController.getLogin);
 
-//@ /post => GET
+//@ /login => GET
 router.post('/login', authController.postLogin);
+
+//@ /logout => POST
+router.post('/logout', authController.postLogout);
 
 export default router;
