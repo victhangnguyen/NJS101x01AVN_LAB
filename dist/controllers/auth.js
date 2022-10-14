@@ -55,19 +55,20 @@ const postSignup = (req, res, next) => {
             return res.redirect('/signup');
         }
         //! currenty a value of 12 is accepted as hightly secure, this function is an asynchronous
-        return bcryptjs_1.default.hash(password, 12);
-    })
-        .then((hashedPassword) => {
-        const user = new user_1.default({
-            email: email,
-            password: hashedPassword,
-            cart: { items: [] },
+        return bcryptjs_1.default
+            .hash(password, 12)
+            .then((hashedPassword) => {
+            const user = new user_1.default({
+                email: email,
+                password: hashedPassword,
+                cart: { items: [] },
+            });
+            return user.save();
+        })
+            .then((result) => {
+            //! success action then redirect to login
+            res.redirect('/login');
         });
-        return user.save();
-    })
-        .then((result) => {
-        //! success action then redirect to login
-        res.redirect('/login');
     })
         .catch((err) => {
         console.log(err);
