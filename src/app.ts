@@ -80,6 +80,19 @@ app.use(
 //       .catch((err) => err);
 //   });
 // });
+app.use((req, res, next) => {
+  if (!req.session.user) {
+    return next();
+  }
+  User.findById(req.session.user._id) //! if find successful.
+    .then((userDoc: IUser | null) => {
+      req.user = userDoc;
+      next();
+    })
+    .catch((err: Error) => {
+      console.log(err);
+    });
+});
 
 //! implementing Routes
 app.use('/admin', adminRoutes);

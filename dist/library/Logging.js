@@ -19,4 +19,5 @@ Logging.warn = (args) => console.log(chalk_1.default.yellow(`[${new Date().toLoc
 Logging.error = (args) => console.log(chalk_1.default.red(`[${new Date().toLocaleString()}] [ERROR]`), typeof args === 'string' ? chalk_1.default.redBright(args) : args);
 Logging.shop = (args) => console.log(chalk_1.default.green(`[${new Date().toLocaleString()}] [SHOP]`), typeof args === 'string' ? chalk_1.default.greenBright(args) : args);
 Logging.admin = (args) => console.log(chalk_1.default.cyan(`[${new Date().toLocaleString()}] [ADMIN]`), typeof args === 'string' ? chalk_1.default.cyanBright(args) : args);
+Logging.success = (args) => console.log(chalk_1.default.green(`[${new Date().toLocaleString()}] [ADMIN]`), typeof args === 'string' ? chalk_1.default.greenBright(args) : args);
 //# sourceMappingURL=Logging.js.map

@@ -19,7 +19,7 @@ const getIndex = (req, res, next) => {
                 path: '/',
                 pageTitle: 'Shop',
                 prods: productDocs,
-                isAuthenticated: true,
+                isAuthenticated: req.session.isLoggedIn,
             });
         })
             .catch((err) => console.log(err));
@@ -36,7 +36,7 @@ const getProducts = (req, res, next) => {
                 path: '/products',
                 pageTitle: 'All Products',
                 prods: productDocs,
-                isAuthenticated: true,
+                isAuthenticated: req.session.isLoggedIn,
             });
         })
             .catch((err) => {
@@ -57,7 +57,7 @@ const getProduct = (req, res, next) => {
                 path: '/products',
                 pageTitle: productDoc === null || productDoc === void 0 ? void 0 : productDoc.title,
                 product: productDoc,
-                isAuthenticated: true,
+                isAuthenticated: req.session.isLoggedIn,
             });
         })
             .catch((err) => {
@@ -69,7 +69,7 @@ exports.getProduct = getProduct;
 //@ /cart => GET
 const getCart = (req, res, next) => {
     Logging_1.default.infoAsync('GET getCart', () => {
-        req.user
+        req.session.user
             .populate('cart.items.productId') //! return Promise
             .then((user) => {
             // console.log('user.cart.items', user.cart.items)
@@ -78,7 +78,7 @@ const getCart = (req, res, next) => {
                 path: '/cart',
                 pageTitle: 'Your Cart',
                 products: products,
-                isAuthenticated: true,
+                isAuthenticated: req.session.isLoggedIn,
             });
         })
             .catch((err) => {
@@ -94,7 +94,7 @@ const postCart = (req, res, next) => {
         product_1.default.findById(prodId)
             .then((productDoc) => {
             var _a;
-            return (_a = req.user) === null || _a === void 0 ? void 0 : _a.addToCart(productDoc);
+            return (_a = req.session.user) === null || _a === void 0 ? void 0 : _a.addToCart(productDoc);
         })
             .then((result) => {
             res.redirect('/cart');
@@ -109,7 +109,7 @@ const postCartDeleteProduct = (req, res, next) => {
     Logging_1.default.infoAsync('POST postCartDeleteProduct', () => {
         var _a;
         const prodId = req.body.productId;
-        (_a = req.user) === null || _a === void 0 ? void 0 : _a.removeFromCart(prodId).then((userDoc) => {
+        (_a = req.session.user) === null || _a === void 0 ? void 0 : _a.removeFromCart(prodId).then((userDoc) => {
             console.log('__Debugger postCartDeleteProduct__userDoc (): ', userDoc);
             Logging_1.default.admin('redirect /cart');
             res.redirect('/cart');
@@ -121,14 +121,14 @@ const postCartDeleteProduct = (req, res, next) => {
 exports.postCartDeleteProduct = postCartDeleteProduct;
 const getOrders = (req, res, next) => {
     Logging_1.default.infoAsync('GET getOrders', () => {
-        order_1.default.find({ 'user.userId': req.user._id })
+        order_1.default.find({ 'user.userId': req.session.user._id })
             .then((orderDocs) => {
             console.log('__Debugger__orderDocs: ', orderDocs);
             res.render('shop/orders', {
                 path: '/orders',
                 pageTitle: 'Your Orders',
                 orders: orderDocs,
-                isAuthenticated: true,
+                isAuthenticated: req.session.isLoggedIn,
             });
         })
             .catch((err) => {
@@ -140,7 +140,7 @@ exports.getOrders = getOrders;
 //@ /create-order => POST
 const postOrder = (req, res, next) => {
     Logging_1.default.infoAsync('POST postOrder', () => {
-        req.user
+        req.session.user
             .populate('cart.items.productId') //! return Promise
             .then((user) => {
             const products = user.cart.items.map((i) => {
@@ -149,15 +149,15 @@ const postOrder = (req, res, next) => {
             const order = new order_1.default({
                 products: products,
                 user: {
-                    name: req.user.name,
-                    userId: req.user, //! this mongoose Object will pick the Id from there
+                    name: req.session.user.name,
+                    userId: req.session.user, //! this mongoose Object will pick the Id from there
                 },
             });
             return order.save();
         })
             .then((result) => {
             console.log('__Debugger__result: ', result);
-            return req.user.clearCart();
+            return req.session.user.clearCart();
         })
             .then(() => {
             res.redirect('/orders');

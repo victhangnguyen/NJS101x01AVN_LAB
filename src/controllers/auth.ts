@@ -19,15 +19,16 @@ export const getLogin: RequestHandler = (req, res, next) => {
 };
 
 export const postLogin: RequestHandler = (req, res, next) => {
-  User.findById(CURRENT_USER_ID) //! if find successful.
-    .then((userDoc: IUser | null) => {
+  User.findById(CURRENT_USER_ID)
+    .then((user) => {
       req.session.isLoggedIn = true;
-      req.session.user = userDoc!;
-      res.redirect('/');
+      req.session.user = user;
+      req.session.save((err) => {
+        console.log(err);
+        res.redirect('/');
+      });
     })
-    .catch((err: Error) => {
-      console.log(err);
-    });
+    .catch((err) => console.log(err));
 };
 
 //@ /logout => POST

@@ -79,7 +79,7 @@ export const getProduct: RequestHandler = (req, res, next) => {
 //@ /cart => GET
 export const getCart: RequestHandler = (req, res, next) => {
   Logging.infoAsync('GET getCart', () => {
-    req.session.user
+    req.user
       .populate('cart.items.productId') //! return Promise
       .then((user: any) => {
         // console.log('user.cart.items', user.cart.items)
@@ -104,7 +104,7 @@ export const postCart: RequestHandler = (req, res, next) => {
 
     Product.findById(prodId)
       .then((productDoc) => {
-        return req.session.user?.addToCart(productDoc!);
+        return req.user?.addToCart(productDoc!);
       })
       .then((result) => {
         res.redirect('/cart');

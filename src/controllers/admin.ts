@@ -18,7 +18,7 @@ export const getAddProduct: RequestHandler = (req, res, next) => {
       pageTitle: 'Add Product',
       path: '/admin/add-product',
       editing: false,
-      isAuthenticated: req.session.isLoggedIn,
+      isAuthenticated: req.session.isLoggedIn, //! true/false
     });
   });
 };
@@ -31,14 +31,12 @@ export const postAddProduct: RequestHandler = (req, res, next) => {
   const price: IProduct['price'] = req.body.price;
   const description: IProduct['description'] = req.body.description;
 
-  const userId: IProduct['userId'] = req.session.user._id;
-
   const product: IProductDocument = new Product({
     title: title,
     price: price,
     description: description,
     imageUrl: imageUrl,
-    userId: userId,
+    userId: req.user,
   });
 
   product

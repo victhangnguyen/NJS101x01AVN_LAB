@@ -26,6 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CURRENT_USER_ID = void 0;
 const Logging_1 = __importDefault(require("./library/Logging"));
 const path_1 = __importDefault(require("path"));
 const express_1 = __importDefault(require("express"));
@@ -44,6 +45,7 @@ const auth_1 = __importDefault(require("./routes/auth"));
 const user_1 = __importDefault(require("./models//user"));
 //! imp controllers
 const errorController = __importStar(require("./controllers/error"));
+exports.CURRENT_USER_ID = '632fe0941cb168613f986706';
 const MONGODB_USERNAME = 'njs101x';
 const MONGODB_PASSWORD = 'njs101x';
 const DATABASE = 'shop';
@@ -63,16 +65,26 @@ app.use(session({
     saveUninitialized: false,
     store: store,
 }));
-//! Authentication
+// //! Authentication
+// app.use((req, res, next) => {
+//   Logging.infoAsync('Authentication', () => {
+//     const currentUserId = CURRENT_USER_ID;
+//     User.findById(currentUserId)
+//       .then((userDoc) => {
+//         req.session.user = userDoc; //! Mongoose Model Object
+//         next();
+//       })
+//       .catch((err) => err);
+//   });
+// });
 app.use((req, res, next) => {
-    Logging_1.default.infoAsync('Authentication', () => {
-        const currentUserId = '632fe0941cb168613f986706';
-        user_1.default.findById(currentUserId)
-            .then((userDoc) => {
-            req.user = userDoc; //! Mongoose Model Object
-            next();
-        })
-            .catch((err) => err);
+    user_1.default.findById(req.session.user._id) //! if find successful.
+        .then((userDoc) => {
+        req.user = userDoc;
+        next();
+    })
+        .catch((err) => {
+        console.log(err);
     });
 });
 //! implementing Routes
