@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import mongoose from 'mongoose';
 import { CURRENT_USER_ID } from '../app';
+import bycrypt from 'bcryptjs';
 
 //! imp library
 import Logging from '../library/Logging';
@@ -56,12 +57,15 @@ export const postSignup: RequestHandler = (req, res, next) => {
   User.findOne({ email: email })
     .then((userDoc): any => {
       if (userDoc) {
-        return res.redirect('/');
+        return res.redirect('/signup');
       }
-
+      //! currenty a value of 12 is accepted as hightly secure, this function is an asynchronous
+      return bycrypt.hash(password, 12);
+    })
+    .then((hashedPassword) => {
       const user = new User({
         email: email,
-        password: password,
+        password: hashedPassword,
         cart: { items: [] },
       });
 

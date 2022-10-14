@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postLogout = exports.postSignup = exports.postLogin = exports.getSignup = exports.getLogin = void 0;
 const app_1 = require("../app");
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 //! imp models
 const user_1 = __importDefault(require("../models/user"));
 const getLogin = (req, res, next) => {
@@ -51,11 +52,15 @@ const postSignup = (req, res, next) => {
     user_1.default.findOne({ email: email })
         .then((userDoc) => {
         if (userDoc) {
-            return res.redirect('/');
+            return res.redirect('/signup');
         }
+        //! currenty a value of 12 is accepted as hightly secure, this function is an asynchronous
+        return bcryptjs_1.default.hash(password, 12);
+    })
+        .then((hashedPassword) => {
         const user = new user_1.default({
             email: email,
-            password: password,
+            password: hashedPassword,
             cart: { items: [] },
         });
         return user.save();
