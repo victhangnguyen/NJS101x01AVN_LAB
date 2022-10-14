@@ -78,6 +78,9 @@ app.use(session({
 //   });
 // });
 app.use((req, res, next) => {
+    if (!req.session.user) {
+        return next();
+    }
     user_1.default.findById(req.session.user._id) //! if find successful.
         .then((userDoc) => {
         req.user = userDoc;
@@ -97,25 +100,6 @@ app.use(errorController.get404);
 mongoose_1.default
     .connect(MONGODB_URI)
     .then((mongooseConnection) => {
-    // console.log('__Debugger__mongooseConnection: ', mongooseConnection);
-    const initialCart = {
-        items: [],
-        total: 0,
-    };
-    user_1.default.findOne({})
-        .then((userDoc) => {
-        if (!userDoc) {
-            const user = new user_1.default({
-                name: 'thangncfx16840',
-                email: 'thangncfx16840@funix.edu.vn',
-                cart: initialCart,
-            });
-            user.save();
-        }
-    })
-        .catch((err) => {
-        console.log(err);
-    });
     const PORT = 3000;
     app.listen(PORT, () => {
         Logging_1.default.info('Server is running in port ' + PORT);

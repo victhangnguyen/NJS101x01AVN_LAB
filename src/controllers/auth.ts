@@ -1,7 +1,12 @@
 import { RequestHandler } from 'express';
-import User, { IUser } from '../models/user';
+import mongoose from 'mongoose';
 import { CURRENT_USER_ID } from '../app';
+
+//! imp library
 import Logging from '../library/Logging';
+
+//! imp models
+import User, { IUser, IUserDocument } from '../models/user';
 
 export const getLogin: RequestHandler = (req, res, next) => {
   // const isLoggedIn =
@@ -18,6 +23,16 @@ export const getLogin: RequestHandler = (req, res, next) => {
   });
 };
 
+//@ /signup => GET
+export const getSignup: RequestHandler = (req, res, next) => {
+  res.render('auth/signup', {
+    path: '/signup',
+    pageTitle: 'Signup',
+    isAuthenticated: false,
+  });
+};
+
+//@ /login => POST
 export const postLogin: RequestHandler = (req, res, next) => {
   User.findById(CURRENT_USER_ID)
     .then((user) => {
@@ -29,6 +44,36 @@ export const postLogin: RequestHandler = (req, res, next) => {
       });
     })
     .catch((err) => console.log(err));
+};
+
+//@ /signup => POST
+export const postSignup: RequestHandler = (req, res, next) => {
+  //! create a new User
+  const email = req.body.email;
+  const password = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
+  //! find out if a user with that email exists
+  User.findOne({ email: email })
+    .then((userDoc): any => {
+      if (userDoc) {
+        return res.redirect('/');
+      }
+
+      const user = new User({
+        email: email,
+        password: password,
+        cart: { items: [] },
+      });
+
+      return user.save();
+    })
+    .then((result) => {
+      //! success action then redirect to login
+      res.redirect('/login');
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 //@ /logout => POST

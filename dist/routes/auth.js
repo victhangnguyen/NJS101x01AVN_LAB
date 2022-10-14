@@ -32,8 +32,12 @@ const authController = __importStar(require("../controllers/auth"));
 const router = express_1.default.Router();
 //@ /login => GET
 router.get('/login', authController.getLogin);
-//@ /login => GET
+//@ /signup => GET
+router.get('/signup', authController.getSignup);
+//@ /login => POST
 router.post('/login', authController.postLogin);
+//@ /signtup => POST
+router.post('/signup', authController.postSignup);
 //@ /logout => POST
 router.post('/logout', authController.postLogout);
 exports.default = router;

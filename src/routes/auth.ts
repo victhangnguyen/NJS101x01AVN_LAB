@@ -7,8 +7,14 @@ const router = express.Router();
 //@ /login => GET
 router.get('/login', authController.getLogin);
 
-//@ /login => GET
+//@ /signup => GET
+router.get('/signup', authController.getSignup);
+
+//@ /login => POST
 router.post('/login', authController.postLogin);
+
+//@ /signtup => POST
+router.post('/signup', authController.postSignup);
 
 //@ /logout => POST
 router.post('/logout', authController.postLogout);

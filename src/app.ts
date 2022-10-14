@@ -80,6 +80,7 @@ app.use(
 //       .catch((err) => err);
 //   });
 // });
+
 app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
@@ -106,28 +107,6 @@ app.use(errorController.get404);
 mongoose
   .connect(MONGODB_URI)
   .then((mongooseConnection) => {
-    // console.log('__Debugger__mongooseConnection: ', mongooseConnection);
-    const initialCart = {
-      items: [],
-      total: 0,
-    };
-
-    User.findOne({})
-      .then((userDoc) => {
-        if (!userDoc) {
-          const user = new User({
-            name: 'thangncfx16840',
-            email: 'thangncfx16840@funix.edu.vn',
-            cart: initialCart,
-          });
-
-          user.save();
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
     const PORT = 3000;
     app.listen(PORT, () => {
       Logging.info('Server is running in port ' + PORT);

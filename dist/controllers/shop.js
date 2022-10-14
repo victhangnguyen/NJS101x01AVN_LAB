@@ -69,7 +69,7 @@ exports.getProduct = getProduct;
 //@ /cart => GET
 const getCart = (req, res, next) => {
     Logging_1.default.infoAsync('GET getCart', () => {
-        req.session.user
+        req.user
             .populate('cart.items.productId') //! return Promise
             .then((user) => {
             // console.log('user.cart.items', user.cart.items)
@@ -94,7 +94,7 @@ const postCart = (req, res, next) => {
         product_1.default.findById(prodId)
             .then((productDoc) => {
             var _a;
-            return (_a = req.session.user) === null || _a === void 0 ? void 0 : _a.addToCart(productDoc);
+            return (_a = req.user) === null || _a === void 0 ? void 0 : _a.addToCart(productDoc);
         })
             .then((result) => {
             res.redirect('/cart');

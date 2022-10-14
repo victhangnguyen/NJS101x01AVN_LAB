@@ -15,7 +15,7 @@ const getAddProduct = (req, res, next) => {
             pageTitle: 'Add Product',
             path: '/admin/add-product',
             editing: false,
-            isAuthenticated: req.session.isLoggedIn,
+            isAuthenticated: req.session.isLoggedIn, //! true/false
         });
     });
 };
@@ -27,13 +27,12 @@ const postAddProduct = (req, res, next) => {
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    const userId = req.session.user._id;
     const product = new product_1.default({
         title: title,
         price: price,
         description: description,
         imageUrl: imageUrl,
-        userId: userId,
+        userId: req.user,
     });
     product
         .save()
