@@ -20,6 +20,7 @@ const getIndex = (req, res, next) => {
                 pageTitle: 'Shop',
                 prods: productDocs,
                 isAuthenticated: req.session.isLoggedIn,
+                csrfToken: req.csrfToken()
             });
         })
             .catch((err) => console.log(err));

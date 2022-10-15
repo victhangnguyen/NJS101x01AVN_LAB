@@ -27,16 +27,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CURRENT_USER_ID = void 0;
-const Logging_1 = __importDefault(require("./library/Logging"));
 const path_1 = __importDefault(require("path"));
 const express_1 = __importDefault(require("express"));
 // import session from 'express-session';
-const session = require('express-session');
+//! imp library
+const Logging_1 = __importDefault(require("./library/Logging"));
+//! imp database + app server
+const mongoose_1 = __importDefault(require("mongoose"));
 // const MongoDBStore = require('connect-mongodb-session')(session);
+const session = require('express-session');
 const connect_mongodb_session_1 = __importDefault(require("connect-mongodb-session"));
 const MongoDBStore = (0, connect_mongodb_session_1.default)(session);
-//! imp database
-const mongoose_1 = __importDefault(require("mongoose"));
+//! CSRF
+const csurf_1 = __importDefault(require("csurf"));
 //! imp routes
 const admin_1 = __importDefault(require("./routes/admin"));
 const shop_1 = __importDefault(require("./routes/shop"));
@@ -53,6 +56,7 @@ const MONGODB_URI = `mongodb+srv://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@clust
 //! createExpress -> instance Express()
 const app = (0, express_1.default)();
 const store = new MongoDBStore({ uri: MONGODB_URI, collection: 'sessions' });
+const csrfProtection = (0, csurf_1.default)();
 app.set('view engine', 'ejs');
 app.set('views', 'src/views');
 //! Register __middlewares
@@ -65,6 +69,7 @@ app.use(session({
     saveUninitialized: false,
     store: store,
 }));
+app.use(csrfProtection);
 // //! Authentication
 // app.use((req, res, next) => {
 //   Logging.infoAsync('Authentication', () => {

@@ -1,15 +1,18 @@
-import Logging from './library/Logging';
 import path from 'path';
 import express from 'express';
 // import session from 'express-session';
-const session = require('express-session');
 
+//! imp library
+import Logging from './library/Logging';
+
+//! imp database + app server
+import mongoose from 'mongoose';
 // const MongoDBStore = require('connect-mongodb-session')(session);
+const session = require('express-session');
 import connectMongoDBSession from 'connect-mongodb-session';
 const MongoDBStore = connectMongoDBSession(session);
-
-//! imp database
-import mongoose from 'mongoose';
+//! CSRF
+import csrf from 'csurf';
 
 //! imp routes
 import adminRoutes from './routes/admin';
@@ -51,6 +54,7 @@ const MONGODB_URI = `mongodb+srv://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@clust
 //! createExpress -> instance Express()
 const app = express();
 const store = new MongoDBStore({ uri: MONGODB_URI, collection: 'sessions' });
+const csrfProtection = csrf();
 
 app.set('view engine', 'ejs');
 app.set('views', 'src/views');
@@ -67,6 +71,7 @@ app.use(
     store: store,
   })
 );
+app.use(csrfProtection);
 
 // //! Authentication
 // app.use((req, res, next) => {
