@@ -26,9 +26,16 @@ export const getLogin: RequestHandler = (req, res, next) => {
 
 //@ /signup => GET
 export const getSignup: RequestHandler = (req, res, next) => {
+  let message: any = req.flash('error');
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
   res.render('auth/signup', {
     path: '/signup',
     pageTitle: 'Signup',
+    errorMessage: message,
   });
 };
 
@@ -77,6 +84,10 @@ export const postSignup: RequestHandler = (req, res, next) => {
   User.findOne({ email: email })
     .then((userDoc): any => {
       if (userDoc) {
+        req.flash(
+          'error',
+          'E-mail exists already, please pick a diferent one.'
+        );
         return res.redirect('/signup');
       }
       //! currenty a value of 12 is accepted as hightly secure, this function is an asynchronous
