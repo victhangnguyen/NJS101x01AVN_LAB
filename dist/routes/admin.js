@@ -29,18 +29,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 //! imp Controllers
 const adminController = __importStar(require("../controllers/admin"));
+const is_auth_1 = __importDefault(require("../middleware/is-auth"));
 const router = express_1.default.Router();
 //@ /admin/add-product => GET
-router.get('/add-product', adminController.getAddProduct);
+router.get('/add-product', is_auth_1.default, adminController.getAddProduct);
 //@ /admin/add-product => POST
-router.post('/add-product', adminController.postAddProduct);
+router.post('/add-product', is_auth_1.default, adminController.postAddProduct);
 //@ /admin/products => GET
-router.get('/products', adminController.getProducts);
+router.get('/products', is_auth_1.default, adminController.getProducts);
 //@ /admin/edit-product/:productId => GET
-router.get('/edit-product/:productId', adminController.getEditProduct);
+router.get('/edit-product/:productId', is_auth_1.default, adminController.getEditProduct);
 //@ /admin/edit-product/:productId => POST
-router.post('/edit-product', adminController.postEditProduct);
+router.post('/edit-product', is_auth_1.default, adminController.postEditProduct);
 //@ /admin/delete-product => POST
-router.post('/delete-product', adminController.postDeleteProduct);
+router.post('/delete-product', is_auth_1.default, adminController.postDeleteProduct);
 exports.default = router;
 //# sourceMappingURL=admin.js.map

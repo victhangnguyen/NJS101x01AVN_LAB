@@ -29,6 +29,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 //! imp Controllers
 const shopController = __importStar(require("../controllers/shop"));
+const is_auth_1 = __importDefault(require("../middleware/is-auth"));
 const router = express_1.default.Router();
 //@ / => GET
 router.get('/', shopController.getIndex);
@@ -37,14 +38,14 @@ router.get('/products', shopController.getProducts);
 //@ /products/:productId => GET
 router.get('/products/:productId', shopController.getProduct);
 //@ /cart => GET
-router.get('/cart', shopController.getCart);
+router.get('/cart', is_auth_1.default, shopController.getCart);
 //@ /cart => POST
-router.post('/cart', shopController.postCart);
+router.post('/cart', is_auth_1.default, shopController.postCart);
 //@ /cart-delete-item => POST
-router.post('/cart-delete-item', shopController.postCartDeleteProduct);
+router.post('/cart-delete-item', is_auth_1.default, shopController.postCartDeleteProduct);
 //@ /orders => GET
-router.get('/orders', shopController.getOrders);
+router.get('/orders', is_auth_1.default, shopController.getOrders);
 //@ /create-order => POST
-router.post('/create-order', shopController.postOrder);
+router.post('/create-order', is_auth_1.default, shopController.postOrder);
 exports.default = router;
 //# sourceMappingURL=shop.js.map
