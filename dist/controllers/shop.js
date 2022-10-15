@@ -19,8 +19,6 @@ const getIndex = (req, res, next) => {
                 path: '/',
                 pageTitle: 'Shop',
                 prods: productDocs,
-                isAuthenticated: req.session.isLoggedIn,
-                csrfToken: req.csrfToken()
             });
         })
             .catch((err) => console.log(err));
@@ -110,7 +108,7 @@ const postCartDeleteProduct = (req, res, next) => {
     Logging_1.default.infoAsync('POST postCartDeleteProduct', () => {
         var _a;
         const prodId = req.body.productId;
-        (_a = req.session.user) === null || _a === void 0 ? void 0 : _a.removeFromCart(prodId).then((userDoc) => {
+        (_a = req.user) === null || _a === void 0 ? void 0 : _a.removeFromCart(prodId).then((userDoc) => {
             console.log('__Debugger postCartDeleteProduct__userDoc (): ', userDoc);
             Logging_1.default.admin('redirect /cart');
             res.redirect('/cart');
@@ -122,7 +120,7 @@ const postCartDeleteProduct = (req, res, next) => {
 exports.postCartDeleteProduct = postCartDeleteProduct;
 const getOrders = (req, res, next) => {
     Logging_1.default.infoAsync('GET getOrders', () => {
-        order_1.default.find({ 'user.userId': req.session.user._id })
+        order_1.default.find({ 'user.userId': req.user._id })
             .then((orderDocs) => {
             console.log('__Debugger__orderDocs: ', orderDocs);
             res.render('shop/orders', {
@@ -141,7 +139,7 @@ exports.getOrders = getOrders;
 //@ /create-order => POST
 const postOrder = (req, res, next) => {
     Logging_1.default.infoAsync('POST postOrder', () => {
-        req.session.user
+        req.user
             .populate('cart.items.productId') //! return Promise
             .then((user) => {
             const products = user.cart.items.map((i) => {
@@ -150,15 +148,15 @@ const postOrder = (req, res, next) => {
             const order = new order_1.default({
                 products: products,
                 user: {
-                    name: req.session.user.name,
-                    userId: req.session.user, //! this mongoose Object will pick the Id from there
+                    name: req.user.name,
+                    userId: req.user, //! this mongoose Object will pick the Id from there
                 },
             });
             return order.save();
         })
             .then((result) => {
             console.log('__Debugger__result: ', result);
-            return req.session.user.clearCart();
+            return req.user.clearCart();
         })
             .then(() => {
             res.redirect('/orders');

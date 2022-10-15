@@ -58,8 +58,8 @@ userSchema.methods.removeFromCart = function (productId) {
     // console.log('__Debugger__productId: ', productId);
     const updatedCartItems = this.cart.items.filter(
     //! filter is not async
-    (i) => {
-        return i.productId.toString() !== productId.toString();
+    (item) => {
+        return item.productId.toString() !== productId.toString();
     });
     // console.log('__Debugger__updatedCartItems: ', updatedCartItems);
     //! update => save

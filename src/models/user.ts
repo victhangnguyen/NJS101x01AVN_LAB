@@ -83,12 +83,13 @@ userSchema.methods.addToCart = function (productDoc: IProductDocument) {
   return this.save();
 };
 
+
 userSchema.methods.removeFromCart = function (productId: string) {
   // console.log('__Debugger__productId: ', productId);
   const updatedCartItems = this.cart.items.filter(
     //! filter is not async
-    (i: ICartItem) => {
-      return i.productId.toString() !== productId.toString();
+    (item: ICartItem) => {
+      return item.productId.toString() !== productId.toString();
     }
   );
   // console.log('__Debugger__updatedCartItems: ', updatedCartItems);

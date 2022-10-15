@@ -70,18 +70,6 @@ app.use(session({
     store: store,
 }));
 app.use(csrfProtection);
-// //! Authentication
-// app.use((req, res, next) => {
-//   Logging.infoAsync('Authentication', () => {
-//     const currentUserId = CURRENT_USER_ID;
-//     User.findById(currentUserId)
-//       .then((userDoc) => {
-//         req.session.user = userDoc; //! Mongoose Model Object
-//         next();
-//       })
-//       .catch((err) => err);
-//   });
-// });
 app.use((req, res, next) => {
     if (!req.session.user) {
         return next();
@@ -94,6 +82,11 @@ app.use((req, res, next) => {
         .catch((err) => {
         console.log(err);
     });
+});
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.csrfToken = req.csrfToken();
+    next();
 });
 //! implementing Routes
 app.use('/admin', admin_1.default);
