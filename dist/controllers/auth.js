@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postLogout = exports.postSignup = exports.postLogin = exports.getSignup = exports.getLogin = void 0;
-const app_1 = require("../app");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 //! imp models
 const user_1 = __importDefault(require("../models/user"));
@@ -30,13 +29,32 @@ const getSignup = (req, res, next) => {
 exports.getSignup = getSignup;
 //@ /login => POST
 const postLogin = (req, res, next) => {
-    user_1.default.findById(app_1.CURRENT_USER_ID)
+    const email = req.body.email;
+    const password = req.body.password;
+    user_1.default.findOne({ email: email })
         .then((user) => {
-        req.session.isLoggedIn = true;
-        req.session.user = user;
-        req.session.save((err) => {
-            console.log(' req.session.save[err] :', err);
-            res.redirect('/');
+        if (!user) {
+            //! throw Error : No existing email or username
+            return res.redirect('/login');
+        }
+        //! If the email exists, then validate the password
+        bcryptjs_1.default
+            .compare(password, user.password)
+            .then((doMatch) => {
+            if (doMatch) {
+                //! if true
+                req.session.isLoggedIn = true;
+                req.session.user = user;
+                return req.session.save((err) => {
+                    console.log(' req.session.save[err] :', err);
+                    res.redirect('/');
+                });
+            }
+            res.redirect('/login');
+        })
+            .catch((err) => {
+            console.log(err);
+            res.redirect('/login');
         });
     })
         .catch((err) => console.log(err));
