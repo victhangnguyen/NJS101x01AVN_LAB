@@ -80,13 +80,13 @@ export const getCart: RequestHandler = (req, res, next) => {
     req.user
       .populate('cart.items.productId') //! return Promise
       .then((user: any) => {
-        // console.log('user.cart.items', user.cart.items)
         const products = user.cart.items;
+        // console.log('__Debugger__ctrls__shop__getCart__products: ', products);
         res.render('shop/cart', {
           path: '/cart',
           pageTitle: 'Your Cart',
           products: products,
-          isAuthenticated: req.session.isLoggedIn,
+          // isAuthenticated: req.session.isLoggedIn,
         });
       })
       .catch((err: any) => {
@@ -134,12 +134,12 @@ export const getOrders: RequestHandler = (req, res, next) => {
   Logging.infoAsync('GET getOrders', () => {
     Order.find({ 'user.userId': req.user._id })
       .then((orderDocs) => {
-        console.log('__Debugger__orderDocs: ', orderDocs);
+        console.log('__Debugger__ctrls__shop__getOrders__orderDocs: ', orderDocs);
         res.render('shop/orders', {
           path: '/orders',
           pageTitle: 'Your Orders',
           orders: orderDocs,
-          isAuthenticated: req.session.isLoggedIn,
+          // isAuthenticated: req.session.isLoggedIn,
         });
       })
       .catch((err) => {
@@ -161,7 +161,7 @@ export const postOrder: RequestHandler = (req, res, next) => {
         const order = new Order({
           products: products,
           user: {
-            name: req.user.name,
+            email: req.user.email,
             userId: req.user, //! this mongoose Object will pick the Id from there
           },
         });

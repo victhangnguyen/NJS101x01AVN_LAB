@@ -71,13 +71,13 @@ const getCart = (req, res, next) => {
         req.user
             .populate('cart.items.productId') //! return Promise
             .then((user) => {
-            // console.log('user.cart.items', user.cart.items)
             const products = user.cart.items;
+            // console.log('__Debugger__ctrls__shop__getCart__products: ', products);
             res.render('shop/cart', {
                 path: '/cart',
                 pageTitle: 'Your Cart',
                 products: products,
-                isAuthenticated: req.session.isLoggedIn,
+                // isAuthenticated: req.session.isLoggedIn,
             });
         })
             .catch((err) => {
@@ -122,12 +122,12 @@ const getOrders = (req, res, next) => {
     Logging_1.default.infoAsync('GET getOrders', () => {
         order_1.default.find({ 'user.userId': req.user._id })
             .then((orderDocs) => {
-            console.log('__Debugger__orderDocs: ', orderDocs);
+            console.log('__Debugger__ctrls__shop__getOrders__orderDocs: ', orderDocs);
             res.render('shop/orders', {
                 path: '/orders',
                 pageTitle: 'Your Orders',
                 orders: orderDocs,
-                isAuthenticated: req.session.isLoggedIn,
+                // isAuthenticated: req.session.isLoggedIn,
             });
         })
             .catch((err) => {
@@ -148,7 +148,7 @@ const postOrder = (req, res, next) => {
             const order = new order_1.default({
                 products: products,
                 user: {
-                    name: req.user.name,
+                    email: req.user.email,
                     userId: req.user, //! this mongoose Object will pick the Id from there
                 },
             });
