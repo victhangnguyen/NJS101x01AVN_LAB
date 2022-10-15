@@ -35,7 +35,6 @@ const getProducts = (req, res, next) => {
                 path: '/products',
                 pageTitle: 'All Products',
                 prods: productDocs,
-                isAuthenticated: req.session.isLoggedIn,
             });
         })
             .catch((err) => {
@@ -56,7 +55,6 @@ const getProduct = (req, res, next) => {
                 path: '/products',
                 pageTitle: productDoc === null || productDoc === void 0 ? void 0 : productDoc.title,
                 product: productDoc,
-                isAuthenticated: req.session.isLoggedIn,
             });
         })
             .catch((err) => {
@@ -77,7 +75,6 @@ const getCart = (req, res, next) => {
                 path: '/cart',
                 pageTitle: 'Your Cart',
                 products: products,
-                // isAuthenticated: req.session.isLoggedIn,
             });
         })
             .catch((err) => {
@@ -127,7 +124,6 @@ const getOrders = (req, res, next) => {
                 path: '/orders',
                 pageTitle: 'Your Orders',
                 orders: orderDocs,
-                // isAuthenticated: req.session.isLoggedIn,
             });
         })
             .catch((err) => {

@@ -13,6 +13,8 @@ import connectMongoDBSession from 'connect-mongodb-session';
 const MongoDBStore = connectMongoDBSession(session);
 //! CSRF
 import csrf from 'csurf';
+//! Flash
+import flash from 'connect-flash';
 
 //! imp routes
 import adminRoutes from './routes/admin';
@@ -72,6 +74,7 @@ app.use(
   })
 );
 app.use(csrfProtection);
+app.use(flash());
 
 app.use((req, res, next) => {
   if (!req.session.user) {

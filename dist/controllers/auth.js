@@ -8,13 +8,10 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 //! imp models
 const user_1 = __importDefault(require("../models/user"));
 const getLogin = (req, res, next) => {
-    // const isLoggedIn =
-    //   req.get('Cookie')?.split(';')[0].trim().split('=')[1] === 'true';
-    console.log('__Debugger__ctrls__auth__getLogin__req.session.isLoggedIn: ', req.session.isLoggedIn);
     res.render('auth/login', {
         path: '/login',
         pageTitle: 'Login',
-        isAuthenticated: false,
+        errorMessage: req.flash('error'),
     });
 };
 exports.getLogin = getLogin;
@@ -23,7 +20,6 @@ const getSignup = (req, res, next) => {
     res.render('auth/signup', {
         path: '/signup',
         pageTitle: 'Signup',
-        isAuthenticated: false,
     });
 };
 exports.getSignup = getSignup;
@@ -34,7 +30,8 @@ const postLogin = (req, res, next) => {
     user_1.default.findOne({ email: email })
         .then((user) => {
         if (!user) {
-            //! throw Error : No existing email or username
+            //! throw Error : No existing email or username with connect-flash
+            req.flash('error', 'Invalid email or password!');
             return res.redirect('/login');
         }
         //! If the email exists, then validate the password

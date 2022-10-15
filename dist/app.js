@@ -40,6 +40,8 @@ const connect_mongodb_session_1 = __importDefault(require("connect-mongodb-sessi
 const MongoDBStore = (0, connect_mongodb_session_1.default)(session);
 //! CSRF
 const csurf_1 = __importDefault(require("csurf"));
+//! Flash
+const connect_flash_1 = __importDefault(require("connect-flash"));
 //! imp routes
 const admin_1 = __importDefault(require("./routes/admin"));
 const shop_1 = __importDefault(require("./routes/shop"));
@@ -70,6 +72,7 @@ app.use(session({
     store: store,
 }));
 app.use(csrfProtection);
+app.use((0, connect_flash_1.default)());
 app.use((req, res, next) => {
     if (!req.session.user) {
         return next();

@@ -10,17 +10,10 @@ import Logging from '../library/Logging';
 import User, { IUser, IUserDocument } from '../models/user';
 
 export const getLogin: RequestHandler = (req, res, next) => {
-  // const isLoggedIn =
-  //   req.get('Cookie')?.split(';')[0].trim().split('=')[1] === 'true';
-  console.log(
-    '__Debugger__ctrls__auth__getLogin__req.session.isLoggedIn: ',
-    req.session.isLoggedIn
-  );
-
   res.render('auth/login', {
     path: '/login',
     pageTitle: 'Login',
-    isAuthenticated: false,
+    errorMessage: req.flash('error'),
   });
 };
 
@@ -29,7 +22,6 @@ export const getSignup: RequestHandler = (req, res, next) => {
   res.render('auth/signup', {
     path: '/signup',
     pageTitle: 'Signup',
-    isAuthenticated: false,
   });
 };
 
@@ -41,7 +33,8 @@ export const postLogin: RequestHandler = (req, res, next) => {
   User.findOne({ email: email })
     .then((user) => {
       if (!user) {
-        //! throw Error : No existing email or username
+        //! throw Error : No existing email or username with connect-flash
+        req.flash('error', 'Invalid email or password!');
         return res.redirect('/login');
       }
       //! If the email exists, then validate the password

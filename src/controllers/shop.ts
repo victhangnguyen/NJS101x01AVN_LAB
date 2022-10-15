@@ -43,7 +43,6 @@ export const getProducts: RequestHandler = (req, res, next) => {
           path: '/products',
           pageTitle: 'All Products',
           prods: productDocs,
-          isAuthenticated: req.session.isLoggedIn,
         });
       })
       .catch((err) => {
@@ -65,7 +64,6 @@ export const getProduct: RequestHandler = (req, res, next) => {
           path: '/products',
           pageTitle: productDoc?.title,
           product: productDoc,
-          isAuthenticated: req.session.isLoggedIn,
         });
       })
       .catch((err) => {
@@ -86,7 +84,6 @@ export const getCart: RequestHandler = (req, res, next) => {
           path: '/cart',
           pageTitle: 'Your Cart',
           products: products,
-          // isAuthenticated: req.session.isLoggedIn,
         });
       })
       .catch((err: any) => {
@@ -139,7 +136,6 @@ export const getOrders: RequestHandler = (req, res, next) => {
           path: '/orders',
           pageTitle: 'Your Orders',
           orders: orderDocs,
-          // isAuthenticated: req.session.isLoggedIn,
         });
       })
       .catch((err) => {
