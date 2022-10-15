@@ -10,6 +10,10 @@ const Logging_1 = __importDefault(require("../library/Logging"));
 const product_1 = __importDefault(require("../models/product"));
 //@  /admin/add-product => GET
 const getAddProduct = (req, res, next) => {
+    //! guard clause Route Protection
+    if (!req.session.isLoggedIn) {
+        return res.redirect('/login');
+    }
     Logging_1.default.infoAsync('GET getAddProduct', () => {
         res.render('admin/edit-product', {
             pageTitle: 'Add Product',

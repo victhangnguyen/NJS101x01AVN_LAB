@@ -13,6 +13,10 @@ import Product, { IProduct, IProductDocument } from '../models/product';
 
 //@  /admin/add-product => GET
 export const getAddProduct: RequestHandler = (req, res, next) => {
+  //! guard clause Route Protection
+  if (!req.session.isLoggedIn) {
+    return res.redirect('/login');
+  }
   Logging.infoAsync('GET getAddProduct', () => {
     res.render('admin/edit-product', {
       pageTitle: 'Add Product',
