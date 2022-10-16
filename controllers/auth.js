@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
+const { validationResult } = require('express-validator');
 
 const User = require('../models/user');
 
@@ -78,6 +79,18 @@ exports.postSignup = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
+  const errors = validationResult(req);
+  console.log('__Debugger__ctrls__auth__errors.array(): ', errors.array());
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render('auth/login', {
+      path: '/login',
+      pageTitle: 'Login',
+      errorMessage: errors.array(), //! this return an Erros Array
+    });
+    //! we dont redirect because we wanna redirect upon success, if we fail we will render the same page with exist errors.
+  }
+
   User.findOne({ email: email })
     .then((userDoc) => {
       if (userDoc) {

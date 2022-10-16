@@ -77,4 +77,4 @@ mongoose
     console.log(err);
   });
 
-module.exports = { CURRENT_USER_ID };
+// module.exports = { CURRENT_USER_ID };
