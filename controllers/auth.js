@@ -86,7 +86,7 @@ exports.postSignup = (req, res, next) => {
     return res.status(422).render('auth/login', {
       path: '/login',
       pageTitle: 'Login',
-      errorMessage: errors.array(), //! this return an Erros Array
+      errorMessage: errors.array()[0].msg, //! a Object {value, msg, param, location}
     });
     //! we dont redirect because we wanna redirect upon success, if we fail we will render the same page with exist errors.
   }
