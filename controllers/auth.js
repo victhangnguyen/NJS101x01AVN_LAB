@@ -83,10 +83,10 @@ exports.postSignup = (req, res, next) => {
   console.log('__Debugger__ctrls__auth__errors.array(): ', errors.array());
 
   if (!errors.isEmpty()) {
-    return res.status(422).render('auth/login', {
-      path: '/login',
-      pageTitle: 'Login',
-      errorMessage: errors.array()[0].msg, //! a Object {value, msg, param, location}
+    return res.status(422).render('auth/signup', {
+      path: '/signup',
+      pageTitle: 'Signup',
+      errorMessage: errors.array()[0].msg,
     });
     //! we dont redirect because we wanna redirect upon success, if we fail we will render the same page with exist errors.
   }
