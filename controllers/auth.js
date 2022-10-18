@@ -46,6 +46,7 @@ exports.getSignup = (req, res, next) => {
       password: '',
       confirmPassword: '',
     },
+    validationErrors: [],
   });
 };
 
@@ -108,8 +109,8 @@ exports.postSignup = (req, res, next) => {
         password: password,
         confirmPassword: req.body.confirmPassword,
       },
+      validationErrors: errors.array(),
     });
-    //! we dont redirect because we wanna redirect upon success, if we fail we will render the same page with exist errors.
   }
 
   bcrypt
