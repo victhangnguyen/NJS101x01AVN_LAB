@@ -77,7 +77,7 @@ app.use(authRoutes);
 
 app.get('/500', errorController.get500);
 
-app.use(errorController.get404); //! wrong route
+app.use(errorController.get404);
 
 //! Error Handling Middlewares when we call next(error)
 app.use((error, req, res, next) => {
