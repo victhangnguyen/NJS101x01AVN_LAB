@@ -44,16 +44,25 @@ app.use(
 app.use(csrfProtection);
 app.use(flash());
 
+//! Authentication
 app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
   }
   User.findById(req.session.user._id)
     .then((user) => {
+      //! user is blocked
+      if (!user) {
+        return next();
+      }
+
       req.user = user;
       next();
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      throw new Error(err);
+      // next();
+    });
 });
 
 app.use((req, res, next) => {

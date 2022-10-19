@@ -72,7 +72,7 @@ exports.getEditProduct = (req, res, next) => {
       }
       res.render('admin/edit-product', {
         pageTitle: 'Edit Product',
-        path: '/admin/edit-product',
+        path: '/admin/edit-product', 
         editing: editMode,
         product: product,
         hasError: false,
