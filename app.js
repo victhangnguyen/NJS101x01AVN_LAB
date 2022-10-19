@@ -77,7 +77,13 @@ app.use(authRoutes);
 
 app.get('/500', errorController.get500);
 
-app.use(errorController.get404);
+app.use(errorController.get404); //! wrong route
+
+//! Error Handling Middlewares when we call next(error)
+app.use((error, req, res, next) => {
+  // res.status(error.httpStatusCode).render(...)
+  res.redirect('/500');
+});
 
 mongoose
   .connect(MONGODB_URI)
