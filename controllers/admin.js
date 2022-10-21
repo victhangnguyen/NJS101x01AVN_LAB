@@ -14,6 +14,7 @@ exports.getAddProduct = (req, res, next) => {
 };
 
 exports.postAddProduct = (req, res, next) => {
+  console.log('postAddProduct')
   const title = req.body.title;
   const imageUrl = req.file;
   console.log('__Debugger__ctrls__admin__postAddProduct__imageUrl: ', imageUrl);

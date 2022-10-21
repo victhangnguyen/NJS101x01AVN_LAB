@@ -30,9 +30,22 @@ const fileStorage = multer.diskStorage({
     cb(null, 'images');
   },
   filename: (req, file, cb) => {
-    cb(null, new Date().toISOString() + '-' + file.originalname);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + '-' + uniqueSuffix);
   },
 });
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg'
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -42,8 +55,11 @@ const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(multer({ storage: fileStorage }).single('image'));
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
+);
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(
   session({
     secret: 'my secret',
@@ -61,7 +77,6 @@ app.use((req, res, next) => {
   next();
 });
 
-//! Authentication
 app.use((req, res, next) => {
   // throw new Error('Sync Dummy');
   if (!req.session.user) {
@@ -69,19 +84,14 @@ app.use((req, res, next) => {
   }
   User.findById(req.session.user._id)
     .then((user) => {
-      // throw new Error('Dummy');
       if (!user) {
-        //! user is blocked
         return next();
       }
-
       req.user = user;
       next();
     })
     .catch((err) => {
-      // throw new Error(err);
       next(new Error(err));
-      f;
     });
 });
 
@@ -93,9 +103,9 @@ app.get('/500', errorController.get500);
 
 app.use(errorController.get404);
 
-//! Error Handling Middlewares when we call next(error)
 app.use((error, req, res, next) => {
-  // res.status(error.httpStatusCode).render(...)
+  // res.status(error.httpStatusCode).render(...);
+  // res.redirect('/500');
   res.status(500).render('500', {
     pageTitle: 'Error!',
     path: '/500',
@@ -106,12 +116,8 @@ app.use((error, req, res, next) => {
 mongoose
   .connect(MONGODB_URI)
   .then((result) => {
-    app.listen(3000, () => {
-      console.log('Server is running with porst 3000 ===>');
-    });
+    app.listen(3000);
   })
   .catch((err) => {
     console.log(err);
   });
-
-// module.exports = { CURRENT_USER_ID };
