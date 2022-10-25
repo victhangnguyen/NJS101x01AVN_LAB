@@ -161,6 +161,25 @@ exports.getInvoice = (req, res, next) => {
       return next(err);
     }
 
+    res.setHeader('Content-Type', 'application/pdf');
+    //! This allow us to define How this content should be served to the Cliend (inline or attachment)
+    res.setHeader(
+      'Content-Disposition',
+      'inline; filename="' + invoiceName + '"'
+    );
+
     res.send(dataBuffer);
   });
 };
+
+// fs.readFile(invoicePath, (err, data) => {
+//   if (err) {
+//     return next(err);
+//   }
+//   res.setHeader('Content-Type', 'application/pdf');
+//   res.setHeader(
+//     'Content-Disposition',
+//     'inline; filename="' + invoiceName + '"'
+//   );
+//   res.send(data);
+// });
