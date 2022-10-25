@@ -19,6 +19,7 @@ const errorController = require('./controllers/error');
 const User = require('./models/user');
 
 const app = express();
+
 const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: 'sessions',

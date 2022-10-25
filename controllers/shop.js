@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 const Product = require('../models/product');
 const Order = require('../models/order');
 
@@ -16,7 +19,6 @@ exports.getProducts = (req, res, next) => {
       error.httpStatusCode = 500;
       return next(error);
     });
-
 };
 
 exports.getProduct = (req, res, next) => {
@@ -50,7 +52,6 @@ exports.getIndex = (req, res, next) => {
       error.httpStatusCode = 500;
       return next(error);
     });
-
 };
 
 exports.getCart = (req, res, next) => {
@@ -147,4 +148,19 @@ exports.getOrders = (req, res, next) => {
       error.httpStatusCode = 500;
       return next(error);
     });
+};
+
+exports.getInvoice = (req, res, next) => {
+  const orderId = req.params.orderId;
+  console.log('__Debugger__ctrls__shop__orderId: ', orderId);
+  const invoiceName = 'invoice-' + orderId + '.pdf';
+  const invoicePath = path.join('data', 'invoices', invoiceName);
+
+  fs.readFile(invoicePath, (err, dataBuffer) => {
+    if (err) {
+      return next(err);
+    }
+
+    res.send(dataBuffer);
+  });
 };

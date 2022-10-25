@@ -23,6 +23,7 @@ exports.getLogin = (req, res, next) => {
   } else {
     message = null;
   }
+
   res.render('auth/login', {
     path: '/login',
     pageTitle: 'Login',
