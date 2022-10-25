@@ -2,8 +2,11 @@
 </head>
 
 <body>
-    <%- include('includes/navigation.ejs') %>
-    <h1>Some error occurred!</h1>
-    <p>We're working on fixing this, sorry for the inconvenience!</p>
+  <%- include('includes/navigation.ejs') %>
+  <h1>Some error occurred!</h1>
+  <p>We're working on fixing this, sorry for the inconvenience!</p>
+  <% if ( error ) { %>
+  <p><%= error.message %></p>
+  <% } %>
 
-<%- include('includes/end.ejs') %>
+  <%- include('includes/end.ejs') %>

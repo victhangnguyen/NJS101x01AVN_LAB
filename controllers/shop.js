@@ -152,24 +152,36 @@ exports.getOrders = (req, res, next) => {
 
 exports.getInvoice = (req, res, next) => {
   const orderId = req.params.orderId;
-  console.log('__Debugger__ctrls__shop__orderId: ', orderId);
-  const invoiceName = 'invoice-' + orderId + '.pdf';
-  const invoicePath = path.join('data', 'invoices', invoiceName);
+  Order.findById(orderId)
+    .then((orderDoc) => {
+      if (!orderDoc) {
+        return next(new Error('No order found'));
+      }
+      if (orderDoc.user.userId.toString() !== req.user._id.toString()) {
+        return next(new Error('Unauthorized'));
+      }
+      
+      console.log('__Debugger__ctrls__shop__orderId: ', orderId);
+      const invoiceName = 'invoice-' + orderId + '.pdf';
+      const invoicePath = path.join('data', 'invoices', invoiceName);
+      fs.readFile(invoicePath, (err, dataBuffer) => {
+        if (err) {
+          return next(err);
+        }
 
-  fs.readFile(invoicePath, (err, dataBuffer) => {
-    if (err) {
-      return next(err);
-    }
+        res.setHeader('Content-Type', 'application/pdf');
+        //! This allow us to define How this content should be served to the Cliend (inline or attachment)
+        res.setHeader(
+          'Content-Disposition',
+          'inline; filename="' + invoiceName + '"'
+        );
 
-    res.setHeader('Content-Type', 'application/pdf');
-    //! This allow us to define How this content should be served to the Cliend (inline or attachment)
-    res.setHeader(
-      'Content-Disposition',
-      'inline; filename="' + invoiceName + '"'
-    );
-
-    res.send(dataBuffer);
-  });
+        res.send(dataBuffer);
+      });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 // fs.readFile(invoicePath, (err, data) => {
