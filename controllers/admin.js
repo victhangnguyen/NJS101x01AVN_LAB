@@ -28,10 +28,10 @@ exports.postAddProduct = (req, res, next) => {
       product: {
         title: title,
         price: price,
-        description: description,
+        description: description
       },
       errorMessage: 'Attached file is not an image.',
-      validationErrors: [],
+      validationErrors: []
     });
   }
   const errors = validationResult(req);
@@ -45,12 +45,11 @@ exports.postAddProduct = (req, res, next) => {
       hasError: true,
       product: {
         title: title,
-        imageUrl: imageUrl,
         price: price,
-        description: description,
+        description: description
       },
       errorMessage: errors.array()[0].msg,
-      validationErrors: errors.array(),
+      validationErrors: errors.array()
     });
   }
 
@@ -62,16 +61,16 @@ exports.postAddProduct = (req, res, next) => {
     price: price,
     description: description,
     imageUrl: imageUrl,
-    userId: req.user,
+    userId: req.user
   });
   product
     .save()
-    .then((result) => {
+    .then(result => {
       // console.log(result);
       console.log('Created Product');
       res.redirect('/admin/products');
     })
-    .catch((err) => {
+    .catch(err => {
       // return res.status(500).render('admin/edit-product', {
       //   pageTitle: 'Add Product',
       //   path: '/admin/add-product',
