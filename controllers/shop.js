@@ -160,38 +160,33 @@ exports.getInvoice = (req, res, next) => {
       if (orderDoc.user.userId.toString() !== req.user._id.toString()) {
         return next(new Error('Unauthorized'));
       }
-      
+
       console.log('__Debugger__ctrls__shop__orderId: ', orderId);
       const invoiceName = 'invoice-' + orderId + '.pdf';
       const invoicePath = path.join('data', 'invoices', invoiceName);
-      fs.readFile(invoicePath, (err, dataBuffer) => {
-        if (err) {
-          return next(err);
-        }
+      // fs.readFile(invoicePath, (err, dataBuffer) => {
+      //   if (err) {
+      //     return next(err);
+      //   }
 
-        res.setHeader('Content-Type', 'application/pdf');
-        //! This allow us to define How this content should be served to the Cliend (inline or attachment)
-        res.setHeader(
-          'Content-Disposition',
-          'inline; filename="' + invoiceName + '"'
-        );
+      //   res.setHeader('Content-Type', 'application/pdf');
+      //   //! This allow us to define How this content should be served to the Cliend (inline or attachment)
+      //   res.setHeader(
+      //     'Content-Disposition',
+      //     'inline; filename="' + invoiceName + '"'
+      //   );
 
-        res.send(dataBuffer);
-      });
+      //   res.send(dataBuffer);
+      // });
+
+      // function createReadStream(path: fs.PathLike, options?: BufferEncoding | ReadStreamOptions | undefined): fs.ReadStream (+1 overload)
+      const file = fs.createReadStream(invoicePath);
+
+      file.pipe(res);
+      //! use pipe to forward the data that is read in with that stream to my response because the response obj is a writableStream acutally.
+      //! not every object is a wriableStream but the response happens to be one.
     })
     .catch((err) => {
       next(err);
     });
 };
-
-// fs.readFile(invoicePath, (err, data) => {
-//   if (err) {
-//     return next(err);
-//   }
-//   res.setHeader('Content-Type', 'application/pdf');
-//   res.setHeader(
-//     'Content-Disposition',
-//     'inline; filename="' + invoiceName + '"'
-//   );
-//   res.send(data);
-// });
