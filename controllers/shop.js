@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const PDFDocument = require('pdfkit');
 
 const Product = require('../models/product');
 const Order = require('../models/order');
@@ -164,6 +165,23 @@ exports.getInvoice = (req, res, next) => {
       console.log('__Debugger__ctrls__shop__orderId: ', orderId);
       const invoiceName = 'invoice-' + orderId + '.pdf';
       const invoicePath = path.join('data', 'invoices', invoiceName);
+
+      // Create a document
+      const pdfDoc = new PDFDocument();
+      res.setHeader('Content-Type', 'application/pdf');
+      //! This allow us to define How this content should be served to the Cliend (inline or attachment)
+      res.setHeader(
+        'Content-Disposition',
+        'inline; filename="' + invoiceName + '"'
+      );
+
+      pdfDoc.pipe(fs.createWriteStream(invoicePath));
+      pdfDoc.pipe(res);
+
+      pdfDoc.text('Hello World!');
+
+      pdfDoc.end();
+
       // fs.readFile(invoicePath, (err, dataBuffer) => {
       //   if (err) {
       //     return next(err);
@@ -180,9 +198,9 @@ exports.getInvoice = (req, res, next) => {
       // });
 
       // function createReadStream(path: fs.PathLike, options?: BufferEncoding | ReadStreamOptions | undefined): fs.ReadStream (+1 overload)
-      const file = fs.createReadStream(invoicePath);
+      // const file = fs.createReadStream(invoicePath);
 
-      file.pipe(res);
+      // file.pipe(res);
       //! use pipe to forward the data that is read in with that stream to my response because the response obj is a writableStream acutally.
       //! not every object is a wriableStream but the response happens to be one.
     })
