@@ -1,8 +1,8 @@
 const MONGODB_USERNAME = 'njs101x';
 const MONGODB_PASSWORD = 'njs101x';
-const DATABASE = 'shop';
+const DATABASE = 'shopLab';
 
-const MONGODB_URI = `mongodb+srv://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@cluster0.nbojriq.mongodb.net/${DATABASE}`;
+const MONGODB_URI = `mongodb+srv://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@cluster0.tf0txmk.mongodb.net/${DATABASE}`;
 
 const path = require('path');
 
@@ -114,14 +114,16 @@ app.use((error, req, res, next) => {
     pageTitle: 'Error!',
     path: '/500',
     isAuthenticated: req.session.isLoggedIn,
-    error
+    error,
   });
 });
 
 mongoose
   .connect(MONGODB_URI)
   .then((result) => {
-    app.listen(3000);
+    app.listen(3000, () => {
+      console.log(`Server is running with Port: 3000`);
+    });
   })
   .catch((err) => {
     console.log(err);

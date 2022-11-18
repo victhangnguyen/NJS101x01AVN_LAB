@@ -28,10 +28,10 @@ exports.postAddProduct = (req, res, next) => {
       product: {
         title: title,
         price: price,
-        description: description
+        description: description,
       },
       errorMessage: 'Attached file is not an image.',
-      validationErrors: []
+      validationErrors: [],
     });
   }
   const errors = validationResult(req);
@@ -46,10 +46,10 @@ exports.postAddProduct = (req, res, next) => {
       product: {
         title: title,
         price: price,
-        description: description
+        description: description,
       },
       errorMessage: errors.array()[0].msg,
-      validationErrors: errors.array()
+      validationErrors: errors.array(),
     });
   }
 
@@ -61,16 +61,16 @@ exports.postAddProduct = (req, res, next) => {
     price: price,
     description: description,
     imageUrl: imageUrl,
-    userId: req.user
+    userId: req.user,
   });
   product
     .save()
-    .then(result => {
+    .then((result) => {
       // console.log(result);
       console.log('Created Product');
       res.redirect('/admin/products');
     })
-    .catch(err => {
+    .catch((err) => {
       // return res.status(500).render('admin/edit-product', {
       //   pageTitle: 'Add Product',
       //   path: '/admin/add-product',
@@ -192,25 +192,27 @@ exports.getProducts = (req, res, next) => {
     });
 };
 
-exports.postDeleteProduct = (req, res, next) => {
-  const prodId = req.body.productId;
+exports.deleteProduct = (req, res, next) => {
+  const productId = req.params.productId;
 
-  Product.findById(prodId)
+  console.log(`__Debugger__admin__deleteProduct__productId: ${productId}`);
+
+  Product.findById(productId)
     .then((productDoc) => {
       if (!productDoc) {
         return next(new Error('Product not found!'));
       }
       fileHelper.deleteFile(productDoc.imageUrl);
 
-      return Product.deleteOne({ _id: prodId, userId: req.user._id });
+      return Product.deleteOne({ _id: productId, userId: req.user._id });
     })
     .then(() => {
       console.log('DESTROYED PRODUCT');
-      res.redirect('/admin/products');
+      res.status(200).json({
+        message: 'Success',
+      });
     })
     .catch((err) => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
+      res.status(500).json({ message: 'Deleting product failed' });
     });
 };
